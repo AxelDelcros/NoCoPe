@@ -11,5 +11,4 @@
 *Pierre Barrios
 *Yohan Bourga
 
-test
 ##How to Deploy the app :
