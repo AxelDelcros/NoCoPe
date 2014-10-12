@@ -9,6 +9,6 @@
 *Axel Delcros
 *Jimmy Farcy
 *Pierre Barrios
-*Yohan Bourga
+*Yoann Bourgault
 
 ##How to Deploy the app :
