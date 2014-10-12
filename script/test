@@ -1,0 +1,8 @@
+#!/bin/bash
+
+###############
+# Test script #
+###############
+
+./node_modules/.bin/mocha
+./test/test.js

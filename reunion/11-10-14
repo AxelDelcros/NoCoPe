@@ -1,0 +1,29 @@
+app mobile
+    idées: marmiton+ (à partir de ce que j'ai je peux faire tout ça)
+    	   informé qd arrive date péremption -> recettes proposées avec ingrédients qui vont périmer
+	   favoris / déjà utilisé
+	   système prix / qualité
+	   nb de personnes qui vont manger
+	   allergies / religions / régimes
+	   tags
+    	   autentification sociale
+
+	   	+++
+		détection des produits suspect (images et mots)
+
+    recettes
+    ingredients
+    ustensiles (appareils + outils)
+    utilisateurs
+	-> enrichir
+	-> utiliser
+    anonyme
+	-> enrichir
+
+*schemaless database
+*web service
+*web app
+
+voir la gestion des utilisateurs en ranking (style forum)
+     mis au point sur la certification d'un cuisiner
+     
