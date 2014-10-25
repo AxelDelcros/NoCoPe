@@ -6,4 +6,4 @@
 
 echo "installing npm modules..."
 npm install;
-npm start;
+echo "Please type [npm start] to start the server"
