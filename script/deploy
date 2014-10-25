@@ -5,7 +5,6 @@
 ######################
 
 
-echo "installing npm modules..."
-sudo npm install;
-
-echo "All is setup!"
+echo "installing npm modules...";
+npm install;
+npm start;
