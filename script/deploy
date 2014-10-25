@@ -4,8 +4,6 @@
 # Deploymnent script #
 ######################
 
-
 echo "installing npm modules..."
-sudo npm install;
-
-echo "All is setup!"
+npm install;
+npm start;
