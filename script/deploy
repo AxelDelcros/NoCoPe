@@ -4,7 +4,6 @@
 # Deploymnent script #
 ######################
 
-
-echo "installing npm modules...";
+echo "installing npm modules..."
 npm install;
 npm start;
