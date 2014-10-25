@@ -12,7 +12,7 @@
 *Yoann Bourgault
 
 ###Version:
-0.1.0
+0.1.1
 
 ##How to Deploy the app :
 Simply run this at the root of the git repository:
