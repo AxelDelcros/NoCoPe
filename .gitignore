@@ -1,6 +1,10 @@
-# Node module #
+# Node modules #
 ###############
-node_modules
+
+api/node_modules
+api/mogodb/database
+api/test/node_modules
+
 
 # Compiled source #
 ###################

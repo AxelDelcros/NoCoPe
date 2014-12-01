@@ -14,12 +14,21 @@
 	"Pierre Barrios <pierre.barrios@epitech.eu>",
 	"Yoann Bourgault <yoann.bourgault@epitech.eu>"
     ],
+
     "dependencies": {
 	"express": "~4.0.0",
 	"morgan": "~1.0.0",
 	"mongodb": "*",
 	"formidable": "*",
 	"uniqid": "*",
-	"util": "*"
+	"util": "*",
+	"mocha": "*",
+	"assert":"*",
+	"supertest":"*",
+	"winston":"*"
+    },
+
+    "scripts":{
+	"test": "nodejs node_modules/mocha/bin/mocha"
     }
 }
