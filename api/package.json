@@ -1,5 +1,19 @@
 {
     "name": "NoCoPe",
+    "description": "Nourriture - Connect people with food - Application",
+    "version": "0.1.1",
+    "main": "NoCoPeApp.js",
+    "private": true,
+    "author": "NoCoPe Crew",
+    "contributors":
+    [
+        "Alexis Le Provost <alexis.leprovost@epitech.eu>",
+	"Axel Delcros <axel.delcros@epitech.eu>",
+	"Guillaume Roncari <guillaume.roncari@epitech.eu>",
+	"Jimmy Farcy <jimmy.farcy@epitech.eu>",
+	"Pierre Barrios <pierre.barrios@epitech.eu>",
+	"Yoann Bourgault <yoann.bourgault@epitech.eu>"
+    ],
     "dependencies": {
 	"express": "~4.0.0",
 	"morgan": "~1.0.0",
