@@ -3,6 +3,14 @@
 var formidable = require('formidable');
 
 
+/*
+** Utils Functions
+*/
+Array.prototype.isArray = true;
+/*
+** End Utils Functions
+*/
+
 
 /*
 ** BEGIN RECIPE FUNCTIONS
@@ -13,7 +21,7 @@ var formidable = require('formidable');
 var RecipeValidator = { }; // better would be to have module create an object
 RecipeValidator.name = function(param)
 {
-    var good_name = /[^\w]/;
+    var good_name = /[^a-zA-Z0-9_ ]/;
     //console.log(good_name.test(param));
     if (good_name.test(param))
 	return (false);
@@ -23,25 +31,60 @@ RecipeValidator.description = function(param)
 {
     return (RecipeValidator.name(param));
 }
+RecipeValidator.content = function(param)
+{
+    return (RecipeValidator.name(param));
+}
 RecipeValidator.duration = function(param)
 {
-    var good_date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
-    var tab = param.split("-");
-    console.log(tab);
+    var good_date = /^[0-9]{1,2}H[0-9]{1,2}$/;
+
+    //console.log(param);
     if (!(good_date.test(param)))
 	return (false);
-    if (!(tab[0].substr(0, 2) == "19" || tab[0].substr(0,2) == "20"))
-	return (false);
-    if (!(tab[1] >= 1 && tab[1] <= 12))
-	return (false);
-    if (!(tab[2] >= 1 && tab[2] <= 31))
-	return (false);
-    return (true);
+    var tab = param.split("H");
+    //console.log(tab);
+    if (parseInt(tab[1]) > 0 && parseInt(tab[1]) <= 59)
+	return (true);
+    return (false);
+}
+RecipeValidator.step = function(param)
+{
+    console.log("STEP !!!");
+    //console.log(param);
+    //console.log(typeof param);
+    if (typeof param == "object") {
+
+	var keys = Object.keys(param);
+	//console.log(keys.length);
+	if (keys.length == 3) {
+	    if (keys[0] == "name" && keys[1] == "duration" && keys[2] == "content") {
+		//console.log("Good keys !");
+		//console.log(RecipeValidator["name"](param[keys[0]]));
+		//console.log(RecipeValidator["duration"](param[keys[1]]));
+		//console.log(RecipeValidator["content"](param[keys[2]]));
+
+		//console.log(keys[1]);
+		//console.log(param[keys[1]]);
+		//console.log(typeof param[keys[1]]);
+		if (RecipeValidator["name"](param[keys[0]]) && RecipeValidator["duration"](param[keys[1]]) && RecipeValidator["content"](param[keys[2]])) {
+		    return (true);
+		}
+	    }
+	}
+    }
+    return (false);
 }
 RecipeValidator.steps = function(param)
 {
-    //console.log(param);
-    return (true);
+    if (param.isArray) {
+	for (i = 0 ; i < param.length ; i++) {
+	    if (!(RecipeValidator["step"](param[i])))
+		return (false);
+	}
+	return (true);
+    }
+    return (false);
 }
 RecipeValidator.ingredients = function(param)
 {
