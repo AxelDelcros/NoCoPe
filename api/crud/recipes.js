@@ -13,17 +13,29 @@ var formidable = require('formidable');
 var RecipeValidator = { }; // better would be to have module create an object
 RecipeValidator.name = function(param)
 {
-    //console.log(param);
+    var good_name = /[^\w]/;
+    //console.log(good_name.test(param));
+    if (good_name.test(param))
+	return (false);
     return (true);
 }
 RecipeValidator.description = function(param)
 {
-    //console.log(param);
-    return (true);
+    return (RecipeValidator.name(param));
 }
 RecipeValidator.duration = function(param)
 {
-    //console.log(param);
+    var good_date = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
+    var tab = param.split("-");
+    console.log(tab);
+    if (!(good_date.test(param)))
+	return (false);
+    if (!(tab[0].substr(0, 2) == "19" || tab[0].substr(0,2) == "20"))
+	return (false);
+    if (!(tab[1] >= 1 && tab[1] <= 12))
+	return (false);
+    if (!(tab[2] >= 1 && tab[2] <= 31))
+	return (false);
     return (true);
 }
 RecipeValidator.steps = function(param)
@@ -75,13 +87,17 @@ exports.post_recipe = function(req, res) {
 	
 	if (name === undefined || name === "")
 	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
-
+	if (RecipeValidator["name"](name) == false)
+	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'name' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
 	if (description === undefined || description === "")
 	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'description' in the form ! (it's maybe empty)"}));
 
+	if (RecipeValidator["description"](description) == false)
+	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'description' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
 	if (duration === undefined || duration === "")
 	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'duration' in the form ! (it's maybe empty)"}));
-
+	if (RecipeValidator["duration"](duration) == false)
+	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'duration' is not in the right format ! It should be like 'YYYY-MM-DD' !"}));
 	if (steps === undefined || steps === "")
 	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'steps' in the form ! (it's maybe empty)"}));
 	if (true) {
