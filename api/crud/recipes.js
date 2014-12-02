@@ -279,8 +279,9 @@ exports.delete_recipe_by_id = function(req, res) {
 	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
+	    req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
 	    collection_recipes.remove({_id: new BSON.ObjectID(id)},  function(err, NbrRemovedDocs) {
-		console.log(NbrRemovedDocs);
+		//console.log(NbrRemovedDocs);
 		if (err) {
 		    res.send({"res":false, "error_code":0004, "msg":"Can not remove this recipe !"});
 		}
