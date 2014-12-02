@@ -9,7 +9,23 @@ var formidable = require('formidable');
 */
 
 
+// Function to validate some formats
 var RecipeValidator = { }; // better would be to have module create an object
+RecipeValidator.name = function(param)
+{
+    //console.log(param);
+    return (true);
+}
+RecipeValidator.description = function(param)
+{
+    //console.log(param);
+    return (true);
+}
+RecipeValidator.duration = function(param)
+{
+    //console.log(param);
+    return (true);
+}
 RecipeValidator.steps = function(param)
 {
     //console.log(param);
@@ -207,18 +223,39 @@ exports.put_recipe_by_id = function(req, res) {
 	else {
 	    var form = new formidable.IncomingForm();
 	    form.parse(req, function(err, fields, files) {
-		var up_fields = false;
-		if (fields.name != null && fields.name != false)
-		    up_fields.name = fields.name;
-		collection_recipes.update({"_id": new BSON.ObjectID(req.params.id)}, {$set: {"name": "COUCOU"}}, {}, function(err, result) {
-		    console.log(err);
-		    console.log(result);
-		    if (err) {
 
-			res.send(err);
+
+		var recipes_updated_fields = ["name", "description", "duration", "steps", "ingredients", "products", "tags"];
+
+		var keys = Object.keys(fields);
+                var f = {};
+                for (i = 0; i < keys.length; i++) {
+                    //console.log(i);
+                    //console.log(keys[i]);
+
+                    if (recipes_updated_fields.indexOf(keys[i]) == -1)
+                        // This keys was not found
+			return (res.send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
+		    else if (RecipeValidator[keys[i]](fields[keys[i]]) == false)
+			return (res.send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
+		    else
+                        // We can add this fields to the future update request 
+                        f[keys[i]] = fields[keys[i]];
+                }
+
+                // Here we can execute the update request
+                //console.log(f);
+
+		req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
+		collection_recipes.update({"_id": new BSON.ObjectID(req.params.id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
+		    if (err) {
+			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+		    }
+		    else if (nbrUpdatedFields == null) {
+			return (res.send({"res":false, "error_code":0005, "msg":"This recipe 'id' was not found !"}));
 		    }
 		    else {
-			res.send(result);
+			return (res.send({"res":true}));
 		    }
 		});
 		
