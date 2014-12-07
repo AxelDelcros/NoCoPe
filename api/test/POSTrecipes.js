@@ -17,6 +17,8 @@ describe('CREATE recipe', function() {
 	//mongoose.connect(config.db.mongodb);
 	done();
     });
+
+
     // use describe to give a title to your test suite, in this case the tile is "Account"
     // and then specify a function in which we are going to declare all the tests
     // we want to run. Each test starts with the function it() and as a first argument 
@@ -24,52 +26,46 @@ describe('CREATE recipe', function() {
     // specify a function that takes a single parameter, "done", that we will use 
     // to specify when our test is completed, and that's what makes easy
     // to perform async test!
-    describe('Account', function() {
-	it('should return error trying to save duplicate username', function(done) {
-	    var profile = {
-		username: 'vgheri',
-		password: 'test',
-		firstName: 'Valerio',
-		lastName: 'Gheri'
-	    };
+    describe('Posting a Recipe', function() {
+	var recipe = {
+	    name: 'Recipe Name',
+	    description: 'Recipe Description',
+	    duration: '1H15',
+	    steps: '[{"name": "step name", "duration": "1H10", "content": "step content"}]',
+	    ingredients: '[]',
+	    products: '[]',
+	    tags: '[]'
+	};
+
+
+
+
+	it('Should create a user in the database', function(done) {
 	    // once we have specified the info we want to send to the server via POST verb,
 	    // we need to actually perform the action on the resource, in this case we want to 
 	    // POST on /api/profiles and we want to send some info
 	    // We do this using the request object, requiring supertest!
-	    request(url)
-		.post('/api/profiles')
-		.send(profile)
-	    // end handles the response
+	    request(url+':'+port)
+		.post('/recipes')
+		.send(recipe)
 		.end(function(err, res) {
 		    if (err) {
+			//console.log(err);
 			throw err;
 		    }
-		    // this is should.js syntax, very clear
-		    res.should.have.status(400);
+		    // We test the ret code
+		    res.should.have.ownProperty('status').equal(200);
+		    // Here we can test the JSon object returned
+
+		    // We can test too the object created in the database
+
 		    done();
 		});
 	});
-	it('should correctly update an existing account', function(done){
-	    var body = {
-		firstName: 'JP',
-		lastName: 'Berd'
-	    };
-	    request(url)
-		.put('/api/profiles/vgheri')
-		.send(body)
-		.expect('Content-Type', /json/)
-		.expect(200) //Status code
-		.end(function(err,res) {
-		    if (err) {
-			throw err;
-		    }
-		    // Should.js fluent syntax applied
-		    res.body.should.have.property('_id');
-	            res.body.firstName.should.equal('JP');
-	            res.body.lastName.should.equal('Berd');                    
-	            res.body.creationDate.should.not.equal(null);
-		    done();
-		});
-	});
+
+
+
+
+
     });
 });

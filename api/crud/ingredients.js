@@ -21,7 +21,7 @@ IngredientValidator.components = function(param)
     //console.log(param);
     return (true);
 }
-IngredientVali1dator.tags = function(param)
+IngredientValidator.tags = function(param)
 {
     //console.log(param);
     return (true);

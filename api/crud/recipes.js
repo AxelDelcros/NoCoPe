@@ -50,7 +50,7 @@ RecipeValidator.duration = function(param)
 }
 RecipeValidator.step = function(param)
 {
-    console.log("STEP !!!");
+    //console.log("STEP !!!");
     //console.log(param);
     //console.log(typeof param);
     if (typeof param == "object") {
@@ -128,76 +128,77 @@ exports.post_recipe = function(req, res) {
 	// We set the _uid to 'null' if it is not sent
 	_uid = _uid === undefined ? null : _uid;
 	
+
 	if (name === undefined || name === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
 	if (RecipeValidator["name"](name) == false)
-	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'name' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'name' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
 	if (description === undefined || description === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'description' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'description' in the form ! (it's maybe empty)"}));
 
 	if (RecipeValidator["description"](description) == false)
-	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'description' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'description' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
 	if (duration === undefined || duration === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'duration' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'duration' in the form ! (it's maybe empty)"}));
 	if (RecipeValidator["duration"](duration) == false)
-	    return (res.send({"res":false, "error_code":0005, "msg":"The field 'duration' is not in the right format ! It should be like 'YYYY-MM-DD' !"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'duration' is not in the right format ! It should be like 'YYYY-MM-DD' !"}));
+
 	if (steps === undefined || steps === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'steps' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'steps' in the form ! (it's maybe empty)"}));
 	if (true) {
 	    try {
 		steps = JSON.parse(steps);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the step variable
 	    if (RecipeValidator["steps"](steps) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
 	}
 
 	if (ingredients === undefined || ingredients === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'ingredients' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'ingredients' in the form ! (it's maybe empty)"}));
 	if (true) {
 	    try {
 		ingredients = JSON.parse(ingredients);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the ingredients variable
 	    if (RecipeValidator["ingredients"](steps) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
 	}
 
 	if (products === undefined || products === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'products' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'products' in the form ! (it's maybe empty)"}));
 	if (true) {
 	    try {
 		products = JSON.parse(products);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the ingredients variable
 	    if (RecipeValidator["products"](steps) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
 	}
 
 	if (tags === undefined || tags === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'tags' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'tags' in the form ! (it's maybe empty)"}));
 	if (true) {
 	    try {
 		tags = JSON.parse(tags);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the tags variable
 	    if (RecipeValidator["tags"](steps) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
 	}
 
-	
 	// We create the new recipe
 	var recipe = {
 	    "_uid": _uid,
@@ -211,18 +212,18 @@ exports.post_recipe = function(req, res) {
 	    "tags":tags
 	};
 	
-
+	
 	db.collection('recipes', function(err, collection_recipes) {
 	    if (err) {
-		res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});	
+		res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});	
 	    }
 	    else {
 		collection_recipes.insert(recipe, function(err, result) {
 		    if (err) {
-			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
 		    else {
-			res.send({"res":true, "_id":result[0]._id});
+			res.status(200).send({"res":true, "_id":result[0]._id});
 		    }
 		});
 	    }
