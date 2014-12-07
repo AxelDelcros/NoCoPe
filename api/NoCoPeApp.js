@@ -57,6 +57,7 @@ app.use(function(req,res,next){
 // Including the recipe CRUD
 var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
+var ingredients = require('./crud/users');
 
 
 
@@ -132,6 +133,18 @@ app.put('/ingredients/id/:id', ingredients.put_ingredient_by_id);
 app.delete('/ingredients/id/:id', ingredients.delete_ingredient_by_id);
 /*
 ** END ROUTES INGREDIENT
+*/
+
+
+/*
+** ROUTES USER
+*/
+app.post('/users', users.post_user);
+app.get('/users/id/:id', users.get_user_by_id);
+app.put('/users/id/:id', users.put_user_by_id);
+app.delete('/users/id/:id', users.delete_user_by_id);
+/*
+** END ROUTES USER
 */
 
 
