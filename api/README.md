@@ -14,13 +14,13 @@
 
 POST : /recipes
 Form :
--name:STRING
--description:STRING
--duration: ex 1H15, 2H06, 42, 5H
--steps:STEPS
--ingredients:["_id_ingredients_1", "_id_ingredients_2", "_id_ingredients_n"]
--products:["_id_products_1", "_id_products_2", "_id_products_n"]
--TAGS:["_id_tags_1", "_id_tags_2", "_id_tags_n"]
+*name:STRING
+*description:STRING
+*duration: ex 1H15, 2H06, 42, 5H
+*steps:STEPS
+*ingredients:["_id_ingredients_1", "_id_ingredients_2", "_id_ingredients_n"]
+*products:["_id_products_1", "_id_products_2", "_id_products_n"]
+*TAGS:["_id_tags_1", "_id_tags_2", "_id_tags_n"]
 
 
 
