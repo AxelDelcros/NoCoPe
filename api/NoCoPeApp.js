@@ -59,6 +59,8 @@ var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
 var users = require('./crud/users');
 
+var basic_auth = require('./auth/basic_auth');
+
 
 
 /*
@@ -107,7 +109,13 @@ app.delete('/:collection', function(req, res) {
 
 
 
-
+/*
+** ROUTES AUTH
+*/
+app.post('/connect', basic_auth.connect);
+/*
+** END ROUTES AUTH
+*/
 
 
 
@@ -115,7 +123,7 @@ app.delete('/:collection', function(req, res) {
 /*
 ** ROUTES RECIPE
 */
-app.post('/recipes', recipes.post_recipe);
+app.post('/recipes', basic_auth.check_auth, recipes.post_recipe);
 app.get('/recipes/id/:id', recipes.get_recipe_by_id);
 app.put('/recipes/id/:id', recipes.put_recipe_by_id);
 app.delete('/recipes/id/:id', recipes.delete_recipe_by_id);

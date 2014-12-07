@@ -1,6 +1,7 @@
 
 // [DEPENDENCIES]
 var formidable = require('formidable');
+var MD5 = require('MD5');
 
 
 /*
@@ -129,6 +130,7 @@ exports.post_user = function(req, res) {
 	var email = fields.email;
 	var password = fields.password;
 	var firstname = fields.firstname;
+	var lastname = fields.lastname;
 	var birth = fields.birth;
 	var diets = fields.diets;
 	var fridge = fields.fridge;
@@ -211,7 +213,7 @@ exports.post_user = function(req, res) {
 	var user = {
 	    "login": login,
 	    "email":email,
-	    "password":password,
+	    "password":MD5(password),
 	    "firstname":firstname,
 	    "lastname":lastname,
 	    "birth":birth,
@@ -267,6 +269,7 @@ exports.get_user_by_id = function(req, res) {
 		}
 		else {
 		    delete user.password;
+		    delete user.access_token;
 		    delete user.fridge;
 		    delete user.tools;
 		    res.status(200).send(user);
