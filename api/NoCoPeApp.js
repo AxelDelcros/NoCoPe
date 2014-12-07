@@ -57,7 +57,7 @@ app.use(function(req,res,next){
 // Including the recipe CRUD
 var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
-var ingredients = require('./crud/users');
+var users = require('./crud/users');
 
 
 

@@ -37,16 +37,19 @@ RecipeValidator.content = function(param)
 }
 RecipeValidator.duration = function(param)
 {
-    var good_date = /^[0-9]{1,2}H[0-9]{1,2}$/;
+    var good_date1 = /^[0-9]{1}H([0-9]{2})?$/;
+    var good_date2 = /^[0-9]{2}$/;
 
     //console.log(param);
-    if (!(good_date.test(param)))
+    if (!(good_date1.test(param)) && !(good_date2.test(param)))
 	return (false);
+    /*
     var tab = param.split("H");
     //console.log(tab);
     if (parseInt(tab[1]) > 0 && parseInt(tab[1]) <= 59)
 	return (true);
-    return (false);
+    */
+    return (true);
 }
 RecipeValidator.step = function(param)
 {
@@ -128,7 +131,7 @@ exports.post_recipe = function(req, res) {
 	// We set the _uid to 'null' if it is not sent
 	_uid = _uid === undefined ? null : _uid;
 	
-
+	console.log(name);
 	if (name === undefined || name === "")
 	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
 	if (RecipeValidator["name"](name) == false)
