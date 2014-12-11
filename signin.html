@@ -1,0 +1,33 @@
+<form id="signinForm" role="form">
+	<div class="col-sm-12 col-md-offset-3 col-md-6">
+		<div class="row">
+			
+			<div class="form-group row">
+				<label for="mail" class="col-md-3">Mail</label>
+				<div class="col-md-6">
+					<input type="mail" class="form-control" name="mail" id="login" placeholder=" {{ placeholderLogin }} " ng-model="formInfo.login" required>
+				</div>
+				<span class="col-md-3" ng-show="attentionMail" class="label label-danger">{{ attentionMail }}</span>
+			</div>
+			
+			<div class="form-group row">
+				<label for="mail" class="col-md-3">Password</label>
+				<div class="col-md-6">
+					<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="formInfo.password" required>
+				</div>
+				<span class="col-md-3" ng-show="attentionPassword" class="label label-danger">{{ attentionPassword }}</span>
+			</div>
+
+
+			<div class="form-group row">
+				<input type="checkbox">
+				Remember me
+			</div>
+
+			<button class="btn btn-success" type="submit" ng-click="submitForm()">
+				<span class="glyphicon glyphicon-upload"></span> Submit
+			</button>
+
+		</div>
+	</div>
+</form>
