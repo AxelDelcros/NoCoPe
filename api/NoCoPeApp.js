@@ -66,6 +66,15 @@ var users = require('./crud/users');
 var basic_auth = require('./auth/basic_auth');
 
 
+var default_database = require('./default_database');
+app.get('/init', function(req, res) {
+    db.collection('recipes', function(err, collection) {
+	collection.insert(default_database.recipes, function(err, result) {
+	    res.send({"res":true});
+	});
+    });
+});
+
 
 /*
 ** ROUTES DEFINITIONS
