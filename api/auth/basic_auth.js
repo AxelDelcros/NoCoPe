@@ -32,6 +32,44 @@ exports.check_auth = function(req, res, next) {
                 else {
 		    // user found, the access token is valid
 		    // We go out of the middleware
+		    req.private_var_user = user;
+		    return (next());
+		}
+	    });
+	}
+    });
+}
+
+
+
+// Don't block the execution of the function if the token is not right
+exports.check_auth = function(req, res, next) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    var token = req.get('access_token');
+
+    if (token === undefined) {
+	req.private_var_user = null;
+	return (next());
+    }
+    
+    db.collection('users', function(err, collection_users) {
+	if (err) {
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+        }
+        else {
+	    collection_users.findOne({"access_token":token}, function(err, user) {
+		if (err) {
+		    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+		}
+                else if (user == null) {
+		    res.status(400).send({"res":false, "error_code":5554, "msg":"Invalid access token ! (Maybe you need to relogin)"});
+                }
+                else {
+		    // user found, the access token is valid
+		    // We go out of the middleware
+		    req.private_var_user = user;
 		    return (next());
 		}
 	    });
