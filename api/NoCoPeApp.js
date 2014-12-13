@@ -49,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
     req.db = db;
     req.BSON = BSON;
+    // Allow cross-domain requests
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET");
     res.header("Access-Control-Request-Method", "*");
@@ -68,9 +69,15 @@ var basic_auth = require('./auth/basic_auth');
 
 var default_database = require('./default_database');
 app.get('/init', function(req, res) {
-    db.collection('recipes', function(err, collection) {
-	collection.insert(default_database.recipes, function(err, result) {
-	    res.send({"res":true});
+    db.collection('recipes', function(err, collection_recipes) {
+	collection_recipes.insert(default_database.recipes, function(err, result) {
+
+	    db.collection('ingredients', function(err, collection_ingredients) {
+		collection_ingredients.insert(default_database.ingredients, function(err, result) {
+		    res.send({"res":true});
+		});
+	    });
+
 	});
     });
 });

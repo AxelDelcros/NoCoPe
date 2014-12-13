@@ -33,3 +33,26 @@ exports.recipes = [
         "tags":"[]"
     }
 ];
+
+
+
+exports.ingredients = [
+    {
+	"name":"eau",
+        "components":"2L",
+        "tags":["11", "22", "33"],
+        "nutrients":[]
+    },
+    {
+	"name":"sucre",
+        "components":"500g",
+        "tags":["11", "22", "33"],
+        "nutrients":[]
+    },
+    {
+	"name":"lait",
+        "components":"1L",
+        "tags":["11", "22", "33"],
+        "nutrients":[]
+    }
+];
