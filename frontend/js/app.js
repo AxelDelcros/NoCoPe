@@ -67,9 +67,10 @@
 
             console.log("ca marche avant le get");
 
-            $http.get('http://www.kaliazur.fr:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
+            $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
             .success(function(data,status,headers,config){
                 console.log('LE ZIZI');
+		console.log(data);
             })
 
             .error(function(data,status,headers,config){
