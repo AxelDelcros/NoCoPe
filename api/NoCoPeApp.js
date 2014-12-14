@@ -67,19 +67,27 @@ var users = require('./crud/users');
 var basic_auth = require('./auth/basic_auth');
 
 
-var default_database = require('./default_database');
 app.get('/init', function(req, res) {
-    db.collection('recipes', function(err, collection_recipes) {
-	collection_recipes.insert(default_database.recipes, function(err, result) {
+    var db = req.db;
+    var BSON = req.BSON;
 
-	    db.collection('ingredients', function(err, collection_ingredients) {
-		collection_ingredients.insert(default_database.ingredients, function(err, result) {
-		    res.send({"res":true});
-		});
+    var default_recipes = require('./default_database').recipes;
+    default_recipes.forEach(function(element, index, array) {
+	db.collection('recipes', function(err, collection_recipes) {
+	    element._id = new BSON.ObjectID(element._id);
+	    collection_recipes.insert(element, function(err, result) {
 	    });
-
 	});
     });
+    var default_ingredients = require('./default_database').ingredients;
+    default_ingredients.forEach(function(element, index, array) {
+	db.collection('ingredients', function(err, collection_ingredients) {
+	    element._id = new BSON.ObjectID(element._id);
+	    collection_ingredients.insert(element, function(err, result) {
+	    });
+	});
+    });
+    res.send({"res":true});
 });
 
 
@@ -111,13 +119,15 @@ app.get('/:collection', function(req, res) {
 app.delete('/:collection', function(req, res) {
     db.collection(req.params.collection, function(err, collection) {
         if (err) {
+	    console.log(err);
             res.status(400).send({"res":false, "error_code":2225, "msg": "An error happened accessing the database !"});
         }
         else
         {
 	    collection.drop(function(err, reply) {
 		if (err) {
-		    res.status(400).send({"res":false, "error_code":2225, "msg": "An error happened accessing the database !"});
+		    console.log(err);
+		    res.status(400).send({"res":false, "error_code":2226, "msg": "An error happened accessing the database !"});
 		}
 		else  {
 		    res.status(200).send({"res":true});

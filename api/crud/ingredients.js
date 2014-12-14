@@ -99,10 +99,11 @@ exports.post_ingredient = function(req, res) {
 
 	db.collection('ingredients', function(err, collection_ingredients) {
 	    if (err) {
-		res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});	
+		console.log(err);
+		res.send({"res":false, "error_code":0005, "msg":"Something happened during the database access !"});
 	    }
 	    else {
-		collection_inredients.insert(recipe, function(err, result) {
+		collection_ingredients.insert(recipe, function(err, result) {
 		    if (err) {
 			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
@@ -126,17 +127,18 @@ exports.get_ingredient_by_id = function(req, res) {
     var BSON = req.BSON;
 
     var id = req.params.id;
-    db.collection('ingredients', function(err, collection) {
+    db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
 	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
-	    collection.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
+	    collection_ingredients.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
 		if (err) {
+		    console.log(err);
 		    res.status(400).send({"res":false, "error_code":5554, "msg":"This ingredient does not exists !"});
 		}
 		else if (ingredient == null) {
-		    res.status(400).send({"res":false, "error_code":5554, "msg":"This ingredient 'id' was not found !"});
+		    res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"});
 		}
 		else {
 		    res.send(ingredient);
