@@ -14,26 +14,35 @@ var logger = require('morgan');
 
 // Including the mongodb module
 var mongo = require('mongodb');
+var GridStore = mongo.GridStore;
+var ObjectID = mongo.ObjectID;
+
+
 
 
 var MongoDBServer = mongo.Server,
 Db = mongo.Db,
 BSON = mongo.BSONPure,
+GridStore = mongo.GridStore,
+MongoDBServerName = 'localhost';
 MongoDBPort = 27018;
+MongoDBDatabase = 'food_db';
 
-var server = new MongoDBServer('localhost', MongoDBPort, {auto_reconnect: true});
-var db = new Db('food_db', server, {safe: true});
+var server = new MongoDBServer(MongoDBServerName, MongoDBPort, {auto_reconnect: true});
+var db = new Db(MongoDBDatabase, server, {safe: true});
 
 db.open(function(err, db) {
 
     if (!err) {
-        console.log("Connected to 'food_db' database !");
+        console.log("Connected to '"+MongoDBDatabase+"' database !");
     }
     else {
         console.log("An error happened during the connection to the MongoDB server !");
+	throw ("An error happened during the connection to the MongoDB server !");
     }
 
 });
+
 
 
 
@@ -46,13 +55,23 @@ app.set('port', process.env.PORT || server_port);
 app.use(logger('dev'));  /* 'default', 'short', 'tiny', 'dev' */
 //app.use(express.bodyParser()),
 app.use(express.static(path.join(__dirname, 'public')));
+// Middleware
 app.use(function(req,res,next){
+    // Put some variable, then we could access them easily
     req.db = db;
+    req.mongo = mongo;
     req.BSON = BSON;
+    req.GridStore = GridStore;
+
+    // Put gridform variable
+    req.gridform = require('gridform');
+    req.gridform.db = db;
+    req.gridform.mongo = mongo;
+
     // Allow cross-domain requests
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET");
-    res.header("Access-Control-Request-Method", "*");
+    res.header("Access-Control-Request-Methods", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
@@ -63,8 +82,74 @@ app.use(function(req,res,next){
 var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
 var users = require('./crud/users');
+//var images = require('./crud/images');
 
 var basic_auth = require('./auth/basic_auth');
+
+
+var formidable = ('formidable');
+app.post('/file', function(req, res) {
+    var form = req.gridform();
+
+    form.on('fileBegin', function(name, file) {
+	console.log("FileBegin");
+	file.metadata = {"key":"value", "tableau":["value1", "value2", "value3"]};
+    });
+    form.parse(req, function(err, fields, files) {
+
+	var keys = Object.keys(files);
+	for (i = 0; i < keys.length; i++) {
+	    console.log(keys[i]);
+	    console.log(files[keys[i]]);
+	    console.log("\n\n");
+	}
+
+    });
+
+
+    res.send("Coucou");
+
+});
+
+
+
+app.get('/file/:id', function(req, res) {
+
+    /*
+    // Other way to do it, in case of future bug
+    var GridStream = require('gridfs-stream');
+    var fileId = new ObjectID(req.params.id);
+    var gfs = GridStream(db, mongo);
+    gfs.files.find({_id: fileId}).toArray(function(err, files) {
+	console.log(files);
+	var readstream = gfs.createReadStream({_id: fileId});
+	readstream.pipe(res);
+    });
+    */
+
+    var fileId = new ObjectID(req.params.id);
+    var file = new GridStore(db, fileId, "r");
+    if (file !== undefined && file !== null) {
+	file.open(function(err, file) {
+	    if (file !== undefined && file !== null) {
+		console.log(file.metadata);
+		res.status(200);
+		res.set('Content-Type', file.contentType);
+		var stream = file.stream();
+		stream.pipe(res);
+	    }
+	    else {
+		res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
+	    }
+	});
+    }
+    else {
+	res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
+    }
+});
+
+
+
 
 
 app.get('/init', function(req, res) {

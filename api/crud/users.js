@@ -2,6 +2,7 @@
 // [DEPENDENCIES]
 var formidable = require('formidable');
 var MD5 = require('MD5');
+var email_validator = require('email-validator');
 
 
 /*
@@ -25,62 +26,79 @@ UserValidator.login = function(param)
 {
     var good_login = /[^a-zA-Z0-9_]/;
     //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'login' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'login' can't be empty !"});
     if (good_login.test(param))
-	return (false);
+        return ({"res":false, "error_code":0007, "msg":"The field 'login' is not in the right format ! It can only contain letters, numbers and underscores !"});
+    if (param.length < 5)
+        return ({"res":false, "error_code":0007, "msg":"The field 'login' has to contain at least 5 caracteres !"});
     return (true);
 }
 UserValidator.email = function(param)
 {
-    /////
-    // TODO
-    // User a Email Validator
-    /////
-    return (UserValidator.name(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'email' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'email' can't be empty !"});
+    if (email_validator.validate(param) == false)
+        return ({"res":false, "error_code":0007, "msg":"The field 'email' has to be a correct email address !"});
+    return (true);
 }
 UserValidator.password = function(param)
 {
-    
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'password' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'password' can't be empty !"});
+    if (param.length < 8)
+        return ({"res":false, "error_code":0007, "msg":"The field 'password' has to contain at least 8 caracteres !"});
     return (true);
 }
 UserValidator.firstname = function(param)
 {
-    return (UserValidator.name(param));
+    var good_name = /[^a-zA-Z]/;
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'firstname' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'firstname' can't be empty !"});
+    if (good_name.test(param))
+        return ({"res":false, "error_code":0007, "msg":"The field 'firstname' is not in the right format ! It can only contain letters !"});
+    return (true);
 }
 UserValidator.lastname = function(param)
 {
-    return (UserValidator.name(param));
-
-
-    //console.log("STEP !!!");
-    //console.log(param);
-    //console.log(typeof param);
-    if (typeof param == "object") {
-
-	var keys = Object.keys(param);
-	//console.log(keys.length);
-	if (keys.length == 3) {
-	    if (keys[0] == "name" && keys[1] == "duration" && keys[2] == "content") {
-		//console.log("Good keys !");
-		//console.log(RecipeValidator["name"](param[keys[0]]));
-		//console.log(RecipeValidator["duration"](param[keys[1]]));
-		//console.log(RecipeValidator["content"](param[keys[2]]));
-
-		//console.log(keys[1]);
-		//console.log(param[keys[1]]);
-		//console.log(typeof param[keys[1]]);
-		if (RecipeValidator["name"](param[keys[0]]) && RecipeValidator["duration"](param[keys[1]]) && RecipeValidator["content"](param[keys[2]])) {
-		    return (true);
-		}
-	    }
-	}
-    }
-    return (false);
+    var good_name = /[^a-zA-Z]/;
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'lastname' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'lastname' can't be empty !"});
+    if (good_name.test(param))
+        return ({"res":false, "error_code":0007, "msg":"The field 'lastname' is not in the right format ! It can only contain letters !"});
+    return (true);
+}
+UserValidator.sexe = function(param)
+{
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'sexe' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'sexe' can't be empty !"});
+    if (param != "male" && param != "female")
+        return ({"res":false, "error_code":0007, "msg":"The field 'sexe' has to be 'male' or 'female' !"});
+    return (true);
 }
 UserValidator.birth = function(param)
 {
     var good_birth = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
-    return (good_birth.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'birth' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'birth' can't be empty !"});
+    if (good_birth.test(param) == false)
+        return ({"res":false, "error_code":0007, "msg":"The field 'birth' is not in the right format ! It Has to be 'YYYY-MM-DD' !"});
+    return (true);
 }
 UserValidator.diets = function(param)
 {
@@ -118,97 +136,55 @@ UserValidator.tools = function(param)
 
 
 
+
 // [CREATE] Post User
 exports.post_user = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
+    var GridStore = req.GridStore;
 
-    var form = new formidable.IncomingForm();
+    //var form = new formidable.IncomingForm();
+    var form = new req.gridform();
+    form.on('fileBegin', function(name, file) {
+        //console.log("FileBegin");
+        //file.metadata = {"uid":"value", "tableau":["value1", "value2", "value3"]};
+    });
     form.parse(req, function(err, fields, files) {
+
+	var keys = Object.keys(files);
+	if (err) {
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"An error happened ! Please retry !"}));
+	}
+	else if (keys.length > 1) {
+	    // Suppression de toutes les eventuelles images envoyées
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"You can just associate one image to a profile !"}));
+	}
+
 
 	var login = fields.login;
 	var email = fields.email;
 	var password = fields.password;
 	var firstname = fields.firstname;
 	var lastname = fields.lastname;
+	var sexe = fields.sexe;
 	var birth = fields.birth;
-	var diets = fields.diets;
-	var fridge = fields.fridge;
-	var tools = fields.tools;
+
+	var ret;
+	if ((ret = UserValidator["login"](login)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["email"](email)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["password"](password)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["firstname"](firstname)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["lastname"](lastname)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["sexe"](sexe)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = UserValidator["birth"](birth)) !== true)
+            return (res.status(400).send(ret));
 	
-
-	/*
-	if (name === undefined || name === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
-	if (RecipeValidator["name"](name) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'name' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
-	if (description === undefined || description === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'description' in the form ! (it's maybe empty)"}));
-
-	if (RecipeValidator["description"](description) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'description' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
-	if (duration === undefined || duration === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'duration' in the form ! (it's maybe empty)"}));
-	if (RecipeValidator["duration"](duration) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'duration' is not in the right format ! It should be like 'YYYY-MM-DD' !"}));
-
-	if (steps === undefined || steps === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'steps' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		steps = JSON.parse(steps);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the step variable
-	    if (RecipeValidator["steps"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
-	}
-
-	if (ingredients === undefined || ingredients === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'ingredients' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		ingredients = JSON.parse(ingredients);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the ingredients variable
-	    if (RecipeValidator["ingredients"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
-	}
-
-	if (products === undefined || products === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'products' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		products = JSON.parse(products);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the ingredients variable
-	    if (RecipeValidator["products"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
-	}
-
-	if (tags === undefined || tags === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'tags' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		tags = JSON.parse(tags);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the tags variable
-	    if (RecipeValidator["tags"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	}
-	*/
-
 	// We create the new recipe
 	var user = {
 	    "login": login,
@@ -216,10 +192,12 @@ exports.post_user = function(req, res) {
 	    "password":MD5(password),
 	    "firstname":firstname,
 	    "lastname":lastname,
+	    "sexe":sexe,
 	    "birth":birth,
-	    "diets":diets,
-	    "fridge":fridge,
-	    "tools":tools
+	    "image":(keys.length == 0 ? null : {"name":files[keys[0]].name, "id":files[keys[0]].id}),
+	    "diets":[],
+	    "fridge":[],
+	    "tools":[]
 	};
 	
 	
@@ -233,10 +211,14 @@ exports.post_user = function(req, res) {
 			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
 		    else {
+			// On rajoute les metadata à l'image
+			result[0].id = result[0]._id;
+			delete result[0]._id;
 			delete result[0].password;
+			delete result[0].diets;
 			delete result[0].fridge;
 			delete result[0].tools;
-			res.status(200).send({"res":true, "_id":result[0]});
+			res.status(200).send({"res":true, "user":result[0]});
 		    }
 		});
 	    }
