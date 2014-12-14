@@ -1,5 +1,7 @@
 # API : Ressourses usages and management
 
+Lancer : `npm install` pour telecharger tout les modules
+
 
 ## Port : 5555
 
