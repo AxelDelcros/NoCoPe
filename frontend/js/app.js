@@ -36,45 +36,96 @@
             });
         });
 
-    // create the controller and inject Angular's $scope
-    NoCoPe.controller('recipeController', function($scope) {
-        // create a message to display in our view
-        $scope.placeholder = 'Type recipe name here...';
-    });
+    // create a factory to handle all request in recipes data
+    NoCoPe.factory('RecipesFactory', function($http, $q){
 
-    NoCoPe.controller('ingredientsController', function($scope) {
-        $scope.placeholder = 'Type ingredient name here...';
-    });
-
-    NoCoPe.controller('productController', function($scope) {
-        $scope.placeholder = 'Type product name here...';
-    });
-
-    NoCoPe.controller('signinController', ['$scope','$http', function( $scope , $http ) {
-
-        $scope.placeholderLogin = 'john.doe@mail.com';
-        $scope.placeholderPassword = 'password';
-        console.log("Enter the controller");
-
-        $scope.submitForm = function(){
-            console.log("Kiki submit");
-
-            if (!$scope.formInfo.login)
-                $scope.attentionMail = 'Mail is required !';
-
-            if (!$scope.formInfo.password)
-                $scope.attentionPassword = 'Password is required !';
-
-            console.log("ca marche avant le get");
-
-            $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
-            .success(function(data,status,headers,config){
-                console.log('LE ZIZI');
-		console.log(data);
+        var factory = {
+           recipes : false,
+           ingredient : false,
+           getRecipes : function(){
+            var deferred = $q.defer();
+            $http.get('http://localhost:5555/recipes')
+            .success(function(data, status, headers, config){
+                factory.recipes = data;
+                deferred.resolve(factory.recipes);
             })
+            .error(function(data, status, headers, config){
+                deferred.reject("Can't get recipes list");
+            })
+            return deferred.promise;
+        },
+        getIngredient : function(id){
+            var deferred = $q.defer();
+            $http.get('http://localhost:5555/ingredients/id/' + id)
+            .success(function(data, status, headers, config){
+                factory.ingredient = data;
+                deferred.resolve(factory.ingredient);
+            })
+            .error(function(data, status, headers, config){
+                deferred.reject("Can't get ingredient data");
+            })
+            return deferred.promise;
+        }
+    }
+    return factory;
+})
 
-            .error(function(data,status,headers,config){
-                console.log('Error');
+
+    // create the controller and inject Angular's $scope
+    NoCoPe.controller('recipeController', ['$scope','$http', 'RecipesFactory', function( $scope, $http, RecipesFactory) {
+        // create a message to display in our view
+        $scope.loading = true;
+        $scope.placeholder = 'Type recipe name here...';
+        $scope.recipes = RecipesFactory.getRecipes().then(function(recipes){
+            $scope.recipes = recipes;
+            angular.forEach($scope.recipes, function(recipe, key1){
+                angular.forEach(recipe.ingredients, function(ingredient, key2) {
+                    $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function(ingredient){
+                        $scope.recipes[key1].ingredients[key2] = ingredient.name;
+                    }, function(msg){
+                        alert(msg);
+                    })  
+                });
             });
-        };
-    }]);
+            $scope.loading = false;
+        }, function(msg){
+            alert(msg);
+        });
+        }]);
+
+        NoCoPe.controller('ingredientsController', function($scope) {
+            $scope.placeholder = 'Type ingredient name here...';
+        });
+
+        NoCoPe.controller('productController', function($scope) {
+            $scope.placeholder = 'Type product name here...';
+        });
+
+        NoCoPe.controller('signinController', ['$scope','$http', function( $scope , $http ) {
+
+            $scope.placeholderLogin = 'john.doe@mail.com';
+            $scope.placeholderPassword = 'password';
+            console.log("Enter the controller");
+
+            $scope.submitForm = function(){
+                console.log("submit");
+
+                if (!$scope.formInfo.login)
+                    $scope.attentionMail = 'Mail is required !';
+
+                if (!$scope.formInfo.password)
+                    $scope.attentionPassword = 'Password is required !';
+
+                console.log("ca marche avant le get");
+
+                $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
+                .success(function(data,status,headers,config){
+                    console.log('LE ZIZI');
+                    console.log(data);
+                })
+
+                .error(function(data,status,headers,config){
+                    console.log('Error');
+                });
+            };
+        }]);
