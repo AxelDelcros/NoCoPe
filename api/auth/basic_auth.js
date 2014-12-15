@@ -15,22 +15,22 @@ exports.check_auth = function(req, res, next) {
     var token = req.get('access_token');
 
     if (token === undefined) {
-	return (res.status(400).send({"res":false, "error_code":0004, "msg":"You need to send the HTTP Header 'access_token' !"}));
+	return (res.status(401).send({"res":false, "error_code":0004, "msg":"You need to send the HTTP Header 'access_token' !"}));
     }
     
     db.collection('users', function(err, collection_users) {
 	if (err) {
 	    console.log(err);
-	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+	    return (res.status(401).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
         }
         else {
 	    collection_users.findOne({"access_token":token}, function(err, user) {
 		if (err) {
 		    console.log(err);
-		    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+		    return (res.status(401).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 		}
                 else if (user == null) {
-		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"Invalid access token ! (Maybe you need to relogin)"}));
+		    return (res.status(401).send({"res":false, "error_code":5554, "msg":"Invalid access token ! (Maybe you need to relogin)"}));
                 }
                 else {
 		    // user found, the access token is valid
