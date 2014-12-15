@@ -272,7 +272,7 @@ app.delete('/:collection', function(req, res) {
 /*
 ** ROUTES AUTH
 */
-app.post('/login', basic_auth.connect);
+app.post('/login', basic_auth.login);
 /*
 ** END ROUTES AUTH
 */
