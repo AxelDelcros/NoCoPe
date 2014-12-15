@@ -150,7 +150,7 @@
         $scope.info = {login: 'Login', firstname : "First name", lastname : "Last name"};
         $scope.placeholderLogin = 'Email';
         $scope.placeholderPassword = 'Password';
-        $scope.placeholderDate = 'AAA-MM-JJ';
+        $scope.placeholderDate = 'YYYY-MM-DD';
         console.log("Enter the controller");
 
         $scope.submitForm = function(sign){
