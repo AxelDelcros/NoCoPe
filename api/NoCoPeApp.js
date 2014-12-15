@@ -62,6 +62,7 @@ app.use(function(req,res,next){
     req.mongo = mongo;
     req.BSON = BSON;
     req.GridStore = GridStore;
+    req.ObjectID = ObjectID;
 
     // Put gridform variable
     req.gridform = require('gridform');
@@ -113,7 +114,30 @@ app.post('/file', function(req, res) {
 
 
 
+app.delete('/file/:id', function(req, res) {
+    // Check the right
+    /*
+    if (req.params.id.length != 24)
+	return (res.status(400).send({"res":false, "error_code":4568, "msg": "You can not remove this image !"}));
+    var fileId = new req.ObjectID(req.params.id);
+    req.GridStore.unlink(req.db, fileId, function(err) {
+	if (err) {
+	    console.log(err);
+	    return (res.status(400).send({"res":false, "error_code":4568, "msg": "An error happened removing the image ! Please retry !"}));
+	}
+	else {
+	    return (res.status(200).send({"res":true}));	    
+	}
+    });
+    */
+    res.send("Coucou");
+});
+
+
+
 app.get('/file/:id', function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
 
     /*
     // Other way to do it, in case of future bug
@@ -127,25 +151,46 @@ app.get('/file/:id', function(req, res) {
     });
     */
 
-    var fileId = new ObjectID(req.params.id);
-    var file = new GridStore(db, fileId, "r");
-    if (file !== undefined && file !== null) {
-	file.open(function(err, file) {
-	    if (file !== undefined && file !== null) {
-		console.log(file.metadata);
-		res.status(200);
-		res.set('Content-Type', file.contentType);
-		var stream = file.stream();
-		stream.pipe(res);
-	    }
-	    else {
-		res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
-	    }
-	});
-    }
-    else {
-	res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
-    }
+    if (req.params.id.length != 24)
+	return (res.status(400).send({"res":false, "error_code":4568, "msg": "This image does not exists !"}));
+    db.collection('images', function(err, collection_images) {
+	if (err) {
+	    console.log(err);
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during thedatabase access !"}));
+	}
+	else {
+	    collection_images.findOne({"_id":new BSON.ObjectID(req.params.id)}, function(err, image) {
+		if (err) {
+		    console.log(err);
+		    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during thedatabase access !"}));
+		}
+		else if (image == null) {
+		    res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
+		}
+		else {
+		    var fileId = new ObjectID(image.id_image);
+		    var file1 = new GridStore(db, fileId, "r");
+		    if (file1 !== undefined && file1 !== null) {
+			file1.open(function(err, file2) {
+			    if (file2 !== undefined && file2 !== null) {
+				//console.log(file.metadata);
+				res.status(200);
+				res.set('Content-Type', file2.contentType);
+				var stream = file2.stream();
+				stream.pipe(res);
+			    }
+			    else {
+				res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
+			    }
+			});
+		    }
+		    else {
+			res.status(400).send({"res": false, "error_code":4475, "msg": "This image does not exists !"});
+		    }
+		}
+	    });
+	}
+    });
 });
 
 

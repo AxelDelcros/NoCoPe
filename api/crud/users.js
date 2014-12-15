@@ -21,8 +21,9 @@ String.prototype.isString = true;
 
 
 // Function to validate some formats
-var UserValidator = { }; // better would be to have module create an object
-UserValidator.login = function(param)
+// better would be to have module create an object
+exports.UserValidator = { };
+exports.UserValidator.login = function(param)
 {
     var good_login = /[^a-zA-Z0-9_]/;
     //console.log(good_name.test(param));
@@ -36,7 +37,7 @@ UserValidator.login = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'login' has to contain at least 5 caracteres !"});
     return (true);
 }
-UserValidator.email = function(param)
+exports.UserValidator.email = function(param)
 {
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'email' !"});
@@ -46,7 +47,7 @@ UserValidator.email = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'email' has to be a correct email address !"});
     return (true);
 }
-UserValidator.password = function(param)
+exports.UserValidator.password = function(param)
 {
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'password' !"});
@@ -56,7 +57,7 @@ UserValidator.password = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'password' has to contain at least 8 caracteres !"});
     return (true);
 }
-UserValidator.firstname = function(param)
+exports.UserValidator.firstname = function(param)
 {
     var good_name = /[^a-zA-Z]/;
     if (param === undefined)
@@ -67,7 +68,7 @@ UserValidator.firstname = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'firstname' is not in the right format ! It can only contain letters !"});
     return (true);
 }
-UserValidator.lastname = function(param)
+exports.UserValidator.lastname = function(param)
 {
     var good_name = /[^a-zA-Z]/;
     if (param === undefined)
@@ -78,7 +79,7 @@ UserValidator.lastname = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'lastname' is not in the right format ! It can only contain letters !"});
     return (true);
 }
-UserValidator.sexe = function(param)
+exports.UserValidator.sexe = function(param)
 {
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'sexe' !"});
@@ -88,7 +89,7 @@ UserValidator.sexe = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'sexe' has to be 'male' or 'female' !"});
     return (true);
 }
-UserValidator.birth = function(param)
+exports.UserValidator.birth = function(param)
 {
     var good_birth = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
@@ -100,7 +101,7 @@ UserValidator.birth = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'birth' is not in the right format ! It Has to be 'YYYY-MM-DD' !"});
     return (true);
 }
-UserValidator.diets = function(param)
+exports.UserValidator.diets = function(param)
 {
     if (param.isArray) {
 	for (i = 0 ; i < param.length ; i++) {
@@ -111,25 +112,28 @@ UserValidator.diets = function(param)
     }
     return (false);
 }
-UserValidator.fridge_component = function(param) {
+exports.UserValidator.fridge_component = function(param) {
     // TODO
     return (true);
 }
-UserValidator.fridge = function(param)
+exports.UserValidator.fridge = function(param)
 {
     if (param.isArray) {
 	for (i = 0 ; i < param.length ; i++) {
-	    if (!(UserValidator["fridge_component"](param[i])))
+	    if (!(exports.UserValidator["fridge_component"](param[i])))
 		return (false);
 	}
 	return (true);
     }
     return (false);
 }
-UserValidator.tools = function(param)
+exports.UserValidator.tools = function(param)
 {
-    return (UserValidator["diets"](param));
+    return (exports.UserValidator["diets"](param));
 }
+
+
+
 //var funcstr = "steps";
 //RecipeValidator[funcstr]();
 
@@ -145,9 +149,13 @@ exports.post_user = function(req, res) {
 
     //var form = new formidable.IncomingForm();
     var form = new req.gridform();
+
+
+
+
     form.on('fileBegin', function(name, file) {
         //console.log("FileBegin");
-        //file.metadata = {"uid":"value", "tableau":["value1", "value2", "value3"]};
+        file.metadata = {"uid":"value", "tableau":["value1", "value2", "value3"]};
     });
     form.parse(req, function(err, fields, files) {
 
@@ -160,7 +168,6 @@ exports.post_user = function(req, res) {
 	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"You can just associate one image to a profile !"}));
 	}
 
-
 	var login = fields.login;
 	var email = fields.email;
 	var password = fields.password;
@@ -170,19 +177,19 @@ exports.post_user = function(req, res) {
 	var birth = fields.birth;
 
 	var ret;
-	if ((ret = UserValidator["login"](login)) !== true)
+	if ((ret = exports.UserValidator["login"](login)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["email"](email)) !== true)
+        if ((ret = exports.UserValidator["email"](email)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["password"](password)) !== true)
+        if ((ret = exports.UserValidator["password"](password)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["firstname"](firstname)) !== true)
+        if ((ret = exports.UserValidator["firstname"](firstname)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["lastname"](lastname)) !== true)
+        if ((ret = exports.UserValidator["lastname"](lastname)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["sexe"](sexe)) !== true)
+        if ((ret = exports.UserValidator["sexe"](sexe)) !== true)
             return (res.status(400).send(ret));
-        if ((ret = UserValidator["birth"](birth)) !== true)
+        if ((ret = exports.UserValidator["birth"](birth)) !== true)
             return (res.status(400).send(ret));
 	
 	// We create the new recipe
@@ -194,7 +201,7 @@ exports.post_user = function(req, res) {
 	    "lastname":lastname,
 	    "sexe":sexe,
 	    "birth":birth,
-	    "image":(keys.length == 0 ? null : {"name":files[keys[0]].name, "id":files[keys[0]].id}),
+	    "image":null,
 	    "diets":[],
 	    "fridge":[],
 	    "tools":[]
@@ -203,22 +210,50 @@ exports.post_user = function(req, res) {
 	
 	db.collection('users', function(err, collection_users) {
 	    if (err) {
-		res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});	
+		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	    }
 	    else {
-		collection_users.insert(user, function(err, result) {
+		
+		collection_users.insert(user, function(err, result_user) {
 		    if (err) {
-			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 		    }
 		    else {
-			// On rajoute les metadata à l'image
-			result[0].id = result[0]._id;
-			delete result[0]._id;
-			delete result[0].password;
-			delete result[0].diets;
-			delete result[0].fridge;
-			delete result[0].tools;
-			res.status(200).send({"res":true, "user":result[0]});
+			result_user[0].id = result_user[0]._id;
+			delete result_user[0]._id;
+			delete result_user[0].password;
+			delete result_user[0].diets;
+			delete result_user[0].fridge;
+			delete result_user[0].tools;
+			// Create the image object
+			if (keys.length != 0) {
+			    //: {"name":files[keys[0]].name, "id":files[keys[0]].id}),
+			    db.collection('images', function(err, collection_images) {
+				var image = {
+				    "uid":result_user[0].id,
+				    "id_image":files[keys[0]].id
+				};
+				collection_images.insert(image, function(err, result_img) {
+				    if (err) {
+					return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+				    }
+				    else {
+					collection_users.update({"_id": result_user[0].id}, {$set: {"image":result_img[0]._id}}, {}, function(err, nbr) {
+					    if (err) {
+				    		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+					    }
+					    else {
+						result_user[0].image = result_img[0]._id;
+						res.status(200).send({"res":true, "user":result_user[0]});
+					    }
+					});
+				    }
+				});
+			    });
+			}
+			else {
+			    res.status(200).send({"res":true, "user":result_user[0]});
+			}
 		    }
 		});
 	    }
@@ -250,6 +285,8 @@ exports.get_user_by_id = function(req, res) {
 		    res.status(400).send({"res":false, "error_code":5554, "msg":"This 'id' user was not found !"});
 		}
 		else {
+		    user.id = user._id;
+		    delete user._id;
 		    delete user.password;
 		    delete user.access_token;
 		    delete user.fridge;
@@ -293,7 +330,7 @@ exports.put_user_by_id = function(req, res) {
                     if (users_updated_fields.indexOf(keys[i]) == -1)
                         // This keys was not found
 			return (res.send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
-		    else if (UserValidator[keys[i]](fields[keys[i]]) == false)
+		    else if (exports.UserValidator[keys[i]](fields[keys[i]]) == false)
 			return (res.send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
 		    else
                         // We can add this fields to the future update request 
