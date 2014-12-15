@@ -94,19 +94,19 @@
 
 					<div class="form-group row">
 						<div class="col-xs-4">
-							<input type="radio" ng-model="signUp.gender" value="male"/>  male
+							<input type="radio" ng-model="signUp.gender" value="male"/>  Male
 						</div>
 						<div class="col-xs-4">
-							<input type="radio" ng-model="signUp.gender" value="female" />  female<br />
+							<input type="radio" ng-model="signUp.gender" value="female" />  Female<br />
 						</div>
 					</div>
 
 					<div class="control-group">
 						<div class="controls">
-							<button id="Submit" name="Submit" ng-click="submitForm(signUp, 'callBack')" class="btn btn-primary" >Send</button>
+							<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" >Send</button>
 						</div>
 					</div>
 
 				</form>
-				<textarea id="submitDebugText">{{callBack | json}}</textarea><br />
+				<textarea id="submitDebugText">{{signUp.back | json}}</textarea><br />
 			</div>

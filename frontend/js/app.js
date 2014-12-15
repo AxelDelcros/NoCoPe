@@ -45,9 +45,9 @@
     NoCoPe.factory('RecipesFactory', function($http, $q){
 
         var factory = {
-         recipes : false,
-         ingredient : false,
-         getRecipes : function(){
+           recipes : false,
+           ingredient : false,
+           getRecipes : function(){
             var deferred = $q.defer();
             $http.get('http://localhost:5555/recipes')
             .success(function(data, status, headers, config){
@@ -147,29 +147,30 @@
     }]);
 
     NoCoPe.controller('signupController', ['$scope','$http', function( $scope , $http ) {
-        $scope.info = {login: 'DarkJoe', firstname : "John", lastname : "Doe"};
-        $scope.placeholderLogin = 'john.doe@mail.com';
-        $scope.placeholderPassword = 'password';
-        $scope.placeholderDate = 'jj/mm/aaaa';
+        $scope.info = {login: 'Login', firstname : "First name", lastname : "Last name"};
+        $scope.placeholderLogin = 'Email';
+        $scope.placeholderPassword = 'Password';
+        $scope.placeholderDate = 'AAA-MM-JJ';
         console.log("Enter the controller");
 
-        $scope.submitForm = function(data, callback){
-            if (data.password !== data.password2)
+        $scope.submitForm = function(sign){
+            if (sign.password !== sign.password2)
             {
                 $scope.errorPassword = "You didn't enter the same password";
-                $scope.placeholderPassword = 'password';
+                $scope.placeholderPassword = 'Password';
             }
             else
             {
+
                 $http.post('http://localhost:5555/users', 
-                    {login:data.login, email:data.email, password:data.password,
-                        firstname:data.firstname, lastname:data.lastname,
-                        birth:data.birthday})
+                    {login:sign.login, email:sign.email, password:sign.password,
+                        firstname:sign.firstName, lastname:sign.lastName,
+                        birth:sign.birthday, sexe:sign.gender})
                 .success(function(data, status, headers, config){
-                    callback = data;
+                    sign.back = data;
                 })
                 .error(function(data, status, headers, config){
-                    callback = data;
+                    sign.back = data
                 });
             }
         }

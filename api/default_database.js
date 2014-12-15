@@ -2,7 +2,12 @@ exports.recipes = [
 {
 	"_uid":"1111",
     "name":"Nom de la recette 1",
-    "description":"Description de la recette 1",
+    "description":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "duration":"1H15",
     "steps":[],
     "ingredients":["111111111111111111111111", "222222222222222222222222"],
@@ -13,7 +18,12 @@ exports.recipes = [
 {
 	"_uid":"2222",
     "name":"Nom de la recette 2",
-    "description":"Description de la recette 2",
+    "description":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "duration":"2H10",
     "steps":[],
     "ingredients":["222222222222222222222222", "333333333333333333333333"],
@@ -24,7 +34,12 @@ exports.recipes = [
 {
 	"_uid":"3333",
     "name":"Nom de la recette 3",
-    "description":"Description de la recette 3",
+    "description":"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "duration":"2H42",
     "steps":[],
     "ingredients":["111111111111111111111111", "333333333333333333333333"],
