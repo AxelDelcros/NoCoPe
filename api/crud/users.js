@@ -47,6 +47,12 @@ exports.UserValidator.email = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'email' has to be a correct email address !"});
     return (true);
 }
+exports.UserValidator.field = function(param) {
+    var ret;
+    if (exports.UserValidator.login(param) != true && exports.UserValidator.email(param) != true)
+	return ({"res":false, "error_code":0007, "msg":"The field is neither a good 'login' nor a good 'email' !"});
+    return (true);
+}
 exports.UserValidator.password = function(param)
 {
     if (param === undefined)
@@ -92,7 +98,6 @@ exports.UserValidator.sexe = function(param)
 exports.UserValidator.birth = function(param)
 {
     var good_birth = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
-
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'birth' !"});
     if (param == "")
@@ -152,12 +157,12 @@ exports.post_user = function(req, res) {
 
 
 
-
     form.on('fileBegin', function(name, file) {
         //console.log("FileBegin");
         file.metadata = {"uid":"value", "tableau":["value1", "value2", "value3"]};
     });
     form.parse(req, function(err, fields, files) {
+
 
 	var keys = Object.keys(files);
 	if (err) {
@@ -192,6 +197,8 @@ exports.post_user = function(req, res) {
         if ((ret = exports.UserValidator["birth"](birth)) !== true)
             return (res.status(400).send(ret));
 	
+	console.log("Coucou");
+
 	// We create the new recipe
 	var user = {
 	    "login": login,
@@ -206,7 +213,8 @@ exports.post_user = function(req, res) {
 	    "fridge":[],
 	    "tools":[]
 	};
-	
+
+
 	
 	db.collection('users', function(err, collection_users) {
 	    if (err) {
@@ -252,6 +260,8 @@ exports.post_user = function(req, res) {
 			    });
 			}
 			else {
+			    console.log("New user created !");
+			    console.log(result_user[0]);
 			    res.status(200).send({"res":true, "user":result_user[0]});
 			}
 		    }

@@ -2,6 +2,7 @@
 ** Module doing a basic authentification
 */
 var formidable = require('formidable');
+var email_validator = require('email-validator');
 var uniqid = require('uniqid');
 var MD5 = require('MD5');
 
@@ -95,10 +96,8 @@ exports.connect = function(req, res) {
         var password = fields.password;
 
 	var ret;
-        if ((ret = users.UserValidator["login"](login)) !== true)
+        if ((ret = users.UserValidator["field"](login)) !== true)
             return (res.status(400).send(ret));
-        //if ((ret = users.UserValidator["email"](email)) !== true)
-        //return (res.status(400).send(ret));
         if ((ret = users.UserValidator["password"](password)) !== true)
             return (res.status(400).send(ret));
 
@@ -108,9 +107,10 @@ exports.connect = function(req, res) {
 		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
             }
             else {
-		collection_users.findOne({"login":login, "password":MD5(password)}, function(err, user) {
+		var toFind = email_validator.validate(login) ? {"email":login, "password":MD5(password)} : {"login":login, "password":MD5(password)};
+		collection_users.findOne(toFind, function(err, user) {
 		    if (err) {
-			return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+			return (res.status(400).send({"res":false, "error_code":9675, "msg":"Something happened during the database access !"}));
 		    }
                     else if (user == null) {
 			return (res.status(400).send({"res":false, "error_code":5554, "msg":"Bad authentification !"}));
