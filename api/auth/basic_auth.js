@@ -85,7 +85,7 @@ exports.check_auth2 = function(req, res, next) {
 
 var users = require('../crud/users');
 // Function connecting a user
-exports.connect = function(req, res) {
+exports.login = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
 
