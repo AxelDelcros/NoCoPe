@@ -283,6 +283,7 @@ app.post('/login', basic_auth.login);
 /*
 ** ROUTES RECIPE
 */
+//app.post('/recipes', recipes.post_recipe);
 app.post('/recipes', basic_auth.check_auth, recipes.post_recipe);
 app.get('/recipes/id/:id', recipes.get_recipe_by_id);
 app.put('/recipes/id/:id', recipes.put_recipe_by_id);

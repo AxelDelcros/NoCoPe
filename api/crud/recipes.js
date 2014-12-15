@@ -18,31 +18,55 @@ Array.prototype.isArray = true;
 
 
 // Function to validate some formats
-var RecipeValidator = { }; // better would be to have module create an object
-RecipeValidator.name = function(param)
+exports.RecipeValidator = { }; // better would be to have module create an object
+exports.RecipeValidator.name = function(param)
 {
     var good_name = /[^a-zA-Z0-9_ ]/;
     //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'name' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'name' can't be empty !"});
     if (good_name.test(param))
-	return (false);
+	return ({"res":false, "error_code":0007, "msg":"The field 'name' is not in the right format ! It can only contain letters, numbers, underscores and spaces !"});
     return (true);
 }
-RecipeValidator.description = function(param)
+exports.RecipeValidator.description = function(param)
 {
-    return (RecipeValidator.name(param));
+    var good_description = /[^a-zA-Z0-9_ ]/;
+    //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'description' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'description' can't be empty !"});
+    if (good_description.test(param))
+        return ({"res":false, "error_code":0007, "msg":"The field 'description' is not in the right format ! It can only contain letters, numbers and underscores !"});
+    return (true);
 }
-RecipeValidator.content = function(param)
+exports.RecipeValidator.content = function(param)
 {
-    return (RecipeValidator.name(param));
+    var good_content = /[^a-zA-Z0-9_ ]/;
+    //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'content' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'content' can't be empty !"});
+    if (good_content.test(param))
+        return ({"res":false, "error_code":0007, "msg":"The field 'content' is not in the right format ! It can only contain letters, numbers and underscores !"});
+    return (true);
 }
-RecipeValidator.duration = function(param)
+exports.RecipeValidator.duration = function(param)
 {
     var good_date1 = /^[0-9]{1}H([0-9]{2})?$/;
     var good_date2 = /^[0-9]{2}$/;
 
     //console.log(param);
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'duration' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'duration' can't be empty !"});
     if (!(good_date1.test(param)) && !(good_date2.test(param)))
-	return (false);
+	return ({"res":false, "error_code":5478, "msg":"The field 'duration' is not in the right format !"});
     /*
     var tab = param.split("H");
     //console.log(tab);
@@ -51,11 +75,8 @@ RecipeValidator.duration = function(param)
     */
     return (true);
 }
-RecipeValidator.step = function(param)
+exports.RecipeValidator.step = function(param)
 {
-    //console.log("STEP !!!");
-    //console.log(param);
-    //console.log(typeof param);
     if (typeof param == "object") {
 
 	var keys = Object.keys(param);
@@ -63,49 +84,75 @@ RecipeValidator.step = function(param)
 	if (keys.length == 3) {
 	    if (keys[0] == "name" && keys[1] == "duration" && keys[2] == "content") {
 		//console.log("Good keys !");
-		//console.log(RecipeValidator["name"](param[keys[0]]));
-		//console.log(RecipeValidator["duration"](param[keys[1]]));
-		//console.log(RecipeValidator["content"](param[keys[2]]));
+		//console.log(exports.RecipeValidator["name"](param[keys[0]]));
+		//console.log(exports.RecipeValidator["duration"](param[keys[1]]));
+		//console.log(exports.RecipeValidator["content"](param[keys[2]]));
 
 		//console.log(keys[1]);
 		//console.log(param[keys[1]]);
 		//console.log(typeof param[keys[1]]);
-		if (RecipeValidator["name"](param[keys[0]]) && RecipeValidator["duration"](param[keys[1]]) && RecipeValidator["content"](param[keys[2]])) {
-		    return (true);
+		var ret;
+		if (((ret = exports.RecipeValidator["name"](param[keys[0]])) !== true) || ((ret = exports.RecipeValidator["duration"](param[keys[1]])) !== true) || ((ret = exports.RecipeValidator["content"](param[keys[2]])) !== true)) {
+		    return (ret);
 		}
 	    }
 	}
     }
-    return (false);
+    return ({"res":false, "error_code":0005, "msg":"The 'steps' array contains a entry that not respect the 'step' format !"});
 }
-RecipeValidator.steps = function(param)
+exports.RecipeValidator.steps = function(param)
 {
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'steps' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'steps' can't be empty !"});
+    try {
+	param = JSON.parse(param);
+    }
+    catch (e) {
+	console.log(e);
+	return ({"res":false, "error_code":0005, "msg":"The 'steps' field is not an array !"});
+    }
     if (param.isArray) {
+	var ret;
 	for (i = 0 ; i < param.length ; i++) {
-	    if (!(RecipeValidator["step"](param[i])))
-		return (false);
+	    if ((ret = exports.UserValidator["step"](param[i])) !== true)
+		return (ret);
+	    
 	}
 	return (true);
     }
-    return (false);
+    return ({"res":false, "error_code":0005, "msg":"The 'steps' field is not an array !"});
 }
-RecipeValidator.ingredients = function(param)
+exports.RecipeValidator.ingredients = function(param)
 {
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'ingredients' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'ingredients' can't be empty !"});
     //console.log(param);
     return (true);
 }
-RecipeValidator.products = function(param)
+exports.RecipeValidator.products = function(param)
 {
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'products' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'products' can't be empty !"});
     //console.log(param);
     return (true);
 }
-RecipeValidator.tags = function(param)
+exports.RecipeValidator.tags = function(param)
 {
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'tags' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'tags' can't be empty !"});
     //console.log(param);
     return (true);
 }
 //var funcstr = "steps";
-//RecipeValidator[funcstr]();
+//exports.RecipeValidator[funcstr]();
 
 
 
@@ -118,7 +165,8 @@ exports.post_recipe = function(req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
 
-	var _uid = fields._uid;
+	// We set the uid to 'null' if the user is not logged
+	var uid = (req.private_var_user === undefined ? null : req.private_var_user.id);
 	var name = fields.name;
 	var description = fields.description;
 	var duration = fields.duration;
@@ -127,84 +175,25 @@ exports.post_recipe = function(req, res) {
 	var products = fields.products;
 	var tags = fields.tags;
 	
+	if ((ret = exports.RecipeValidator["name"](name)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["description"](description)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["duration"](duration)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["steps"](steps)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["ingredients"](ingredients)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["products"](products)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["tags"](tags)) !== true)
+            return (res.status(400).send(ret));
 
-	// We set the _uid to 'null' if it is not sent
-	_uid = _uid === undefined ? null : _uid;
-	
-	console.log(name);
-	if (name === undefined || name === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
-	if (RecipeValidator["name"](name) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'name' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
-	if (description === undefined || description === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'description' in the form ! (it's maybe empty)"}));
-
-	if (RecipeValidator["description"](description) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'description' is not in the right format ! It should contain only letters, numbers, spaces and underscores !"}));
-	if (duration === undefined || duration === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'duration' in the form ! (it's maybe empty)"}));
-	if (RecipeValidator["duration"](duration) == false)
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"The field 'duration' is not in the right format ! It should be like 'YYYY-MM-DD' !"}));
-
-	if (steps === undefined || steps === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'steps' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		steps = JSON.parse(steps);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the step variable
-	    if (RecipeValidator["steps"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'steps' field is not in the right format !"}));
-	}
-
-	if (ingredients === undefined || ingredients === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'ingredients' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		ingredients = JSON.parse(ingredients);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the ingredients variable
-	    if (RecipeValidator["ingredients"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not in the right format !"}));
-	}
-
-	if (products === undefined || products === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'products' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		products = JSON.parse(products);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the ingredients variable
-	    if (RecipeValidator["products"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'products' field is not in the right format !"}));
-	}
-
-	if (tags === undefined || tags === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'tags' in the form ! (it's maybe empty)"}));
-	if (true) {
-	    try {
-		tags = JSON.parse(tags);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the tags variable
-	    if (RecipeValidator["tags"](steps) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	}
 
 	// We create the new recipe
 	var recipe = {
-	    "_uid": _uid,
+	    "uid": uid,
 	    "name":name,
 	    "description":description,
 	    "duration":duration,
@@ -218,15 +207,15 @@ exports.post_recipe = function(req, res) {
 	
 	db.collection('recipes', function(err, collection_recipes) {
 	    if (err) {
-		res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});	
+		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	    }
 	    else {
 		collection_recipes.insert(recipe, function(err, result) {
 		    if (err) {
-			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 		    }
 		    else {
-			res.status(200).send({"res":true, "_id":result[0]._id});
+			return (res.status(200).send({"res":true, "id":result[0]._id}));
 		    }
 		});
 	    }
@@ -245,20 +234,24 @@ exports.get_recipe_by_id = function(req, res) {
     var BSON = req.BSON;
 
     var id = req.params.id;
+    if (id.length != 24)
+   	return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"}));
     db.collection('recipes', function(err, collection) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	}
 	else {
 	    collection.findOne({"_id" : new BSON.ObjectID(id)}, function(err, recipe) {
 		if (err) {
-		    res.status(400).send({"res":false, "error_code":5554, "msg":"This recipes does not exists !"});
+		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipes does not exists !"}));
 		}
 		else if (recipe == null) {
-		    res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"});
+		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"}));
 		}
 		else {
-		    res.send(recipe);
+		    recipe.id = recipe._id;
+		    delete recipe._id;
+		    return (res.status(200).send(recipe));
 		}
 	    });
 	}
@@ -278,10 +271,13 @@ exports.put_recipe_by_id = function(req, res) {
 
 
     //collection_users.update({"connection_token":access_token}, {$set: {"connection_date":[], "connection_token":[]}});
+    var id = req.params.id;
+    if (id.length != 24)
+   	return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"}));
 
     db.collection('recipes', function(err, collection_recipes) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
 	    var form = new formidable.IncomingForm();
@@ -298,9 +294,9 @@ exports.put_recipe_by_id = function(req, res) {
 
                     if (recipes_updated_fields.indexOf(keys[i]) == -1)
                         // This keys was not found
-			return (res.send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
-		    else if (RecipeValidator[keys[i]](fields[keys[i]]) == false)
-			return (res.send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
+			return (res.status(400).send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
+		    else if (exports.RecipeValidator[keys[i]](fields[keys[i]]) == false)
+			return (res.status(400).send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
 		    else
                         // We can add this fields to the future update request 
                         f[keys[i]] = fields[keys[i]];
@@ -309,16 +305,15 @@ exports.put_recipe_by_id = function(req, res) {
                 // Here we can execute the update request
                 //console.log(f);
 
-		req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
-		collection_recipes.update({"_id": new BSON.ObjectID(req.params.id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
+		collection_recipes.update({"_id": new BSON.ObjectID(id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
 		    if (err) {
-			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 		    }
 		    else if (nbrUpdatedFields == null) {
-			return (res.send({"res":false, "error_code":0005, "msg":"This recipe 'id' was not found !"}));
+			return (res.status(400).send({"res":false, "error_code":0005, "msg":"This recipe 'id' was not found !"}));
 		    }
 		    else {
-			return (res.send({"res":true}));
+			return (res.status(200).send({"res":true}));
 		    }
 		});
 		
@@ -337,26 +332,27 @@ exports.delete_recipe_by_id = function(req, res) {
     var BSON = req.BSON;
 
     var id = req.params.id;
+    if (id.length != 24)
+   	return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"}));
+
     db.collection('recipes', function(err, collection_recipes) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	}
 	else {
-	    req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
 	    collection_recipes.remove({_id: new BSON.ObjectID(id)},  function(err, NbrRemovedDocs) {
 		//console.log(NbrRemovedDocs);
 		if (err) {
-		    res.send({"res":false, "error_code":0004, "msg":"Can not remove this recipe !"});
+		    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Can not remove this recipe !"}));
 		}
 		else if (NbrRemovedDocs == 1) {
-		    res.send({"res":true});
+		    return (res.status(200).send({"res":true}));
 		}
 		else {
-		    res.send({"res":false, "error_code":0004, "msg":"Can not remove this recipe !"});
+		    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Can not remove this recipe !"}));
 		}
 	    });
 	}
-
     });
 };
 
