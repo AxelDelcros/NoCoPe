@@ -52,7 +52,7 @@ exports.post_ingredient = function(req, res) {
 	
 
 	if (name === undefined || name === "")
-	    return (res.send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
+	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
 
 	if (true) {
 	    try {
@@ -63,29 +63,29 @@ exports.post_ingredient = function(req, res) {
 	    }
 	    // here we have to test the right format of the step variable
 	    if (IngredientValidator["components"](components) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'components' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'components' field is not in the right format !"}));
 	}
 	if (true) {
 	    try {
 		tags = JSON.parse(tags);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the step variable
 	    if (IngredientValidator["tags"](tags) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
 	}
 	if (true) {
 	    try {
 		nutrients = JSON.parse(nutrients);
 	    }
 	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
 	    }
 	    // here we have to test the right format of the step variable
 	    if (IngredientValidator["nutrients"](nutrients) == false)
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
+		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
 	}
 	
 	// We create the new recipe
@@ -100,15 +100,15 @@ exports.post_ingredient = function(req, res) {
 	db.collection('ingredients', function(err, collection_ingredients) {
 	    if (err) {
 		console.log(err);
-		res.send({"res":false, "error_code":0005, "msg":"Something happened during the database access !"});
+		res.status(400).send({"res":false, "error_code":0005, "msg":"Something happened during the database access !"});
 	    }
 	    else {
 		collection_ingredients.insert(recipe, function(err, result) {
 		    if (err) {
-			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
 		    else {
-			res.send({"res":true, "_id":result[0]._id});
+			res.status(200).send({"res":true, "_id":result[0]._id});
 		    }
 		});
 	    }
@@ -129,7 +129,7 @@ exports.get_ingredient_by_id = function(req, res) {
     var id = req.params.id;
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
 	    collection_ingredients.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
@@ -141,7 +141,7 @@ exports.get_ingredient_by_id = function(req, res) {
 		    res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"});
 		}
 		else {
-		    res.send(ingredient);
+		    res.status(200).send(ingredient);
 		}
 	    });
 	}
@@ -162,7 +162,7 @@ exports.put_ingredient_by_id = function(req, res) {
 
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
 	    var form = new formidable.IncomingForm();
@@ -179,9 +179,9 @@ exports.put_ingredient_by_id = function(req, res) {
 
                     if (ingredients_updated_fields.indexOf(keys[i]) == -1)
                         // This keys was not found
-			return (res.send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
+			return (res.status(400).send({"res":false, "error_code":0009, "msg":"The field '"+keys[i]+"' cannot be updated !"}));
 		    else if (IngredientValidator[keys[i]](fields[keys[i]]) == false)
-			return (res.send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
+			return (res.status(400).send({"res":false, "error_code":0005, "msg":"The '"+keys[i]+"' field is not in the right format !"}));
 		    else
                         // We can add this fields to the future update request 
                         f[keys[i]] = fields[keys[i]];
@@ -193,13 +193,13 @@ exports.put_ingredient_by_id = function(req, res) {
 		req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
 		collection_ingredients.update({"_id": new BSON.ObjectID(req.params.id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
 		    if (err) {
-			res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
 		    else if (nbrUpdatedFields == null) {
-			return (res.send({"res":false, "error_code":0005, "msg":"This ingredient 'id' was not found !"}));
+			return (res.status(400).send({"res":false, "error_code":0005, "msg":"This ingredient 'id' was not found !"}));
 		    }
 		    else {
-			return (res.send({"res":true}));
+			return (res.status(200).send({"res":true}));
 		    }
 		});
 		
@@ -220,20 +220,20 @@ exports.delete_ingredient_by_id = function(req, res) {
     var id = req.params.id;
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
-	    res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
 	    req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
 	    collection_ingredients.remove({_id: new BSON.ObjectID(id)},  function(err, NbrRemovedDocs) {
 		//console.log(NbrRemovedDocs);
 		if (err) {
-		    res.send({"res":false, "error_code":0004, "msg":"Can not remove this ingredient !"});
+		    res.status(400).send({"res":false, "error_code":0004, "msg":"Can not remove this ingredient !"});
 		}
 		else if (NbrRemovedDocs == 1) {
-		    res.send({"res":true});
+		    res.status(400).send({"res":true});
 		}
 		else {
-		    res.send({"res":false, "error_code":0004, "msg":"Can not remove this ingredient !"});
+		    res.status(200).send({"res":false, "error_code":0004, "msg":"Can not remove this ingredient !"});
 		}
 	    });
 	}
