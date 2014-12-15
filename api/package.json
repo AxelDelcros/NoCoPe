@@ -21,6 +21,7 @@
 	"mongodb": "*",
 	"email-validator": "*",
 	"formidable": "*",
+	"gridform": "*",
 	"uniqid": "*",
 	"MD5": "*",
 	"util": "*",
