@@ -1,40 +1,4 @@
-<!-- <form id="signinForm" role="form">
-	<div class="col-sm-12 col-md-offset-3 col-md-6">
-		<div class="row">
-			
-			<div class="form-group row">
-				<label for="mail" class="col-md-3">Mail</label>
-				<div class="col-md-6">
-					<input type="mail" class="form-control" name="mail" id="login" placeholder=" {{ placeholderLogin }} " ng-model="formInfo.login" required>
-				</div>
-				<span class="col-md-3" ng-show="attentionMail" class="label label-danger">{{ attentionMail }}</span>
-			</div>
-			
-			<div class="form-group row">
-				<label for="mail" class="col-md-3">Password</label>
-				<div class="col-md-6">
-					<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="formInfo.password" required>
-				</div>
-				<span class="col-md-3" ng-show="attentionPassword" class="label label-danger">{{ attentionPassword }}</span>
-			</div>
-
-
-			<div class="form-group row">
-				<input type="checkbox">
-				Remember me
-			</div>
-
-			<button class="btn btn-success" type="submit" ng-click="submitForm()">
-				<span class="glyphicon glyphicon-upload"></span> Submit
-			</button>
-
-		</div>
-	</div>
-</form>
--->
-
-
-<div id="form_sample" ng-controller="signupController">
+<div id="form_sample" ng-controller="signupController" style="margin-top: 15%; margin-left: 25%">
 	<form  name="signUpForm"  novalidate>
 		<div class="col-sm-8 col-md-offset-3 col-md-6">
 			<div class="row">
@@ -43,15 +7,9 @@
 					<div class="col-xs-4">
 						<input type="text" class="form-control" name="firstName" ng-model="signUp.firstName" placeholder="{{ info.firstname }}" autocomplete="off" required>
 					</div>
-					<div class="error-container" ng-show="signUp.firstName.$dirty && signUp.firstName.$invalid">
-						<small class="error" ng-show="signUp.firstName.$error.required">Please input a firstName</small>
-					</div>
 
 					<div class="col-xs-4">
 						<input type="text" class="form-control" name="lastName" ng-model="signUp.lastName" placeholder="{{ info.lastname }}" autocomplete="off" required>
-					</div>
-					<div class="error-container" ng-show="signUp.lastName.$dirty && signUp.lastName.$invalid">
-						<small class="error" ng-show="signUp.lastName.$error.required">Please input a lastName</small>
 					</div>
 
 				</div>
@@ -60,16 +18,11 @@
 					<div class="col-xs-8">
 						<input type="text" class="form-control" name="login" ng-model="signUp.login" placeholder="{{ info.login }}" autocomplete="off"  ng-minlength="3" ng-maxlength="8"required>
 					</div>
-					<div ng-show="signUp.login.$error.minlength" class="help-block">Login is too short.</div>
-					<div ng-show="signUp.login.$error.maxlength" class="help-block">Login is too long.</div>
 				</div>
 
 				<div class="form-group row">
 					<div class="col-xs-8">
 						<input type="email" name="email" class="form-control" ng-model="signUp.email"  placeholder="{{ placeholderLogin }}" class="input-xlarge" autocomplete="off" required>
-						<div ng-show=" userForm.email.$invalid && !userForm.email.$pristine" class="help-block">
-							Enter a valid email.</div>
-						</div>
 					</div>
 
 					<div class="form-group row">

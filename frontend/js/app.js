@@ -118,31 +118,23 @@
     });    
 
     NoCoPe.controller('loginController', ['$scope','$http', function( $scope , $http ) {
-
-        $scope.placeholderLogin = 'john.doe@mail.com';
+        $scope.placeholderLogin = 'e-mail address / login';
         $scope.placeholderPassword = 'password';
-        console.log("Enter the controller");
 
         $scope.submitForm = function(){
-            console.log("submit");
+            if (!$scope.logIn.id)
+                $scope.attentionMail = 'Id is required !';
 
-            if (!$scope.formInfo.login)
-                $scope.attentionMail = 'Mail is required !';
-
-            if (!$scope.formInfo.password)
+            if (!$scope.logIn.password)
                 $scope.attentionPassword = 'Password is required !';
 
-            console.log("ca marche avant le get");
-
-            $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
+            $http.post('http://localhost:5555/connect',{ login:$scope.logIn.id, password:$scope.logIn.password } )
             .success(function(data,status,headers,config){
-                console.log('LE ZIZI');
-                console.log(data);
-            })
-
+            $scope.logIn.back = data;
+         })
             .error(function(data,status,headers,config){
-                console.log('Error');
-            });
+             $scope.logIn.back = data;
+         });
         };
     }]);
 
@@ -170,7 +162,7 @@
                     sign.back = data;
                 })
                 .error(function(data, status, headers, config){
-                    sign.back = data
+                    sign.back = data;
                 });
             }
         }
