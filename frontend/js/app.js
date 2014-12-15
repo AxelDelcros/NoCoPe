@@ -30,19 +30,24 @@
                 controller  : 'productController'
             })
             
-            .when('/signin', {
-                templateUrl : 'signin.html',
-                controller  : 'signinController'
-            });
+            .when('/signup', {
+                templateUrl : 'signup.html',
+                controller  : 'signupController'
+            })
+            .when('/login', {
+                templateUrl : 'login.html',
+                controller  : 'loginController'
+            })
+            .otherwise({redirectTo: '/'});
         });
 
     // create a factory to handle all request in recipes data
     NoCoPe.factory('RecipesFactory', function($http, $q){
 
         var factory = {
-           recipes : false,
-           ingredient : false,
-           getRecipes : function(){
+         recipes : false,
+         ingredient : false,
+         getRecipes : function(){
             var deferred = $q.defer();
             $http.get('http://localhost:5555/recipes')
             .success(function(data, status, headers, config){
@@ -91,41 +96,81 @@
         }, function(msg){
             alert(msg);
         });
-        }]);
+    }]);
 
-        NoCoPe.controller('ingredientsController', function($scope) {
-            $scope.placeholder = 'Type ingredient name here...';
-        });
+    NoCoPe.controller('ingredientsController', ['$scope','$http', function( $scope, $http){
+      $scope.loading = true;
+      $scope.placeholder = 'Type recipe name here...';
+      console.log("Coucou");
+      $http.get('http://localhost:5555/ingredients')
+      .success(function(data,status,headers,config){
+        $scope.ingredients = data;
+        $scope.loading = false;
+    })
+      .error(function(data,status,headers,config){
+        console.log('Error');
+    });
+  }]);
 
-        NoCoPe.controller('productController', function($scope) {
-            $scope.placeholder = 'Type product name here...';
-        });
 
-        NoCoPe.controller('signinController', ['$scope','$http', function( $scope , $http ) {
+    NoCoPe.controller('productController', function($scope) {
+        $scope.placeholder = 'Type product name here...';
+    });    
 
-            $scope.placeholderLogin = 'john.doe@mail.com';
-            $scope.placeholderPassword = 'password';
-            console.log("Enter the controller");
+    NoCoPe.controller('loginController', ['$scope','$http', function( $scope , $http ) {
 
-            $scope.submitForm = function(){
-                console.log("submit");
+        $scope.placeholderLogin = 'john.doe@mail.com';
+        $scope.placeholderPassword = 'password';
+        console.log("Enter the controller");
 
-                if (!$scope.formInfo.login)
-                    $scope.attentionMail = 'Mail is required !';
+        $scope.submitForm = function(){
+            console.log("submit");
 
-                if (!$scope.formInfo.password)
-                    $scope.attentionPassword = 'Password is required !';
+            if (!$scope.formInfo.login)
+                $scope.attentionMail = 'Mail is required !';
 
-                console.log("ca marche avant le get");
+            if (!$scope.formInfo.password)
+                $scope.attentionPassword = 'Password is required !';
 
-                $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
-                .success(function(data,status,headers,config){
-                    console.log('LE ZIZI');
-                    console.log(data);
+            console.log("ca marche avant le get");
+
+            $http.get('http://localhost:5555/recipes',{ login:$scope.formInfo.login, password:$scope.formInfo.password } )
+            .success(function(data,status,headers,config){
+                console.log('LE ZIZI');
+                console.log(data);
+            })
+
+            .error(function(data,status,headers,config){
+                console.log('Error');
+            });
+        };
+    }]);
+
+    NoCoPe.controller('signupController', ['$scope','$http', function( $scope , $http ) {
+        $scope.info = {login: 'DarkJoe', firstname : "John", lastname : "Doe"};
+        $scope.placeholderLogin = 'john.doe@mail.com';
+        $scope.placeholderPassword = 'password';
+        $scope.placeholderDate = 'jj/mm/aaaa';
+        console.log("Enter the controller");
+
+        $scope.submitForm = function(data, callback){
+            if (data.password !== data.password2)
+            {
+                $scope.errorPassword = "You didn't enter the same password";
+                $scope.placeholderPassword = 'password';
+            }
+            else
+            {
+                $http.post('http://localhost:5555/users', 
+                    {login:data.login, email:data.email, password:data.password,
+                        firstname:data.firstname, lastname:data.lastname,
+                        birth:data.birthday})
+                .success(function(data, status, headers, config){
+                    callback = data;
                 })
-
-                .error(function(data,status,headers,config){
-                    console.log('Error');
+                .error(function(data, status, headers, config){
+                    callback = data;
                 });
-            };
-        }]);
+            }
+        }
+    }]);
