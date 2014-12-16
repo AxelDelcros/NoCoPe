@@ -271,8 +271,6 @@ exports.get_recipe_by_name_url = function(req, res) {
     var BSON = req.BSON;
 
     var name_url = req.params.name_url;
-    if (name_url.length != 24)
-   	return (res.status(400).send({"res":false, "error_code":5554, "msg":"The recipe : "+name_url+" was not found !"}));
     db.collection('recipes', function(err, collection) {
 	if (err) {
 	    return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
