@@ -117,6 +117,15 @@ exports.RecipeValidator.ingredients = function(param)
     //console.log(param);
     return (true);
 }
+exports.RecipeValidator.tools = function(param)
+{
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'tools' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'tools' can't be empty !"});
+    //console.log(param);
+    return (true);
+}
 exports.RecipeValidator.products = function(param)
 {
     if (param === undefined)
@@ -170,6 +179,7 @@ exports.post_recipe = function(req, res) {
 	var duration = fields.duration;
 	var steps = fields.steps;
 	var ingredients = fields.ingredients;
+	var tools = fields.tools;
 	var products = fields.products;
 	var tags = fields.tags;
 	
@@ -182,6 +192,8 @@ exports.post_recipe = function(req, res) {
 	if ((ret = exports.RecipeValidator["steps"](steps)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["ingredients"](ingredients)) !== true)
+            return (res.status(400).send(ret));
+	if ((ret = exports.RecipeValidator["tools"](tools)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["products"](products)) !== true)
             return (res.status(400).send(ret));
@@ -198,6 +210,7 @@ exports.post_recipe = function(req, res) {
 	    "duration":duration,
 	    "steps":steps,
 	    "ingredients":ingredients,
+	    "tools":tools,
 	    "products":products,
 	    "submit_date":new Date(),
 	    "tags":tags

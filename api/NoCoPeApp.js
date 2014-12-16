@@ -220,6 +220,15 @@ app.get('/init', function(req, res) {
 	    });
 	});
     });
+    var default_tools = require('./default_database').tools;
+    default_tools.forEach(function(element, index, array) {
+	db.collection('tools', function(err, collection_tools) {
+	    element._id = new BSON.ObjectID(element._id);
+	    element.name_url = tools.nameToUrl(element.name);
+	    collection_tools.insert(element, function(err, result) {
+	    });
+	});
+    });
     res.send({"res":true});
 });
 
@@ -295,6 +304,8 @@ app.delete('/recipes/id/:id', recipes.delete_recipe_by_id);
 /*
 ** END ROUTES RECIPE
 */
+
+
 
 
 /*
