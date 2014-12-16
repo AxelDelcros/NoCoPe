@@ -214,6 +214,7 @@ app.get('/init', function(req, res) {
     default_ingredients.forEach(function(element, index, array) {
 	db.collection('ingredients', function(err, collection_ingredients) {
 	    element._id = new BSON.ObjectID(element._id);
+	    element.name_url = ingredients.nameToUrl(element.name);
 	    collection_ingredients.insert(element, function(err, result) {
 	    });
 	});
@@ -300,6 +301,7 @@ app.delete('/recipes/id/:id', recipes.delete_recipe_by_id);
 */
 app.post('/ingredients', ingredients.post_ingredient);
 app.get('/ingredients/id/:id', ingredients.get_ingredient_by_id);
+app.get('/ingredients/name_url/:name_url', ingredients.get_ingredient_by_name_url);
 app.put('/ingredients/id/:id', ingredients.put_ingredient_by_id);
 app.delete('/ingredients/id/:id', ingredients.delete_ingredient_by_id);
 /*

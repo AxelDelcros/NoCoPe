@@ -71,17 +71,13 @@ exports.RecipeValidator.step = function(param)
 	//console.log(keys.length);
 	if (keys.length == 3) {
 	    if (keys[0] == "name" && keys[1] == "duration" && keys[2] == "content") {
-		//console.log("Good keys !");
-		//console.log(exports.RecipeValidator["name"](param[keys[0]]));
-		//console.log(exports.RecipeValidator["duration"](param[keys[1]]));
-		//console.log(exports.RecipeValidator["content"](param[keys[2]]));
 
-		//console.log(keys[1]);
-		//console.log(param[keys[1]]);
-		//console.log(typeof param[keys[1]]);
 		var ret;
 		if (((ret = exports.RecipeValidator["name"](param[keys[0]])) !== true) || ((ret = exports.RecipeValidator["duration"](param[keys[1]])) !== true) || ((ret = exports.RecipeValidator["content"](param[keys[2]])) !== true)) {
 		    return (ret);
+		}
+		else {
+		    return (true);
 		}
 	    }
 	}

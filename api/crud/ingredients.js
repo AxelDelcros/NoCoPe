@@ -10,26 +10,98 @@ var formidable = require('formidable');
 
 
 // Function to validate some formats
-var IngredientValidator = { }; // better would be to have module create an object
-IngredientValidator.name = function(param)
+exports.IngredientValidator = { }; // better would be to have module create an object
+exports.IngredientValidator.name = function(param)
 {
-    //console.log(param);
+    var good_name = /[^a-zA-Z0-9_ \-\(\)\[\]\"\']/;
+    //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'name' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'name' can't be empty !"});
+    if (good_name.test(param))
+        return ({"res":false, "error_code":0007, "msg":"The field 'name' is not in the right format ! It can only contain letters, numbers, underscores and spaces !"});
     return (true);
 }
-IngredientValidator.components = function(param)
+exports.IngredientValidator.nutrient = function(param) {
+    if (param === undefined)
+	return ({"res":false, "error_code":0005, "msg":"The 'nutrients' array contains a entry that not respect the 'nutrient' format !"});
+    if (param == "")
+	return ({"res":false, "error_code":0005, "msg":"The 'nutrients' array contains a entry that not respect the 'nutrient' format !"});
+    try {
+        param = JSON.parse(param);
+    }
+    catch (e) {
+        console.log(e);
+	return ({"res":false, "error_code":0005, "msg":"The 'nutrients' array contains a entry that not respect the 'nutrient' format !"});
+    }
+    
+    if (typeof param == "object") {
+	
+        var keys = Object.keys(param);
+        //console.log(keys.length);
+	
+	if (keys.length == 2) {
+            if (keys[0] == "name" && keys[1] == "value") {
+                
+		var ret;
+		if (((ret = exports.IngredientValidator["name"](param[keys[0]])) !== true) || ((ret = exports.IngredientValidator["name"](param[keys[0]])) !== true)) {
+                    return (ret);
+                }
+		else {
+		    return (true);
+		}
+            }
+	}
+    }
+    return ({"res":false, "error_code":0005, "msg":"The 'nutrients' array contains a entry that not respect the 'nutrient' format !"});
+}
+exports.IngredientValidator.nutrients = function(param)
 {
     //console.log(param);
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'nutrients' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'nutrients' can't be empty !"});
+    try {
+        param = JSON.parse(param);
+    }
+    catch (e) {
+        console.log(e);
+        return ({"res":false, "error_code":0005, "msg":"The field 'nutrients' is not an array !"});
+    }
+    if (param.isArray) {
+        var ret;
+        for (i = 0 ; i < param.length ; i++) {
+            if ((ret = exports.IngredientValidator["nutrient"](param[i])) !== true)
+		return (ret);
+        }
+        return (true);
+    }
+    return ({"res":false, "error_code":0005, "msg":"The field 'nutrients' is not an array !"});
+}
+exports.IngredientValidator.tags = function(param)
+{
+    //console.log(param);
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'tags' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'tags' can't be empty !"});
     return (true);
 }
-IngredientValidator.tags = function(param)
-{
-    //console.log(param);
-    return (true);
-}
-IngredientValidator.nutrients = function(param)
-{
-    //console.log(param);
-    return (true);
+exports.nameToUrl = function(param) {
+    var to_replace = ["_", " ", "(", ")", "[", "]", "\"", "'"];
+    for (i = 0; i < to_replace.length ; i++) {
+	while (param.indexOf(to_replace[i]) != -1)
+            param = param.replace(to_replace[i], "-");
+    }
+    var reg = /[-]{2,}/;
+    while (reg.test(param))
+	param = param.replace(reg, "-");
+    param = param.replace(/^-/, "");
+    param = param.replace(/-$/, "");
+    param = param.toLowerCase();
+    return (param);
 }
 //var funcstr = "steps";
 //RecipeValidator[funcstr]();
@@ -46,52 +118,21 @@ exports.post_ingredient = function(req, res) {
     form.parse(req, function(err, fields, files) {
 
 	var name = fields.name;
-	var components = fields.components;
 	var tags = fields.tags;
 	var nutrients = fields.nutrients;
 	
-
-	if (name === undefined || name === "")
-	    return (res.status(400).send({"res":false, "error_code":0005, "msg":"Need to send the field 'name' in the form ! (it's maybe empty)"}));
-
-	if (true) {
-	    try {
-		components = JSON.parse(components);
-	    }
-	    catch (e) {
-		return (res.send({"res":false, "error_code":0005, "msg":"The 'components' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the step variable
-	    if (IngredientValidator["components"](components) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'components' field is not in the right format !"}));
-	}
-	if (true) {
-	    try {
-		tags = JSON.parse(tags);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the step variable
-	    if (IngredientValidator["tags"](tags) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'tags' field is not in the right format !"}));
-	}
-	if (true) {
-	    try {
-		nutrients = JSON.parse(nutrients);
-	    }
-	    catch (e) {
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
-	    }
-	    // here we have to test the right format of the step variable
-	    if (IngredientValidator["nutrients"](nutrients) == false)
-		return (res.status(400).send({"res":false, "error_code":0005, "msg":"The 'nutrients' field is not in the right format !"}));
-	}
+	var ret;
+        if ((ret = exports.IngredientValidator["name"](name)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = exports.IngredientValidator["tags"](tags)) !== true)
+            return (res.status(400).send(ret));
+        if ((ret = exports.IngredientValidator["nutrients"](nutrients)) !== true)
+            return (res.status(400).send(ret));
 	
 	// We create the new recipe
 	var recipe = {
 	    "name":name,
-	    "components":components,
+	    "name_url":exports.nameToUrl(name),
 	    "tags":tags,
 	    "nutrients":nutrients
 	};
@@ -127,21 +168,58 @@ exports.get_ingredient_by_id = function(req, res) {
     var BSON = req.BSON;
 
     var id = req.params.id;
+    if (id.length != 24)
+	return (res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"}));
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
-	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	}
 	else {
 	    collection_ingredients.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
 		if (err) {
 		    console.log(err);
+		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This ingredient does not exists !"}));
+		}
+		else if (ingredient == null) {
+		    return (res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"}));
+		}
+		else {
+		    ingredient.id = ingredient._id;
+		    delete ingredient._id;
+		    return (res.status(200).send(ingredient));
+		}
+	    });
+	}
+    });
+};
+
+
+
+
+
+// [READ] Get Ingredient By Name_Url
+exports.get_ingredient_by_name_url = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    var name_url = req.params.name_url;
+    db.collection('ingredients', function(err, collection_ingredients) {
+	if (err) {
+	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+	}
+	else {
+	    collection_ingredients.findOne({"name_url" : name_url}, function(err, ingredient) {
+		if (err) {
+		    console.log(err);
 		    res.status(400).send({"res":false, "error_code":5554, "msg":"This ingredient does not exists !"});
 		}
 		else if (ingredient == null) {
-		    res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"});
+		    res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'name_url' was not found !"});
 		}
 		else {
-		    res.status(200).send(ingredient);
+		    ingredient.id = ingredient._id;
+		    delete ingredient._id;
+		    return (res.status(200).send(ingredient));
 		}
 	    });
 	}
