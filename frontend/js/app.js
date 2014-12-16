@@ -40,6 +40,12 @@
                     access : { requiredLogin: false}
                 })
 
+                .when('/tools/:name_url', {
+                    templateUrl : 'showtool.html',
+                    controller  : 'showToolController',
+                    access : { requiredLogin: false}
+                })
+
                 .when('/products', {
                     templateUrl : 'products.html',
                     controller  : 'productController',
@@ -144,6 +150,18 @@
                         deferred.reject("Can't get ingredient data");
                     })
                     return deferred.promise;
+                },
+                getTool : function(id){
+                    var deferred = $q.defer();
+                    $http.get('http://localhost:5555/tools/id/' + id)
+                    .success(function (data, status, headers, config) {
+                        factory.tool = data;
+                        deferred.resolve(factory.tool);
+                    })
+                    .error(function (data, status, headers, config) {
+                        deferred.reject("Can't get tool data");
+                    })
+                    return deferred.promise;
                 }
             }
             return factory;
@@ -166,10 +184,20 @@
                 angular.forEach($scope.recipes, function (recipe, key1) {
                     angular.forEach(recipe.ingredients, function (ingredient, key2) {
                         $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
-                            ingredientid = ingredient.id;
-                            $scope.recipes[key1].ingredients[key2] = {
-                                id: ingredientid,
-                                name: ingredient.name
+                            $scope.recipes[key1].ingredients[key2] = {                                
+                                name: ingredient.name,
+                                name_url: ingredient.name_url
+                            };
+                        }, function (msg) {
+                            alert(msg);
+                        })  
+                    });
+                    angular.forEach(recipe.tools, function (tool, key2) {
+                        console.log(tool)
+                        $scope.recipes[key1].tools[key2] = RecipesFactory.getTool(tool).then(function (tool) {
+                            $scope.recipes[key1].tools[key2] = {
+                                name: tool.name,
+                                name_url: tool.name_url
                             };
                         }, function (msg) {
                             alert(msg);
@@ -187,7 +215,6 @@
         function showRecipeController ($scope, $http, $window, $location) {
             $scope.loading = true;
             recipeid = $location.path();
-            $window.alert(recipeid.split('recipes/')[1].length);
             $http.get('http://localhost:5555/recipes/name_url/' + recipeid.split('recipes/')[1])
             .success(function (data, status, headers, config) {
                 $scope.recipe = data;
@@ -203,7 +230,6 @@
         function ingredientsController ($scope, $http) {
             $scope.loading = true;
             $scope.placeholder = 'Type ingredient name here...';
-            console.log("Coucou");
             $http.get('http://localhost:5555/ingredients')
                 .success(function (data,status,headers,config) {
                     $scope.ingredients = data;
@@ -219,10 +245,24 @@
         function showIngredientController ($scope, $http, $window, $location) {
             $scope.loading = true;
             ingredientid = $location.path();
-            $window.alert(ingredientid.split('ingredients/')[1]);
             $http.get('http://localhost:5555/ingredients/name_url/' + ingredientid.split('ingredients/')[1])
             .success(function (data, status, headers, config) {
                 $scope.ingredient = data;
+                $scope.loading = false;
+            })
+            .error(function (data, status, headers, config) {
+                 $scope.callBack = data;
+            })
+        }
+    ]); 
+
+    NoCoPe.controller('showToolController', ['$scope', '$http', '$window', '$location',
+        function showIngredientController ($scope, $http, $window, $location) {
+            $scope.loading = true;
+            toolid = $location.path();
+            $http.get('http://localhost:5555/tools/name_url/' + toolid.split('tools/')[1])
+            .success(function (data, status, headers, config) {
+                $scope.tool = data;
                 $scope.loading = false;
             })
             .error(function (data, status, headers, config) {
@@ -275,7 +315,6 @@
                     $window.sessionStorage.token = data.access_token;
                     AuthenticationService.isLogged = true;
                     $scope.isLogged = "connect";
-                    $window.alert(data.access_token);
                     $location.path('/');
                 })
                 .error(function (data,status,headers,config) {
@@ -291,7 +330,6 @@
             $scope.placeholderLogin = 'Email';
             $scope.placeholderPassword = 'Password';
             $scope.placeholderDate = 'YYYY-MM-DD';
-            console.log("Enter the controller");
 
             $scope.submitForm = function (sign) {
                 if (sign.password !== sign.password2)
@@ -301,7 +339,6 @@
                 }
                 else
                 {
-                    console.log(sign.avatar);
                     $http.post('http://localhost:5555/users', 
                         {login:sign.login, email:sign.email, password:sign.password,
                             firstname:sign.firstName, lastname:sign.lastName,
