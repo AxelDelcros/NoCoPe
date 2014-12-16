@@ -307,8 +307,7 @@ exports.delete_ingredient_by_id = function(req, res) {
 	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 	}
 	else {
-	    req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
-	    collection_ingredients.remove({_id: new BSON.ObjectID(id)},  function(err, NbrRemovedDocs) {
+	    collection_ingredients.remove({"_id": new BSON.ObjectID(id)},  function(err, NbrRemovedDocs) {
 		//console.log(NbrRemovedDocs);
 		if (err) {
 		    res.status(400).send({"res":false, "error_code":0004, "msg":"Can not remove this ingredient !"});

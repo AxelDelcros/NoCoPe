@@ -84,6 +84,8 @@ exports.check_auth2 = function(req, res, next) {
 
 
 var users = require('../crud/users');
+
+
 // Function connecting a user
 exports.login = function(req, res) {
     var db = req.db;
@@ -127,7 +129,6 @@ exports.login = function(req, res) {
 			    }
 			    else if (nbrUpdatedFields == null) {
 				return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
-				//return (res.send({"res":false, "error_code":0005, "msg":"This recipe 'id' was not found !"}));
 			    }
 			    else {
 				// Login okay
@@ -145,3 +146,47 @@ exports.login = function(req, res) {
 	});
     });
 }
+
+
+
+
+
+
+
+// Function disconnect a user
+exports.logout = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    db.collection('users', function(err, collection_users) {
+	if (err) {
+	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+        }
+        else {
+	    collection_users.findOne({"_id":new BSON.ObjectID(req.private_var_user._id)}, function(err, user) {
+		if (err) {
+		    return (res.status(400).send({"res":false, "error_code":9675, "msg":"Something happened during the database access !"}));
+		}
+                else if (user == null) {
+		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"Bad authentification !"}));
+                }
+                else {
+		    collection_users.update({"_id": new BSON.ObjectID(user._id)}, {$set: {"access_token":null}}, {}, function(err, nbrUpdatedFields) {
+			if (err) {
+			    return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+			}
+			else if (nbrUpdatedFields == null) {
+			    return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+			}
+			else {
+			    // Logout okay
+			    return (res.send({"res":true}));
+			}
+		    });
+		    
+                }
+	    });
+        }
+    });
+}
+
