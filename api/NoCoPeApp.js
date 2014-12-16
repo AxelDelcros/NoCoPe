@@ -286,6 +286,7 @@ app.post('/login', basic_auth.login);
 //app.post('/recipes', recipes.post_recipe);
 app.post('/recipes', basic_auth.check_auth, recipes.post_recipe);
 app.get('/recipes/id/:id', recipes.get_recipe_by_id);
+app.get('/recipes/name_url/:name_url', recipes.get_recipe_by_name_url);
 app.put('/recipes/id/:id', recipes.put_recipe_by_id);
 app.delete('/recipes/id/:id', recipes.delete_recipe_by_id);
 /*

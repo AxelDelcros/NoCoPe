@@ -21,7 +21,7 @@ Array.prototype.isArray = true;
 exports.RecipeValidator = { }; // better would be to have module create an object
 exports.RecipeValidator.name = function(param)
 {
-    var good_name = /[^a-zA-Z0-9_ ]/;
+    var good_name = /[^a-zA-Z0-9_ \-\(\)\[\]\"\']/;
     //console.log(good_name.test(param));
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'name' !"});
@@ -33,7 +33,7 @@ exports.RecipeValidator.name = function(param)
 }
 exports.RecipeValidator.description = function(param)
 {
-    var good_description = /[^a-zA-Z0-9_ ]/;
+    var good_description = /[^a-zA-Z0-9_ \-\(\)\[\]\"\']/;
     //console.log(good_name.test(param));
     if (param === undefined)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'description' !"});
@@ -41,18 +41,6 @@ exports.RecipeValidator.description = function(param)
         return ({"res":false, "error_code":0007, "msg":"The field 'description' can't be empty !"});
     if (good_description.test(param))
         return ({"res":false, "error_code":0007, "msg":"The field 'description' is not in the right format ! It can only contain letters, numbers and underscores !"});
-    return (true);
-}
-exports.RecipeValidator.content = function(param)
-{
-    var good_content = /[^a-zA-Z0-9_ ]/;
-    //console.log(good_name.test(param));
-    if (param === undefined)
-        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'content' !"});
-    if (param == "")
-        return ({"res":false, "error_code":0007, "msg":"The field 'content' can't be empty !"});
-    if (good_content.test(param))
-        return ({"res":false, "error_code":0007, "msg":"The field 'content' is not in the right format ! It can only contain letters, numbers and underscores !"});
     return (true);
 }
 exports.RecipeValidator.duration = function(param)
@@ -151,6 +139,13 @@ exports.RecipeValidator.tags = function(param)
     //console.log(param);
     return (true);
 }
+exports.nameToUrl = function(param) {
+    var to_replace = ["_", " ", "-", "(", ")", "[", "]", "\"", "'"];
+    for (i = 0; i < to_replace.length ; i++) {
+	param = param.replace(to_replace[i], "-");
+    }
+    return (param);
+}
 //var funcstr = "steps";
 //exports.RecipeValidator[funcstr]();
 
@@ -195,6 +190,7 @@ exports.post_recipe = function(req, res) {
 	var recipe = {
 	    "uid": uid,
 	    "name":name,
+	    "name_url":exports.nameToUrl(name),
 	    "description":description,
 	    "duration":duration,
 	    "steps":steps,
@@ -247,6 +243,40 @@ exports.get_recipe_by_id = function(req, res) {
 		}
 		else if (recipe == null) {
 		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This recipe 'id' was not found !"}));
+		}
+		else {
+		    recipe.id = recipe._id;
+		    delete recipe._id;
+		    return (res.status(200).send(recipe));
+		}
+	    });
+	}
+    });
+};
+
+
+
+
+
+// [READ] Get Recipe By Name_Url
+exports.get_recipe_by_name_url = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    var name_url = req.params.name_url;
+    if (name_url.length != 24)
+   	return (res.status(400).send({"res":false, "error_code":5554, "msg":"The recipe : "+name_url+" was not found !"}));
+    db.collection('recipes', function(err, collection) {
+	if (err) {
+	    return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+	}
+	else {
+	    collection.findOne({"name_url" : name_url}, function(err, recipe) {
+		if (err) {
+		    return (res.status(400).send({"res":false, "error_code":5555, "msg":"This recipes does not exists !"}));
+		}
+		else if (recipe == null) {
+   		    return (res.status(400).send({"res":false, "error_code":5559, "msg":"The recipe : "+name_url+" was not found !"}));
 		}
 		else {
 		    recipe.id = recipe._id;
