@@ -1,0 +1,52 @@
+<div ng-show="loading">Loading ...</div>
+<div ng-show="!loading" style="margin-top: 25%; margin-left: 25%">
+	<div class="col-xs-12" style="list-style-type:none">
+
+			<div class="col-xs-2">
+				<img id="recipe_img" src="img/porocaramel.jpg" class="img-circle" width="80%"/>
+			</div>
+
+			<div class="col-xs-10">
+				<div class="col-xs-12">
+					<div style="font-size:20pt;color:black;">{{recipe.name}}</div>
+				</div>
+
+				<div class="col-xs-3 col-sm-2">
+					<span class="glyphicon glyphicon-time"></span>{{recipe.duration}}</span>
+				</div>
+
+				<div class="col-xs-9 col-sm-10">
+					<ul style="display:inline;padding:0;list-style-type:none;">
+						<li style="display:inline;"><span class="label label-danger" ng-repeat="tag in recipe.tags">{{tag}}</span></li>
+					</ul>
+				</div>
+
+				<div class="col-xs-12">
+					<p style="text-align:justify;">
+						{{recipe.description}}
+					</p>
+				</div>
+
+				<div class="col-xs-12">
+					<label class="col-xs-3 col-sm-2">Ingredients </label>
+					<div class="col-xs-9 col-sm-10">
+						<ul style="display:inline;padding:0;list-style-type:none;">
+							<li style="display:inline;"><span class="label label-info" ng-repeat="ingredient in recipe.ingredients">{{ingredient}}</span></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<label class="col-xs-3 col-sm-2">Tools </label>
+					<div class="col-xs-9 col-sm-10">
+						<ul style="display:inline;padding:0;list-style-type:none;">
+							<li style="display:inline;"><span class="label label-primary">Oven</span></li>
+							<li style="display:inline;"><span class="label label-primary">Bowl</span></li>
+							<li style="display:inline;"><span class="label label-primary">Fryer</span></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+<div>{{callBack | json}}</div>

@@ -32,7 +32,7 @@
 
 						<div class="col-xs-10">
 							<div class="col-xs-12">
-								<a href="#" style="font-size:20pt;color:black;">{{recipe.name}}</a>
+								<a href="#/recipes/id/{{recipe._id}}" style="font-size:20pt;color:black;">{{recipe.name}}</a>
 							</div>
 
 							<div class="col-xs-3 col-sm-2">
@@ -47,7 +47,7 @@
 
 							<div class="col-xs-12">
 								<p style="text-align:justify;">
-									{{recipe.description}}<a href="#">... See more</a>
+									{{recipe.description}}<a href="#/recipes/id/{{recipe._id}}">... See more</a>
 								</p>
 							</div>
 
@@ -55,7 +55,7 @@
 								<label class="col-xs-3 col-sm-2">Ingredients </label>
 								<div class="col-xs-9 col-sm-10">
 									<ul style="display:inline;padding:0;list-style-type:none;">
-										<li style="display:inline;"><span class="label label-info" ng-repeat="ingredient in recipe.ingredients">{{ingredient}}</span></li>
+										<li style="display:inline;"><span class="label label-info" ng-repeat="ingredient in recipe.ingredients"><a href="#/ingredients/id/{{ingredient.id}}">{{ingredient.name}}</a></span></li>
 									</ul>
 								</div>
 							</div>
@@ -74,3 +74,5 @@
 					</li>
 				</ul>
 			</div>
+
+			<div>{{test | json}}</div>

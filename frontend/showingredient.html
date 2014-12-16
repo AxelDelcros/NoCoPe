@@ -1,0 +1,29 @@
+<div ng-show="loading">Loading ...</div>
+<div ng-show="!loading" style="margin-top: 25%; margin-left: 25%">
+	<div class="col-xs-12" style="list-style-type:none">
+
+		<div class="col-xs-2">
+			<img id="recipe_img" src="img/porocaramel.jpg" class="img-circle" width="80%"/>
+		</div>
+
+		<div class="col-xs-10">
+			<div class="col-xs-12">
+				<div style="font-size:20pt;color:black;">{{ingredient.name}}</div>
+			</div>
+
+			<div class="col-xs-9 col-sm-10">
+				<ul style="display:inline;padding:0;list-style-type:none;">
+					<li style="display:inline;"><span class="label label-danger" ng-repeat="tag in ingredient.tags">{{tag}}</span></li>
+				</ul>
+			</div>
+
+			<div class="col-xs-9 col-sm-10">
+				<ul style="display:inline;padding:0;list-style-type:none;">
+					<li style="display:inline;"><span class="label label-danger" ng-repeat="nutrient in ingredient.nutrients">{{nutrient}}</span></li>
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div>{{callBack | json}}</div>
