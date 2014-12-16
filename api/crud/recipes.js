@@ -140,10 +140,17 @@ exports.RecipeValidator.tags = function(param)
     return (true);
 }
 exports.nameToUrl = function(param) {
-    var to_replace = ["_", " ", "-", "(", ")", "[", "]", "\"", "'"];
+    var to_replace = ["_", " ", "(", ")", "[", "]", "\"", "'"];
     for (i = 0; i < to_replace.length ; i++) {
-	param = param.replace(to_replace[i], "-");
+	while (param.indexOf(to_replace[i]) != -1)
+	    param = param.replace(to_replace[i], "-");
     }
+    var reg = /[-]{2,}/;
+    while (reg.test(param))
+	param = param.replace(reg, "-");
+    param = param.replace(/^-/, "");
+    param = param.replace(/-$/, "");
+    param = param.toLowerCase();
     return (param);
 }
 //var funcstr = "steps";
