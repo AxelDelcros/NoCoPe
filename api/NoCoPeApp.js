@@ -205,6 +205,7 @@ app.get('/init', function(req, res) {
     default_recipes.forEach(function(element, index, array) {
 	db.collection('recipes', function(err, collection_recipes) {
 	    element._id = new BSON.ObjectID(element._id);
+	    element.name_url = recipes.nameToUrl(element.name);
 	    collection_recipes.insert(element, function(err, result) {
 	    });
 	});
