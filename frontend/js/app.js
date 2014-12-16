@@ -21,7 +21,7 @@
                     access : { requiredLogin: false}
                 })
 
-                .when('/recipes/id/:id', {
+                .when('/recipes/:name_url', {
                     templateUrl : 'showrecipe.html',
                     controller  : 'showRecipeController',
                     access : { requiredLogin: false}
@@ -34,7 +34,7 @@
                     access : { requiredLogin: false}
                 })
 
-                .when('/ingredients/id/:id', {
+                .when('/ingredients/:name_url', {
                     templateUrl : 'showingredient.html',
                     controller  : 'showIngredientController',
                     access : { requiredLogin: false}
@@ -162,6 +162,7 @@
             $scope.placeholder = 'Type recipe name here...';
             $scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
                 $scope.recipes = recipes;
+                $scope.recipes.limit = 282;
                 angular.forEach($scope.recipes, function (recipe, key1) {
                     angular.forEach(recipe.ingredients, function (ingredient, key2) {
                         $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
@@ -186,8 +187,8 @@
         function showRecipeController ($scope, $http, $window, $location) {
             $scope.loading = true;
             recipeid = $location.path();
-            $window.alert(recipeid.split('id/')[1].length);
-            $http.get('http://localhost:5555/recipes/id/' + recipeid.split('id/')[1])
+            $window.alert(recipeid.split('recipes/')[1].length);
+            $http.get('http://localhost:5555/recipes/name_url/' + recipeid.split('recipes/')[1])
             .success(function (data, status, headers, config) {
                 $scope.recipe = data;
                 $scope.loading = false;
@@ -201,7 +202,7 @@
     NoCoPe.controller('ingredientsController', ['$scope','$http', 
         function ingredientsController ($scope, $http) {
             $scope.loading = true;
-            $scope.placeholder = 'Type recipe name here...';
+            $scope.placeholder = 'Type ingredient name here...';
             console.log("Coucou");
             $http.get('http://localhost:5555/ingredients')
                 .success(function (data,status,headers,config) {
@@ -218,8 +219,8 @@
         function showIngredientController ($scope, $http, $window, $location) {
             $scope.loading = true;
             ingredientid = $location.path();
-            $window.alert(ingredientid.split('id/')[1]);
-            $http.get('http://localhost:5555/ingredients/id/' + ingredientid.split('id/')[1])
+            $window.alert(ingredientid.split('ingredients/')[1]);
+            $http.get('http://localhost:5555/ingredients/name_url/' + ingredientid.split('ingredients/')[1])
             .success(function (data, status, headers, config) {
                 $scope.ingredient = data;
                 $scope.loading = false;
@@ -284,8 +285,8 @@
         }
     ]);
 
-    NoCoPe.controller('signupController', ['$scope','$http', 
-        function signupController ($scope , $http ) {
+    NoCoPe.controller('signupController', ['$scope','$http', '$window',
+        function signupController ($scope , $http, $window) {
             $scope.info = {login: 'Login', firstname : "First name", lastname : "Last name"};
             $scope.placeholderLogin = 'Email';
             $scope.placeholderPassword = 'Password';
@@ -300,11 +301,11 @@
                 }
                 else
                 {
-
+                    console.log(sign.avatar);
                     $http.post('http://localhost:5555/users', 
                         {login:sign.login, email:sign.email, password:sign.password,
                             firstname:sign.firstName, lastname:sign.lastName,
-                            birth:sign.birthday, sexe:sign.gender})
+                            birth:sign.birthday, sexe:sign.gender, image:sign.avatar})
                     .success(function (data, status, headers, config) {
                         sign.back = data;
                     })
