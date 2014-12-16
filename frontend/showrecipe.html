@@ -31,7 +31,7 @@
 					<label class="col-xs-3 col-sm-2">Ingredients </label>
 					<div class="col-xs-9 col-sm-10">
 						<ul style="display:inline;padding:0;list-style-type:none;">
-							<li style="display:inline;"><span class="label label-info" ng-repeat="ingredient in recipe.ingredients">{{ingredient}}</span></li>
+							<li style="display:inline;margin-right:2%;" ng-repeat="ingredient in recipe.ingredients"><span class="label label-info">{{ingredient.name}}</span></li>
 						</ul>
 					</div>
 				</div>
@@ -40,9 +40,7 @@
 					<label class="col-xs-3 col-sm-2">Tools </label>
 					<div class="col-xs-9 col-sm-10">
 						<ul style="display:inline;padding:0;list-style-type:none;">
-							<li style="display:inline;"><span class="label label-primary">Oven</span></li>
-							<li style="display:inline;"><span class="label label-primary">Bowl</span></li>
-							<li style="display:inline;"><span class="label label-primary">Fryer</span></li>
+							<li style="display:inline;margin-right:2%;" ng-repeat="tool in recipe.tools"><span class="label label-primary">{{tool.name}}</span></li>
 						</ul>
 					</div>
 				</div>

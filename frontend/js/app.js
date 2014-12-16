@@ -180,7 +180,7 @@
             $scope.placeholder = 'Type recipe name here...';
             $scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
                 $scope.recipes = recipes;
-                $scope.recipes.limit = 282;
+                $scope.recipes.limit = 271;
                 angular.forEach($scope.recipes, function (recipe, key1) {
                     angular.forEach(recipe.ingredients, function (ingredient, key2) {
                         $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
@@ -193,7 +193,6 @@
                         })  
                     });
                     angular.forEach(recipe.tools, function (tool, key2) {
-                        console.log(tool)
                         $scope.recipes[key1].tools[key2] = RecipesFactory.getTool(tool).then(function (tool) {
                             $scope.recipes[key1].tools[key2] = {
                                 name: tool.name,
@@ -211,13 +210,33 @@
         }
     ]);
 
-    NoCoPe.controller('showRecipeController', ['$scope', '$http', '$window', '$location',
-        function showRecipeController ($scope, $http, $window, $location) {
+    NoCoPe.controller('showRecipeController', ['$scope', '$http', '$window', '$location', 'RecipesFactory',
+        function showRecipeController ($scope, $http, $window, $location, RecipesFactory) {
             $scope.loading = true;
             recipeid = $location.path();
             $http.get('http://localhost:5555/recipes/name_url/' + recipeid.split('recipes/')[1])
             .success(function (data, status, headers, config) {
                 $scope.recipe = data;
+                angular.forEach($scope.recipe.ingredients, function (ingredient, key2) {
+                        $scope.recipe.ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
+                            $scope.recipe.ingredients[key2] = {                                
+                                name: ingredient.name,
+                                name_url: ingredient.name_url
+                            };
+                        }, function (msg) {
+                            alert(msg);
+                        })  
+                    });
+                angular.forEach($scope.recipe.tools, function (tool, key2) {
+                        $scope.recipe.tools[key2] = RecipesFactory.getTool(tool).then(function (tool) {
+                            $scope.recipe.tools[key2] = {
+                                name: tool.name,
+                                name_url: tool.name_url
+                            };
+                        }, function (msg) {
+                            alert(msg);
+                        })  
+                    });
                 $scope.loading = false;
             })
             .error(function (data, status, headers, config) {
