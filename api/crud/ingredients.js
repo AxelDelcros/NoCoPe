@@ -130,7 +130,7 @@ exports.post_ingredient = function(req, res) {
             return (res.status(400).send(ret));
 	
 	// We create the new recipe
-	var recipe = {
+	var ingredient = {
 	    "name":name,
 	    "name_url":exports.nameToUrl(name),
 	    "tags":tags,
@@ -144,7 +144,7 @@ exports.post_ingredient = function(req, res) {
 		res.status(400).send({"res":false, "error_code":0005, "msg":"Something happened during the database access !"});
 	    }
 	    else {
-		collection_ingredients.insert(recipe, function(err, result) {
+		collection_ingredients.insert(ingredient, function(err, result) {
 		    if (err) {
 			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
@@ -237,6 +237,10 @@ exports.put_ingredient_by_id = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
 
+    var id = req.params.id;
+
+    if (id.length != 24)
+	return (res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"}));
 
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
@@ -247,7 +251,7 @@ exports.put_ingredient_by_id = function(req, res) {
 	    form.parse(req, function(err, fields, files) {
 
 
-		var ingredients_updated_fields = ["name", "components", "tags", "nutrients"];
+		var ingredients_updated_fields = ["name", "tags", "nutrients"];
 
 		var keys = Object.keys(fields);
                 var f = {};
@@ -268,8 +272,7 @@ exports.put_ingredient_by_id = function(req, res) {
                 // Here we can execute the update request
                 //console.log(f);
 
-		req.params.id = req.params.id.length == 24 ? req.params.id : "000000000000000000000000";
-		collection_ingredients.update({"_id": new BSON.ObjectID(req.params.id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
+		collection_ingredients.update({"_id": new BSON.ObjectID(id)}, {$set: f}, {}, function(err, nbrUpdatedFields) {
 		    if (err) {
 			res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
 		    }
@@ -296,6 +299,9 @@ exports.delete_ingredient_by_id = function(req, res) {
     var BSON = req.BSON;
 
     var id = req.params.id;
+
+    if (id.length != 24)
+	return (res.status(400).send({"res":false, "error_code":5553, "msg":"This ingredient 'id' was not found !"}));
     db.collection('ingredients', function(err, collection_ingredients) {
 	if (err) {
 	    res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
@@ -322,5 +328,5 @@ exports.delete_ingredient_by_id = function(req, res) {
 
 
 /*
-** END RECIPE FUNCTIONS
+** END INGREDIENT FUNCTIONS
 */

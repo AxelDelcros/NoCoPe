@@ -83,6 +83,7 @@ app.use(function(req,res,next){
 var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
 var users = require('./crud/users');
+var tools = require('./crud/tools');
 //var images = require('./crud/images');
 
 var basic_auth = require('./auth/basic_auth');
@@ -322,60 +323,17 @@ app.delete('/users/id/:id', users.delete_user_by_id);
 
 
 
-
-
-
-/* 
-** ROUTES RECIPE
-*/
-//app.post('/recipe/id/:id', food_api.post_recipe);
-//app.get('/recipe/', food_api.get_recipe_by_id);
-//app.put('/recipe/id/:id', food_api.put_recipe_by_id);
-//app.delete('/recipe/id/:id', food_api.delete_recipe_by_id);
 /*
-** END ROUTES RECIPE
+** ROUTES TOOL
 */
-
-
-/* 
-** ROUTES RECIPE
-*/
-//app.post('/recipe/id/:id', food_api.post_recipe);
-//app.get('/recipe/', food_api.get_recipe_by_id);
-//app.put('/recipe/id/:id', food_api.put_recipe_by_id);
-//app.delete('/recipe/id/:id', food_api.delete_recipe_by_id);
+app.post('/tools', tools.post_tool);
+app.get('/tools/id/:id', tools.get_tool_by_id);
+app.get('/tools/name_url/:name_url', tools.get_tool_by_name_url);
+app.put('/tools/id/:id', tools.put_tool_by_id);
+app.delete('/tools/id/:id', tools.delete_tool_by_id);
 /*
-** END ROUTES RECIPE
+** END ROUTES TOOL
 */
-
-
-/* 
-** ROUTES RECIPE
-*/
-//app.post('/recipe/id/:id', food_api.post_recipe);
-//app.get('/recipe/', food_api.get_recipe_by_id);
-//app.put('/recipe/id/:id', food_api.put_recipe_by_id);
-//app.delete('/recipe/id/:id', food_api.delete_recipe_by_id);
-/*
-** END ROUTES RECIPE
-*/
-
-
-//app.get('/ingredient/id/:id', food_api.get_ingredient_id);
-//app.get('/tool/id/:id', food_api.get_tool_id);
-//app.get('/fridge/id/:id', food_api.get_fridge_id);
-//app.get('/user/id/:id', food_api.check_authentification, food_api.get_user_id);
-
-//app.get('/recipe/name/:name', food_api.get_recipe_by_name);
-//app.get('/ingredient/name/:name', food_api.get_ingredient_by_name);
-
-
-
-//app.post('/user/login', food_api.user_login);
-//app.post('/user/logout', food_api.check_authentification, food_api.user_logout);
-
-
-
 
 
 
