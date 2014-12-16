@@ -181,6 +181,14 @@ exports.post_user = function(req, res) {
 	var sexe = fields.sexe;
 	var birth = fields.birth;
 
+	console.log("login : " + login);
+	console.log("email : " + email);
+	console.log("password : " + password);
+	console.log("firtname : " + firstname);
+	console.log("lastname : " + lastname);
+	console.log("sexe : " + sexe);
+	console.log("birth : " + birth);
+
 	var ret;
 	if ((ret = exports.UserValidator["login"](login)) !== true)
             return (res.status(400).send(ret));
