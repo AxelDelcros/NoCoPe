@@ -166,7 +166,7 @@
                 angular.forEach($scope.recipes, function (recipe, key1) {
                     angular.forEach(recipe.ingredients, function (ingredient, key2) {
                         $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
-                            ingredientid = ingredient._id;
+                            ingredientid = ingredient.id;
                             $scope.recipes[key1].ingredients[key2] = {
                                 id: ingredientid,
                                 name: ingredient.name
