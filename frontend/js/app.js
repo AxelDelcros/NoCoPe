@@ -187,7 +187,7 @@
             $scope.loading = true;
             recipeid = $location.path();
             $window.alert(recipeid.split('id/')[1].length);
-            $http.get('http://localhost:5555/recipes/id/' + {_id:recipeid.split('id/')[1]})
+            $http.get('http://localhost:5555/recipes/id/' + recipeid.split('id/')[1])
             .success(function (data, status, headers, config) {
                 $scope.recipe = data;
                 $scope.loading = false;
@@ -219,7 +219,7 @@
             $scope.loading = true;
             ingredientid = $location.path();
             $window.alert(ingredientid.split('id/')[1]);
-            $http.get('http://localhost:5555/ingredients/id/' + {_id:ingredientid.split('id/')[1]})
+            $http.get('http://localhost:5555/ingredients/id/' + ingredientid.split('id/')[1])
             .success(function (data, status, headers, config) {
                 $scope.ingredient = data;
                 $scope.loading = false;
