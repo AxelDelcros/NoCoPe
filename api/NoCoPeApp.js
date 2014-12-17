@@ -38,6 +38,7 @@ db.open(function(err, db) {
     }
     else {
         console.log("An error happened during the connection to the MongoDB server !");
+	console.log(err);
 	throw ("An error happened during the connection to the MongoDB server !");
     }
 
