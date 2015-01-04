@@ -1,3 +1,31 @@
+<nav class="navbar navbar-inverse" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+
+		<a class="navbar-brand" href="#">GTrotter</a>
+	</div>
+
+	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
+		<ul class="nav navbar-nav pull-right">
+			<li>
+				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+			</li>
+			<li>
+				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
+			</li>
+
+			<li>
+				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}"><span class="glyphicon glyphicon-remove" ></span> Logout</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+
 <div id="form_sample"  style="margin-top:15%; margin-left:25%" ng-show="!$window.sessionStorage.token">
 	<form  name="signUpForm"  novalidate>
 		<div class="col-sm-8 col-md-offset-3 col-md-6">
@@ -22,7 +50,7 @@
 
 				<div class="form-group row">
 					<div class="col-xs-8">
-						<input type="email" name="email" class="form-control" ng-model="signUp.email"  placeholder="{{ placeholderLogin }}" class="input-xlarge" autocomplete="off" required>
+						<input type="email" name="email" class="form-control" ng-model="signUp.email"  placeholder="{{ placeholderMail }}" class="input-xlarge" autocomplete="off" required>
 					</div>
 				</div>
 
@@ -65,7 +93,7 @@
 
 				<div class="control-group">
 					<div class="controls">
-						<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" >Send</button>
+						<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate" >Send</button>
 					</div>
 				</div>
 

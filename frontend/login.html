@@ -1,31 +1,58 @@
+<nav class="navbar navbar-inverse" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+
+		<a class="navbar-brand" href="#">GTrotter</a>
+	</div>
+
+	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
+		<ul class="nav navbar-nav pull-right">
+			<li>
+				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+			</li>
+			<li>
+				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
+			</li>
+
+			<li>
+				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}"><span class="glyphicon glyphicon-remove" ></span> Logout</a>
+			</li>
+		</ul>
+	</div>
+</nav>
 <div style="margin-top: 25%; margin-left: 25%"> 
-	<form id="loginForm" role="form">
-		<div class="col-sm-12 col-md-offset-3 col-md-6">
-			<div class="row">
-				<div class="form-group row">
-					<div class="col-md-6">
-						<input type="mail" class="form-control" name="mail" id="login" placeholder=" {{ placeholderLogin }} " ng-model="logIn.id" autocomplete="off" required>
-					</div>
-					<span class="col-md-3" ng-show="attentionMail" class="label label-danger">{{ attentionMail }}</span>
-				</div>
-
-				<div class="form-group row">
-					<div class="col-md-6">
-						<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="logIn.password" autocomplete="off" required>
-					</div>
-					<span class="col-md-3" ng-show="attentionPassword" class="label label-danger">{{ attentionPassword }}</span>
-				</div>
-
-				<button class="btn btn-success" type="submit" ng-click="submitForm()">
-					<span class="glyphicon glyphicon-upload"></span> Submit
-				</button>
-
-			</div>
-		</div>
-	</form>
+<form id="loginForm" role="form">
 	<div class="col-sm-12 col-md-offset-3 col-md-6">
-		<div class="col-md-">
-			<textarea id="submitDebugText">{{logIn.back | json}}</textarea><br />
+		<div class="row">
+			<div class="form-group row">
+				<div class="col-md-6">
+					<input type="mail" class="form-control" name="mail" id="login" placeholder=" {{ placeholderLogin }} " ng-model="logIn.id" autocomplete="off" required>
+				</div>
+				<span class="col-md-3" ng-show="attentionMail" class="label label-danger">{{ attentionMail }}</span>
+			</div>
+
+			<div class="form-group row">
+				<div class="col-md-6">
+					<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="logIn.password" autocomplete="off" required>
+				</div>
+				<span class="col-md-3" ng-show="attentionPassword" class="label label-danger">{{ attentionPassword }}</span>
+			</div>
+
+			<button class="btn btn-success" type="submit" ng-click="submitForm()">
+				<span class="glyphicon glyphicon-upload"></span> Submit
+			</button>
+
 		</div>
 	</div>
+</form>
+<div class="col-sm-12 col-md-offset-3 col-md-6">
+	<div class="col-md-">
+		<textarea id="submitDebugText">{{logIn.back | json}}</textarea><br />
+	</div>
+</div>
 </div>

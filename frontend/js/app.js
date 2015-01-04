@@ -27,7 +27,6 @@
                     access : { requiredLogin: false}
                 })
 
-                // route for the contact page
                 .when('/ingredients', {
                     templateUrl : 'ingredients.html',
                     controller  : 'ingredientsController',
@@ -57,59 +56,67 @@
                     controller  : 'signupController',
                     access : { requiredLogin: false}
                 })
+
                 .when('/login', {
                     templateUrl : 'login.html',
                     controller  : 'loginController',
                     access : { requiredLogin: false}
                 })
+
+                 .when('/logout', {
+                    controller  : 'logoutController',
+                })
+
                 .otherwise({redirectTo: '/'});
 
-            // $httpProvider.interceptors.push('TokenInterceptor');
+            $httpProvider.interceptors.push('TokenInterceptor');
         }
     ]);
 
-    // NoCoPe.run(function ($rootScope, $location, AuthenticationService) {
-    //     $rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-    //         if (nextRoute.access.requiredLogin && !AuthenticationService.isLogged) {
-    //          $location.path("/login");
-    //         }
-    //     });
-    // });
+    NoCoPe.run(function ($rootScope, $location, AuthenticationService) {
+        $rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
+            if (nextRoute.access){
+                if (nextRoute.access.requiredLogin && !AuthenticationService.isLogged) {
+                 $location.path("/login");
+                }
+            };
+        });
+    });
 
 //////////////////////////////////////////////
 //////////////////FACTORIES//////////////////
 ////////////////////////////////////////////
 
-    // NoCoPe.factory('TokenInterceptor', ['$q', 'AuthenticationService',
-    //     function ($q, $window, AuthenticationService) {
-    //         return {
-    //             request : function (config) {
-    //                 config.headers = config.headers || {};
-    //                 if ($window.sessionStorage.token) {
-    //                     config.headers.Authorization = 'NoCoPe' + $window.sessionStorage.token;
-    //                 }
-    //                 return config;
-    //             },
+    NoCoPe.factory('TokenInterceptor', ['$q', '$window', 'AuthenticationService',
+        function ($q, $window, AuthenticationService) {
+            return {
+                request : function (config) {
+                    config.headers = config.headers || {};
+                    if ($window.sessionStorage.token) {
+                        config.headers.Authorization = 'NoCoPe' + $window.sessionStorage.token;
+                    }
+                    return config;
+                },
 
-    //             requestError : function (rejection) {
-    //                 return $q.reject(rejection);
-    //             },
+                requestError : function (rejection) {
+                    return $q.reject(rejection);
+                },
 
-    //             response : function (response) {
-    //                 return response || $q.when(response);
-    //             },
+                response : function (response) {
+                    return response || $q.when(response);
+                },
 
-    //             responseError : function (rejection) {
-    //                 if (rejection != null && rejection.status == 401 && ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
-    //                     delete $window.sessionStorage.token;
-    //                     AuthenticationService.isLogged = false;
-    //                     $location.path("/login");
-    //                 }
-    //                 return $q.reject(rejection);
-    //             }
-    //         };
-    //     }]
-    // );
+                responseError : function (rejection) {
+                    if (rejection != null && rejection.status == 401 && ($window.sessionStorage.token || AuthenticationService.isAuthenticated)) {
+                        delete $window.sessionStorage.token;
+                        AuthenticationService.isLogged = false;
+                        $location.path("/login");
+                    }
+                    return $q.reject(rejection);
+                }
+            };
+        }]
+    );
 
     // // // Create a factory to handle connect action
     NoCoPe.factory('AuthenticationService', function () {
@@ -172,12 +179,16 @@
 /////////////////CONTROLLERS/////////////////
 ////////////////////////////////////////////
 
+
     // create the controller and inject Angular's $scope
-    NoCoPe.controller('recipeController', ['$scope','$http', 'RecipesFactory',
-        function recipeController ($scope, $http, RecipesFactory) {
+    NoCoPe.controller('recipeController', ['$scope','$http', 'RecipesFactory', '$window', 'AuthenticationService',
+        function recipeController ($scope, $http, RecipesFactory, $window, AuthenticationService) {
             // create a message to display in our view
             $scope.loading = true;
             $scope.placeholder = 'Type recipe name here...';
+            console.log($window.sessionStorage.token);
+            console.log("in recipeCOntroller " + $window.sessionStorage.token);
+
             $scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
                 $scope.recipes = recipes;
                 $scope.recipes.limit = 271;
@@ -214,6 +225,8 @@
         function showRecipeController ($scope, $http, $window, $location, RecipesFactory) {
             $scope.loading = true;
             recipeid = $location.path();
+            console.log($window.sessionStorage.token);
+            console.log("in the showrecopeCOntroller " + $window.sessionStorage.token);
             $http.get('http://localhost:5555/recipes/name_url/' + recipeid.split('recipes/')[1])
             .success(function (data, status, headers, config) {
                 $scope.recipe = data;
@@ -245,9 +258,12 @@
         }
     ]); 
 
-    NoCoPe.controller('ingredientsController', ['$scope','$http', 
-        function ingredientsController ($scope, $http) {
+    NoCoPe.controller('ingredientsController', ['$scope','$http', '$window',
+        function ingredientsController ($scope, $http, $window) {
             $scope.loading = true;
+            console.log($window.sessionStorage.token);
+            console.log("in the ingredientsController " + $window.sessionStorage.token);
+
             $scope.placeholder = 'Type ingredient name here...';
             $http.get('http://localhost:5555/ingredients')
                 .success(function (data,status,headers,config) {
@@ -264,6 +280,9 @@
         function showIngredientController ($scope, $http, $window, $location) {
             $scope.loading = true;
             ingredientid = $location.path();
+            console.log($window.sessionStorage.token);
+            console.log("in the showIngredientController" + $window.sessionStorage.token);
+
             $http.get('http://localhost:5555/ingredients/name_url/' + ingredientid.split('ingredients/')[1])
             .success(function (data, status, headers, config) {
                 $scope.ingredient = data;
@@ -279,6 +298,7 @@
         function showIngredientController ($scope, $http, $window, $location) {
             $scope.loading = true;
             toolid = $location.path();
+            console.log($window.sessionStorage.token);
             $http.get('http://localhost:5555/tools/name_url/' + toolid.split('tools/')[1])
             .success(function (data, status, headers, config) {
                 $scope.tool = data;
@@ -291,35 +311,28 @@
     ]); 
 
 
-    NoCoPe.controller('productController', ['$scope',
-        function productController ($scope) {
+    NoCoPe.controller('productController', ['$scope', '$window',
+        function productController ($scope, $window) {
+            console.log($window.sessionStorage.token);
             $scope.placeholder = 'Type product name here...';
         }
     ]);    
 
-    NoCoPe.controller('SignOutController', ['$scope', '$location', '$window', '$http', 'AuthenticationService',
-        function SignOutController ($scope , $http ,$location, $window, AuthenticationService) {
-            $scope.logOut = function($scope, $location, $window, $http, AuthenticationService) {
-                    if (AuthenticationService.isLogged) {
-                        $http.post('http://localhost:5555/logout')
-                        .success(function (data, status, headers, config) {
-                            AuthenticationService.isLogged = false;
-                            delete $window.sessionStorage.token;
-                            $location.path("/");
-                            $scope.isLogged = "disconnect";
-                        })
-                        .error(function (data, status, headers, config) {
-                            console.log("Error while trying disconnect the user");
-                        });
-                    }
-            }
-        }
-    ]);
+    // NoCoPe.controller('SignOutController', ['$scope', '$location', '$window', '$http', 'AuthenticationService',
+    //     function SignOutController ($scope , $http ,$location, $window, AuthenticationService) {
+    //         $scope.logOut = function ($scope, $location, $window, $http, AuthenticationService) {
+                   
+    //                 }
+    //         }
+    //     }
+    // ]);
 
     NoCoPe.controller('loginController', ['$scope','$http', '$location', '$window', 'AuthenticationService',
         function loginController ($scope , $http ,$location, $window, AuthenticationService) {
             $scope.placeholderLogin = 'e-mail address / login';
             $scope.placeholderPassword = 'password';
+            console.log($window.sessionStorage.token);
+            console.log("in the loginController " + $window.sessionStorage.token);
 
             $scope.submitForm = function () {
                 if (!$scope.logIn.id)
@@ -346,9 +359,11 @@
     NoCoPe.controller('signupController', ['$scope','$http', '$window',
         function signupController ($scope , $http, $window) {
             $scope.info = {login: 'Login', firstname : "First name", lastname : "Last name"};
-            $scope.placeholderLogin = 'Email';
+            $scope.placeholderMail = 'Email';
             $scope.placeholderPassword = 'Password';
             $scope.placeholderDate = 'YYYY-MM-DD';
+            console.log($window.sessionStorage.token);
+            console.log("in signupController " + $window.sessionStorage.token);
 
             $scope.submitForm = function (sign) {
                 if (sign.password !== sign.password2)
@@ -372,3 +387,18 @@
             }
         }
     ]);
+
+    NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route',
+        function userController ($scope, $window, AuthenticationService, $route) {
+            console.log(" authentification.islogged " + AuthenticationService.isLogged);
+            $scope.logout = function () {
+                alert("Coucou");
+                delete $window.sessionStorage.token;
+                console.log(" in logout function " + $window.sessionStorage.token);
+                $scope.Logged = false;
+                $route.reload()
+            }
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+        }
+    ]);   
