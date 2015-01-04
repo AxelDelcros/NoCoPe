@@ -25,14 +25,17 @@
 		</ul>
 	</div>
 </nav>
-<div ng-show="loading">Loading ...</div>
-<div ng-show="!loading" style="margin-top: 25%; margin-left: 25%">
-	<div class="col-xs-12" style="list-style-type:none">
 
-		<div style="font-size:20pt;color:black;">{{tool.name}}</div>
+<div class="container">
+	<div ng-show="loading">Loading ...</div>
+	<div ng-show="!loading" style="margin-top: 25%; margin-left: 25%">
+		<div class="col-xs-12" style="list-style-type:none">
 
-		<img id="recipe_img" src="img/porocaramel.jpg" width="10%"/>
+			<div style="font-size:20pt;color:black;">{{tool.name}}</div>
 
+			<img id="recipe_img" src="img/porocaramel.jpg" width="10%"/>
+
+		</div>
 	</div>
+	<div>{{callBack | json}}</div>
 </div>
-<div>{{callBack | json}}</div>

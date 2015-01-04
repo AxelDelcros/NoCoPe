@@ -26,79 +26,82 @@
 	</div>
 </nav>
 
-<div id="form_sample"  style="margin-top:15%; margin-left:25%" ng-show="!$window.sessionStorage.token">
-	<form  name="signUpForm"  novalidate>
-		<div class="col-sm-8 col-md-offset-3 col-md-6">
-			<div class="row">
+<div class="container">
+	<div id="form_sample"  style="margin-top:15%; margin-left:25%" ng-show="!$window.sessionStorage.token">
+		<form  name="signUpForm"  novalidate>
+			<div class="col-sm-8 col-md-offset-3 col-md-6">
+				<div class="row">
 
-				<div class="form-group row">
-					<div class="col-xs-4">
-						<input type="text" class="form-control" name="firstName" ng-model="signUp.firstName" placeholder="{{ info.firstname }}" autocomplete="off" required>
+					<div class="form-group row">
+						<div class="col-xs-4">
+							<input type="text" class="form-control" name="firstName" ng-model="signUp.firstName" placeholder="{{ info.firstname }}" autocomplete="off" required>
+						</div>
+
+						<div class="col-xs-4">
+							<input type="text" class="form-control" name="lastName" ng-model="signUp.lastName" placeholder="{{ info.lastname }}" autocomplete="off" required>
+						</div>
+
 					</div>
 
-					<div class="col-xs-4">
-						<input type="text" class="form-control" name="lastName" ng-model="signUp.lastName" placeholder="{{ info.lastname }}" autocomplete="off" required>
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<input type="text" class="form-control" name="login" ng-model="signUp.login" placeholder="{{ info.login }}" autocomplete="off" required>
+						</div>
 					</div>
 
-				</div>
-
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<input type="text" class="form-control" name="login" ng-model="signUp.login" placeholder="{{ info.login }}" autocomplete="off" required>
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<input type="email" name="email" class="form-control" ng-model="signUp.email"  placeholder="{{ placeholderMail }}" class="input-xlarge" autocomplete="off" required>
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<input type="email" name="email" class="form-control" ng-model="signUp.email"  placeholder="{{ placeholderMail }}" class="input-xlarge" autocomplete="off" required>
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="signUp.password"  ng-minlength="6"  required>
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<input type="password" class="form-control" name="password" id="password" placeholder=" {{ placeholderPassword }} " ng-model="signUp.password"  ng-minlength="6"  required>
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<input type="password" class="form-control" name="password2" id="password2" placeholder=" {{ placeholderPassword }} " ng-model="signUp.password2"  ng-minlength="6" required>
+						</div>
+						<span class="col-md-3" ng-show="errorPassword" class="label label-danger">{{ errorPassword }}</span>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<input type="password" class="form-control" name="password2" id="password2" placeholder=" {{ placeholderPassword }} " ng-model="signUp.password2"  ng-minlength="6" required>
+
+					<div class="form-group row">
+						<div class="col-xs-8">
+							<input type="text" name="birthday" class="form-control" ng-model="signUp.birthday"  placeholder="{{placeholderDate}}" autocomplete="off" required>
+						</div>
 					</div>
-					<span class="col-md-3" ng-show="errorPassword" class="label label-danger">{{ errorPassword }}</span>
-				</div>
 
-
-				<div class="form-group row">
-					<div class="col-xs-8">
-						<input type="text" name="birthday" class="form-control" ng-model="signUp.birthday"  placeholder="{{placeholderDate}}" autocomplete="off" required>
+					<div class="form-group row">
+						<div class="col-xs-4">
+							<input type="radio" ng-model="signUp.gender" value="male"/>  Male
+						</div>
+						<div class="col-xs-4">
+							<input type="radio" ng-model="signUp.gender" value="female" />  Female<br />
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<div class="col-xs-4">
-						<input type="radio" ng-model="signUp.gender" value="male"/>  Male
+					<div class="form-group row">
+						<div class="col-xs-8" ng-show="!signUp.image">
+							<input  type="radio" ng-model="signUp.image" value="false"/>
+						</div>
+						<input class="col-xs-8" ng-show="signUp.image"type="file" name="avatar" class="form-control" ng-model="signUp.avatar" required>
 					</div>
-					<div class="col-xs-4">
-						<input type="radio" ng-model="signUp.gender" value="female" />  Female<br />
+
+
+					<div class="control-group">
+						<div class="controls">
+							<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate" >Send</button>
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group row">
-					<div class="col-xs-8" ng-show="!signUp.image">
-						<input  type="radio" ng-model="signUp.image" value="false"/>
-					</div>
-					<input class="col-xs-8" ng-show="signUp.image"type="file" name="avatar" class="form-control" ng-model="signUp.avatar" required>
-				</div>
+				</form>
+				<textarea id="submitDebugText">{{signUp.back | json}}</textarea><br />
+			</div>
 
+			<textarea > {{signUp | json}}</textarea>
 
-				<div class="control-group">
-					<div class="controls">
-						<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate" >Send</button>
-					</div>
-				</div>
-
-			</form>
-			<textarea id="submitDebugText">{{signUp.back | json}}</textarea><br />
 		</div>
-
-		<textarea > {{signUp | json}}</textarea>
