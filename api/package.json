@@ -24,6 +24,7 @@
 	"gridform": "*",
 	"uniqid": "*",
 	"MD5": "*",
+	"promise": "*",
 	"util": "*",
 	"mocha": "*",
 	"assert":"*",
