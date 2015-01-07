@@ -85,9 +85,15 @@ var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
 var users = require('./crud/users');
 var tools = require('./crud/tools');
+var moments = require('./crud/moments');
 //var images = require('./crud/images');
 
+// Including the authentification module
 var basic_auth = require('./auth/basic_auth');
+
+// Including the research module
+var search = require('./search/search.js');
+
 
 
 var formidable = ('formidable');
@@ -293,6 +299,15 @@ app.post('/logout', basic_auth.check_auth, basic_auth.logout);
 
 
 
+/*
+** ROUTES SEARCH
+*/
+app.get('/search/recipe', search.search_recipe);
+/*
+** END ROUTES SEARCH
+*/
+
+
 
 /*
 ** ROUTES RECIPE
@@ -330,6 +345,8 @@ app.post('/users', users.post_user);
 app.get('/users/id/:id', users.get_user_by_id);
 app.put('/users/id/:id', users.put_user_by_id);
 app.delete('/users/id/:id', users.delete_user_by_id);
+
+app.post('/users/follow', basic_auth.check_auth, users.follow);
 /*
 ** END ROUTES USER
 */
@@ -350,69 +367,27 @@ app.delete('/tools/id/:id', tools.delete_tool_by_id);
 
 
 
-
 /*
-app.get('history/:id', food_api.get_history_element);
-
-app.get('/nutrient/:id', food_api.get_nutrient);
-
-app.get('/product/:id', food_api.get_product);
-
-app.get('/product/:name', food_api.get_product_by_name);
+** ROUTES MOMENT
 */
+app.post('/moments', basic_auth.check_auth, moments.post_moment);
+//app.post('/recipes', basic_auth.check_auth, recipes.post_recipe);
+//app.get('/recipes/id/:id', recipes.get_recipe_by_id);
+//app.get('/recipes/name_url/:name_url', recipes.get_recipe_by_name_url);
+//app.put('/recipes/id/:id', recipes.put_recipe_by_id);
+//app.delete('/recipes/id/:id', recipes.delete_recipe_by_id);
+
+// ROUTE -> /moments/(un)like?id=ID
+app.post('/moments/like', basic_auth.check_auth, moments.like_moment);
+app.post('/moments/unlike', basic_auth.check_auth, moments.unlike_moment);
+
+// ROUTE -> /moments/comment?id=ID
+app.post('/moments/comment', basic_auth.check_auth, moments.comment_moment);
 /*
-** ROUTES PUT DEFINITIONS
+** END ROUTES RECIPE
 */
-/*
-app.put('/recipe/:id', food_api.put_recipe);
 
-app.put('/ingredient/:id', food_api.put_ingredient);
 
-app.put('/user/:id', food_api.put_user);
-
-app.get('/user/inscription', food_api.get_inscription);
-
-app.put('/tools/:id', food_api.put_tools);
-
-app.put('/fridge/:id', food_api.put_fridge);
-
-app.put('/history/:id', food_api.put_history_element);
-
-app.put('/nutrient/:id', food_api.put_nutrient);
-
-app.put('/step/:title', food_api.put_step);
-
-app.put('/product/:id', food_api.put_product);
-*/
-/*
-** ROUTES DELETE DEFINITIONS
-*/
-/*
-app.delete('/recipe/:id', food_api.delete_recipe);
-
-app.delete('/recipe/:name', food_api.delete_recipe_using_name);
-
-app.delete('/ingredient/:id', food_api.delete_ingredient);
-
-app.delete('/ingredient/:name', food_api.delete_ingredient_using_name);
-
-app.delete('/user/:id', food_api.delete_user);
-
-app.delete('/user/:name', food_api.delete_user_using_name);
-
-app.delete('/tools/:id', food_api.delete_tools);
-
-app.delete('/fridge/:id', food_api.delete_fridge);
-
-app.delete('/nutrient/:id', food_api.delete_nutrient);
-
-app.delete('/step/:title', food_api.delete_step);
-
-app.delete('/product/:id', food_api.delete_product);
-*/
-/*
-** END ROUTES DEFINITIONS
-*/
 
 
 

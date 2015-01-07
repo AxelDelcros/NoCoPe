@@ -205,7 +205,7 @@ exports.post_user = function(req, res) {
         if ((ret = exports.UserValidator["birth"](birth)) !== true)
             return (res.status(400).send(ret));
 	
-	console.log("Coucou");
+
 
 	// We create the new recipe
 	var user = {
@@ -218,6 +218,7 @@ exports.post_user = function(req, res) {
 	    "birth":birth,
 	    "image":null,
 	    "diets":[],
+	    "followed": [],
 	    "fridge":[],
 	    "tools":[]
 	};
@@ -408,6 +409,63 @@ exports.delete_user_by_id = function(req, res) {
 
     });
 };
+
+
+
+
+exports.follow = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    var id = req.query.id;
+    if (id.lendth == 24) {
+
+	db.collection('users', function(err, collection_users) {
+	    if (err) {
+		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+	    }
+	    else {
+
+		collection_users.findOne({"_id" : new BSON.ObjectID(id)}, function(err, user) {
+		    if (err) {
+			return (res.status(400).send({"res":false, "error_code":5554, "msg":"This user does not exists !"}));
+		    }
+		    else if (user == null) {
+			return (res.status(400).send({"res":false, "error_code":5554, "msg":"This 'id' user was not found !"}));
+		    }
+		    else {
+			// We add the id of the user we want to follow
+			if (req.private_var_user.follow.indexOf(id) != -1) {
+			    req.private_var_user.follow.push(id);
+			    
+			    collection_users.update({"_id": new BSON.ObjectID(req.private_var_user.id)}, {$set: {"follow": req.private_var_user.follow}}, {}, function(err, nbrUpdatedFields) {
+				if (err) {
+				    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+				}
+				else if (nbrUpdatedFields == null) {
+				    return (res.status(400).send({"res":false, "error_code":0005, "msg":"This 'id' user was not found !"}));
+				}
+				else {
+				    return (res.status(200).send({"res":true}));
+				}
+			    });
+			}
+			else {
+			    return (res.status(400).send({"res":false, "error_code":0005, "msg":"You are already following this user !"}));
+			}
+			
+		    }
+		});
+		
+	    }
+	    
+	});
+    }
+    else {
+	return (res.status(400).send({"res":false, "error_code":4457, "msg":"This user does not exists !"}));
+    }
+}
+
 
 
 

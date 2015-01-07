@@ -187,8 +187,8 @@ exports.post_recipe = function(req, res) {
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["description"](description)) !== true)
             return (res.status(400).send(ret));
-	if ((ret = exports.RecipeValidator["duration"](duration)) !== true)
-            return (res.status(400).send(ret));
+	//if ((ret = exports.RecipeValidator["duration"](duration)) !== true)
+        //return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["steps"](steps)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["ingredients"](ingredients)) !== true)
@@ -207,7 +207,7 @@ exports.post_recipe = function(req, res) {
 	    "name":name,
 	    "name_url":exports.nameToUrl(name),
 	    "description":description,
-	    "duration":duration,
+//	    "duration":duration,
 	    "steps":steps,
 	    "ingredients":ingredients,
 	    "tools":tools,
