@@ -63,6 +63,17 @@ exports.RecipeValidator.duration = function(param)
     */
     return (true);
 }
+exports.RecipeValidator.content = function(param) {
+    var good_content = /[^a-zA-Z0-9_ \-\(\)\[\]\"\']/;
+    //console.log(good_content.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'content' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'content' can't be empty !"});
+    if (good_content.test(param))
+	return ({"res":false, "error_code":0007, "msg":"The field 'content' is not in the right format ! It can only contain letters, numbers, underscores and spaces !"});
+    return (true);
+}
 exports.RecipeValidator.step = function(param)
 {
     if (typeof param == "object") {
@@ -100,7 +111,7 @@ exports.RecipeValidator.steps = function(param)
     if (param.isArray) {
 	var ret;
 	for (i = 0 ; i < param.length ; i++) {
-	    if ((ret = exports.UserValidator["step"](param[i])) !== true)
+	    if ((ret = exports.RecipeValidator["step"](param[i])) !== true)
 		return (ret);
 	    
 	}
