@@ -57,6 +57,8 @@ app.use(logger('dev'));  /* 'default', 'short', 'tiny', 'dev' */
 //app.use(express.bodyParser()),
 app.use(express.static(path.join(__dirname, 'public')));
 // Middleware
+var cors = require('cors');
+app.use(cors);
 app.use(function(req,res,next){
     // Put some variable, then we could access them easily
     req.db = db;
