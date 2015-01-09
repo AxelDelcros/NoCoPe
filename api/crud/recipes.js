@@ -211,6 +211,7 @@ exports.post_recipe = function(req, res) {
 	if ((ret = exports.RecipeValidator["tags"](tags)) !== true)
             return (res.status(400).send(ret));
 
+	console.log(steps);
 
 	// We create the new recipe
 	var recipe = {
