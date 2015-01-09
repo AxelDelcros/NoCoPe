@@ -15,12 +15,13 @@
 			<li>
 				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
 			</li>
+
 			<li>
 				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
 			</li>
 
 			<li>
-				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}"><span class="glyphicon glyphicon-remove" ></span> Logout</a>
+				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}">Logout</a>
 			</li>
 		</ul>
 	</div>
@@ -52,9 +53,7 @@
 			</div>
 		</form>
 		<div class="col-sm-12 col-md-offset-3 col-md-6">
-			<div class="col-md-">
-				<textarea id="submitDebugText">{{logIn.back | json}}</textarea><br />
-			</div>
+			<div><span ng-show="{{!logIn.stat}}" class="label label-danger">{{logIn.back}}</span></div>
 		</div>
 	</div>
 </div>

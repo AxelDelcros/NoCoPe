@@ -20,7 +20,7 @@
 			</li>
 
 			<li>
-				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}"><span class="glyphicon glyphicon-remove" ></span> Logout</a>
+				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}">Logout</a>
 			</li>
 		</ul>
 	</div>
@@ -97,11 +97,9 @@
 							<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate" >Send</button>
 						</div>
 					</div>
-
 				</form>
-				<textarea id="submitDebugText">{{signUp.back | json}}</textarea><br />
+				<div><span ng-show="{{stat}}" class="label label-default">{{back}}</span></div>
+				<div><span ng-show="{{!stat}}" class="label label-info">{{back}}</span></div>
+				</div>
 			</div>
-
-			<textarea > {{signUp | json}}</textarea>
-
 		</div>

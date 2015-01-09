@@ -1,0 +1,114 @@
+<nav class="navbar navbar-inverse" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+
+		<a class="navbar-brand" href="#">NoCope</a>
+	</div>
+
+	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
+		<ul class="nav navbar-nav pull-right" id="menu-demo2">
+			<li>
+				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+			</li>
+			<li>
+				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
+			</li>
+
+			<li id="drop down" ng-show="{{Logged}}"><a href="#">User</a>
+				<ul>
+					<li>
+						<a href="#recipes/create" style="color:#FAFAFA;width:100%" class="btn btn-info" >Add recipe</a>
+					</li>
+
+					<li>
+						<a href="#settingsun " style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Settings</a>
+					</li>
+
+					<li>
+						<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" >Logout</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+<div class="container">
+	<div id="form_sample"  style="margin-top:5%; margin-left:20%">
+		<form  name="signUpForm"  novalidate>
+			<div class="col-sm-8 col-md-offset-3 col-md-6 col-xs-12">
+				<div class="row">
+					<h1>Add a new recipe</h1>
+
+					<div class="form-group row">
+						<div class="col-xs-10 col-sm-12">
+							<h3><input type="text" class="form-control" name="recipename" ng-model="addrecipe.recipename" placeholder="{{ recipename }}" autocomplete="off" required></h3>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-xs-10 col-sm-12">
+							<h3><input type="text" class="form-control" name="tag" ng-model="addrecipe.tag" placeholder="{{ tag }}" autocomplete="off" required></h3>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<div class="controls">                     
+								<textarea rows="4" cols="50" style="text-align:center" maxlength="1500" placeholder="{{ description }}" ng-minLength="1" ng-model="addrecipe.description" autocomplete="off" required></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-xs-6">
+							<div class="controls">                     
+								<textarea rows="4" cols="50" style="text-align:center" maxlength="1500" placeholder="{{ ingredients }}" ng-minLength="1" ng-model="addrecipe.ingredients" autocomplete="off" required></textarea>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-xs-10 col-sm-12">
+							<input type="text" class="form-control" name="tools" ng-model="addrecipe.tools" placeholder="{{ tools }}" autocomplete="off" required>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-xs-10 col-sm-12">
+							<input type="text" class="form-control" name="product" ng-model="addrecipe.product" placeholder="{{ products }}" autocomplete="off" required>
+						</div>
+					</div>
+
+					<div class="col-xs-10">	
+						<h2>Step</h2>
+						<div class="form-group row">
+							<div class="col-xs-12">
+								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.name" placeholder="{{ stepname }}" autocomplete="off" required>
+							</div>
+							<div class="col-xs-12">
+								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.duration" placeholder="{{ duration }}" autocomplete="off" required>
+							</div>
+							<div class="col-xs-12">
+								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.content" placeholder="{{ steps }}" autocomplete="off" required>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="controls">
+					<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate">Send</button>
+				</div>
+				<div><span ng-show="{{stat}}" class="label label-default">{{back}}</span></div>
+				<div><span ng-show="{{!stat}}" class="label label-info">{{back}}</span></div>
+				<textarea>{{error}}</textarea>
+				<textarea>{{callBack}}</textarea>
+			</div>
+		</div>
+	</form>
+</div>

@@ -11,31 +11,39 @@
 	</div>
 
 	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
-		<ul class="nav navbar-nav pull-right">
+		<ul class="nav navbar-nav pull-right" id="menu-demo2">
 			<li>
 				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
 			</li>
+			
 			<li>
 				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
 			</li>
 
-			<li>
-				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}"><span class="glyphicon glyphicon-remove" ></span> Logout</a>
+			<li id="drop down" ng-show="{{Logged}}"><a href="#">User</a>
+				<ul>
+					<li>
+						<a href="#recipes/create" style="color:#FAFAFA;width:100%" class="btn btn-info" >Add recipe</a>
+					</li>
+
+					<li>
+						<a href="#settings" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Settings</a>
+					</li>
+
+					<li>
+						<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" >Logout</a>
+					</li>
+				</ul>
 			</li>
 		</ul>
 	</div>
 </nav>
 
 <div class="container">
-	<div ng-show="loading">Loading ...</div>
 	<div ng-show="!loading" style="margin-top: 25%; margin-left: 25%">
-		<div class="col-xs-12" style="list-style-type:none">
-
-			<div style="font-size:20pt;color:black;">{{tool.name}}</div>
-
-			<img id="recipe_img" src="img/porocaramel.jpg" width="10%"/>
-
+		<h1><strong>Settings</h1>
+		<div style="margin-left: 25%">
+			{{user.login}}
 		</div>
 	</div>
-	<div>{{callBack | json}}</div>
 </div>

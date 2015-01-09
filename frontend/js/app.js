@@ -9,74 +9,83 @@
             $routeProvider
                 // route for the home page
                 .when('/', {
-                    templateUrl : 'recipes.html',
-                    controller  : 'recipeController',
+                    templateUrl : 'partials/home.html',
+                    controller  : 'homeController',
                     access : { requiredLogin: false}
                 })
 
                 // route for the about page
                 .when('/recipes', {
-                    templateUrl : 'recipes.html',
+                    templateUrl : 'partials/recipes.html',
                     controller  : 'recipeController',
                     access : { requiredLogin: false}
                 })
 
+                .when('/recipes/create', {
+                    templateUrl : 'partials/addrecipe.html',
+                    controller  : 'addRecipeController',
+                    access : { requiredLogin: true}
+                })
+
                 .when('/recipes/:name_url', {
-                    templateUrl : 'showrecipe.html',
+                    templateUrl : 'partials/showrecipe.html',
                     controller  : 'showRecipeController',
                     access : { requiredLogin: false}
                 })
 
                 .when('/ingredients', {
-                    templateUrl : 'ingredients.html',
+                    templateUrl : 'partials/ingredients.html',
                     controller  : 'ingredientsController',
                     access : { requiredLogin: false}
                 })
 
                 .when('/ingredients/:name_url', {
-                    templateUrl : 'showingredient.html',
+                    templateUrl : 'partials/showingredient.html',
                     controller  : 'showIngredientController',
                     access : { requiredLogin: false}
                 })
 
                 .when('/tools/:name_url', {
-                    templateUrl : 'showtool.html',
+                    templateUrl : 'partials/showtool.html',
                     controller  : 'showToolController',
                     access : { requiredLogin: false}
                 })
 
                 .when('/products', {
-                    templateUrl : 'products.html',
+                    templateUrl : 'partials/products.html',
                     controller  : 'productController',
                     access : { requiredLogin: false}
                 })
                 
                 .when('/signup', {
-                    templateUrl : 'signup.html',
+                    templateUrl : 'partials/signup.html',
                     controller  : 'signupController',
                     access : { requiredLogin: false}
                 })
 
                 .when('/login', {
-                    templateUrl : 'login.html',
+                    templateUrl : 'partials/login.html',
                     controller  : 'loginController',
                     access : { requiredLogin: false}
                 })
 
-                 .when('/logout', {
-                    controller  : 'logoutController',
+                .when('/settings', {
+                    templateUrl : 'partials/settings.html',
+                    controller  : 'settingsController',
+                    access : { requiredLogin: true}
                 })
 
                 .otherwise({redirectTo: '/'});
+
 
             $httpProvider.interceptors.push('TokenInterceptor');
         }
     ]);
 
-    NoCoPe.run(function ($rootScope, $location, AuthenticationService) {
+    NoCoPe.run(function ($rootScope, $location, AuthenticationService, $window) {
         $rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
             if (nextRoute.access){
-                if (nextRoute.access.requiredLogin && !AuthenticationService.isLogged) {
+                if (nextRoute.access.requiredLogin && !$window.sessionStorage.token) {
                  $location.path("/login");
                 }
             };
@@ -183,6 +192,10 @@
     // create the controller and inject Angular's $scope
     NoCoPe.controller('recipeController', ['$scope','$http', 'RecipesFactory', '$window', 'AuthenticationService',
         function recipeController ($scope, $http, RecipesFactory, $window, AuthenticationService) {
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+            else
+                $scope.Logged = false;
             // create a message to display in our view
             $scope.loading = true;
             $scope.placeholder = 'Type recipe name here...';
@@ -191,7 +204,7 @@
 
             $scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
                 $scope.recipes = recipes;
-                $scope.recipes.limit = 271;
+                $scope.recipes.limit = 258;
                 angular.forEach($scope.recipes, function (recipe, key1) {
                     angular.forEach(recipe.ingredients, function (ingredient, key2) {
                         $scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
@@ -278,7 +291,11 @@
 
       NoCoPe.controller('showIngredientController', ['$scope', '$http', '$window', '$location',
         function showIngredientController ($scope, $http, $window, $location) {
-            $scope.loading = true;
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+            else
+                $scope.Logged = false;
+           $scope.loading = true;
             ingredientid = $location.path();
             console.log($window.sessionStorage.token);
             console.log("in the showIngredientController" + $window.sessionStorage.token);
@@ -318,20 +335,10 @@
         }
     ]);    
 
-    // NoCoPe.controller('SignOutController', ['$scope', '$location', '$window', '$http', 'AuthenticationService',
-    //     function SignOutController ($scope , $http ,$location, $window, AuthenticationService) {
-    //         $scope.logOut = function ($scope, $location, $window, $http, AuthenticationService) {
-                   
-    //                 }
-    //         }
-    //     }
-    // ]);
-
-    NoCoPe.controller('loginController', ['$scope','$http', '$location', '$window', 'AuthenticationService',
-        function loginController ($scope , $http ,$location, $window, AuthenticationService) {
+    NoCoPe.controller('loginController', ['$scope','$http', '$location', '$window', 'AuthenticationService', "$rootScope",
+        function loginController ($scope , $http ,$location, $window, AuthenticationService, $rootScope) {
             $scope.placeholderLogin = 'e-mail address / login';
             $scope.placeholderPassword = 'password';
-            console.log($window.sessionStorage.token);
             console.log("in the loginController " + $window.sessionStorage.token);
 
             $scope.submitForm = function () {
@@ -343,14 +350,15 @@
 
                 $http.post('http://localhost:5555/login',{ login:$scope.logIn.id, password:$scope.logIn.password } )
                 .success(function (data,status,headers,config) {
-                    $scope.logIn.back = data;
                     $window.sessionStorage.token = data.access_token;
+                    $rootScope.user = JSON.stringify(data.user);
                     AuthenticationService.isLogged = true;
-                    $scope.isLogged = "connect";
                     $location.path('/');
                 })
                 .error(function (data,status,headers,config) {
-                   $scope.logIn.back = data;
+                    $scope.logIn.back = data.msg;
+                    $scope.logIn.stat = "false";
+
                });
             };
         }
@@ -368,7 +376,7 @@
             $scope.submitForm = function (sign) {
                 if (sign.password !== sign.password2)
                 {
-                    $scope.errorPassword = "You didn't enter the same password";
+                    $scope.back = "You didn't enter the same password";
                     $scope.placeholderPassword = 'Password';
                 }
                 else
@@ -378,27 +386,95 @@
                             firstname:sign.firstName, lastname:sign.lastName,
                             birth:sign.birthday, sexe:sign.gender, image:sign.avatar})
                     .success(function (data, status, headers, config) {
-                        sign.back = data;
+                        $scope.back = "You have successfully create an account";
+                        $scope.stat = "true";
                     })
                     .error(function (data, status, headers, config) {
-                        sign.back = data;
+                        $scope.back = data.msg;
+                        $scope.stat = "false";
                     });
                 }
             }
         }
     ]);
 
-    NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route',
-        function userController ($scope, $window, AuthenticationService, $route) {
+    NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route', "$rootScope",
+        function userController ($scope, $window, AuthenticationService, $route, $rootScope) {
             console.log(" authentification.islogged " + AuthenticationService.isLogged);
             $scope.logout = function () {
-                alert("Coucou");
                 delete $window.sessionStorage.token;
                 console.log(" in logout function " + $window.sessionStorage.token);
                 $scope.Logged = false;
-                $route.reload()
+                delete $rootScope.user;
+                $route.reload();
             }
             if ($window.sessionStorage.token)
                 $scope.Logged = true;
         }
-    ]);   
+    ]);
+
+    NoCoPe.controller('settingsController', ['$scope', '$window', "$rootScope",
+        function settingsController ($scope, $window, $rootScope) {
+            console.log($window.sessionStorage.token);
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+            else
+                $scope.Logged = false;
+        }
+    ]);
+
+    NoCoPe.controller('homeController', ['$scope', '$window', "$rootScope",
+        function homeController ($scope, $window, $rootScope) {
+            console.log($window.sessionStorage.token);
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+            else
+                $scope.Logged = false;
+            // $scope.user = $window.sessionStorage.user;
+        }
+    ]);
+
+    NoCoPe.controller('addRecipeController', ['$scope','$http', '$location', '$window', 'AuthenticationService', "$rootScope",
+        function addRecipeController ($scope , $http ,$location, $window, AuthenticationService, $rootScope) {
+            $scope.recipename = 'Name of the recipe';
+            $scope.tag = 'Specify any tag, i.e. halal';
+            $scope.description = 'Enter the description for your recipe';
+            $scope.duration = 'Time needed to cook (in minutes)';
+            $scope.steps = 'Here explain how you are cooking your recipe';
+            $scope.ingredients = 'Please list here all the ingredients and their quantities';
+            $scope.tools = 'Please list here all the ingredients and their quantities';
+            $scope.products = 'Please list here all the products and their quantities';
+            $scope.stepname = 'Name of the recipe';
+            $scope.stepname = 'Name of the recipe';
+            console.log("in the addRecipeController " + $window.sessionStorage.token);
+            picture = [];
+            var stepArray = [];
+
+            $scope.submitForm = function () {
+                stepArray.push( {'name' : $scope.addrecipe.step.name,
+                                 'duration' : $scope.addrecipe.step.duration,
+                                 'content' : $scope.addrecipe.step.content});
+                $http.post('http://localhost:5555/recipes/',{ 
+                    name:$scope.addrecipe.recipename, 
+                    tags:$scope.addrecipe.tag,
+                    description:$scope.addrecipe.description,
+                    ingredients:$scope.addrecipe.ingredients,
+                    tools:$scope.addrecipe.tools,
+                    products:$scope.addrecipe.product,
+                    steps:JSON.stringify(stepArray),
+                    pictures:picture
+                    })
+                .success(function (data,status,headers,config) {
+                        $scope.back = "You have successfully create a recipe";
+                        $scope.stat = "true";
+                        $scope.callBack = data;
+                })
+                .error(function (data,status,headers,config) {
+                    $scope.back = data.msg;
+                    $scope.stat = "false";
+                    $scope.callBack = data;
+                    $scope.error = stepArray;
+               });
+            };
+        }
+    ]);
