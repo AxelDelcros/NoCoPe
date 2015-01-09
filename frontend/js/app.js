@@ -406,7 +406,9 @@
                 console.log(" in logout function " + $window.sessionStorage.token);
                 $scope.Logged = false;
                 delete $rootScope.user;
+                alert($window.sessionStorage.token);
                 $route.reload();
+                alert('coucou')
             }
             if ($window.sessionStorage.token)
                 $scope.Logged = true;
@@ -442,7 +444,7 @@
             $scope.duration = 'Time needed to cook (in minutes)';
             $scope.steps = 'Here explain how you are cooking your recipe';
             $scope.ingredients = 'Please list here all the ingredients and their quantities';
-            $scope.tools = 'Please list here all the ingredients and their quantities';
+            $scope.tools = 'Please list here all the tools and their quantities';
             $scope.products = 'Please list here all the products and their quantities';
             $scope.stepname = 'Name of the recipe';
             $scope.stepname = 'Name of the recipe';
