@@ -57,8 +57,6 @@ app.use(logger('dev'));  /* 'default', 'short', 'tiny', 'dev' */
 //app.use(express.bodyParser()),
 app.use(express.static(path.join(__dirname, 'public')));
 // Middleware
-var cors = require('cors');
-app.use(cors);
 app.use(function(req,res,next){
     // Put some variable, then we could access them easily
     req.db = db;
@@ -74,11 +72,9 @@ app.use(function(req,res,next){
 
     // Allow cross-domain requests
     res.header("Access-Control-Allow-Origin", "*");
-    //res.header("Access-Control-Allow-Methods", "GET");
-    res.header("Access-Control-Allow-Methods", "*");
+    res.header("Access-Control-Allow-Methods", "GET");
     res.header("Access-Control-Request-Methods", "*");
-    //res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
 
