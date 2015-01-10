@@ -14,7 +14,7 @@
                     access : { requiredLogin: false}
                 })
 
-                 .when('/search', {
+                 .when('/search/:q', {
                     templateUrl : 'partials/search.html',
                     controller  : 'searchController',
                     access : { requiredLogin: false}
@@ -410,7 +410,7 @@
         function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
             console.log(" authentification.islogged " + AuthenticationService.isLogged);
             $scope.search = function() {
-                $location.path('/search?q=' + $scope.searchName);
+		$location.path('/search/' + $scope.searchName);
             }
             $scope.logout = function () {
                 delete $window.sessionStorage.token;
