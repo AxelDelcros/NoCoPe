@@ -183,8 +183,8 @@ exports.post_recipe = function(req, res) {
     var form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
 
-	// We set the uid to 'null' if the user is not logged
-	var uid = (req.private_var_user === undefined ? null : req.private_var_user.id);
+	// The user is always logged here
+	var uid = req.private_var_user._id;
 	var name = fields.name;
 	var description = fields.description;
 	var duration = fields.duration;
