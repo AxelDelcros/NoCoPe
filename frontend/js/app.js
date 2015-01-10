@@ -72,7 +72,7 @@
                 .when('/settings', {
                     templateUrl : 'partials/settings.html',
                     controller  : 'settingsController',
-                    access : { requiredLogin: true}
+                    access : { requiredLogin: false}
                 })
 
                 .otherwise({redirectTo: '/'});
@@ -388,6 +388,7 @@
                     .success(function (data, status, headers, config) {
                         $scope.back = "You have successfully create an account";
                         $scope.stat = "true";
+                        $location.path('/login');
                     })
                     .error(function (data, status, headers, config) {
                         $scope.back = data.msg;
@@ -406,9 +407,7 @@
                 console.log(" in logout function " + $window.sessionStorage.token);
                 $scope.Logged = false;
                 delete $rootScope.user;
-                alert($window.sessionStorage.token);
                 $route.reload();
-                alert('coucou')
             }
             if ($window.sessionStorage.token)
                 $scope.Logged = true;
@@ -456,7 +455,8 @@
                 stepArray.push( {'name' : $scope.addrecipe.step.name,
                                  'duration' : $scope.addrecipe.step.duration,
                                  'content' : $scope.addrecipe.step.content});
-                $http.post('http://localhost:5555/recipes/',{ 
+                $http.defaults.headers.common.access_token = $window.sessionStorage.token;
+                $http.post('http://localhost:5555/recipes/', { 
                     name:$scope.addrecipe.recipename, 
                     tags:$scope.addrecipe.tag,
                     description:$scope.addrecipe.description,
@@ -464,7 +464,7 @@
                     tools:$scope.addrecipe.tools,
                     products:$scope.addrecipe.product,
                     steps:JSON.stringify(stepArray),
-                    pictures:picture
+                    pictures:picture,
                     })
                 .success(function (data,status,headers,config) {
                         $scope.back = "You have successfully create a recipe";
@@ -472,7 +472,7 @@
                         $scope.callBack = data;
                 })
                 .error(function (data,status,headers,config) {
-                    $scope.back = data.msg;
+                    // $scope.back = data.msg;
                     $scope.stat = "false";
                     $scope.callBack = data;
                     $scope.error = stepArray;
