@@ -14,6 +14,13 @@
                     access : { requiredLogin: false}
                 })
 
+                 .when('/search', {
+                    templateUrl : 'partials/search.html',
+                    controller  : 'searchController',
+                    access : { requiredLogin: false}
+                })
+
+
                 // route for the about page
                 .when('/recipes', {
                     templateUrl : 'partials/recipes.html',
@@ -399,9 +406,12 @@
         }
     ]);
 
-    NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route', "$rootScope",
-        function userController ($scope, $window, AuthenticationService, $route, $rootScope) {
+    NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route', "$rootScope", "$location",
+        function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
             console.log(" authentification.islogged " + AuthenticationService.isLogged);
+            $scope.search = function() {
+                $location.path('/search?q=' + $scope.searchName);
+            }
             $scope.logout = function () {
                 delete $window.sessionStorage.token;
                 console.log(" in logout function " + $window.sessionStorage.token);
@@ -426,6 +436,17 @@
 
     NoCoPe.controller('homeController', ['$scope', '$window', "$rootScope",
         function homeController ($scope, $window, $rootScope) {
+            console.log($window.sessionStorage.token);
+            if ($window.sessionStorage.token)
+                $scope.Logged = true;
+            else
+                $scope.Logged = false;
+            // $scope.user = $window.sessionStorage.user;
+        }
+    ]);
+
+    NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope",
+        function searchController ($scope, $window, $rootScope) {
             console.log($window.sessionStorage.token);
             if ($window.sessionStorage.token)
                 $scope.Logged = true;

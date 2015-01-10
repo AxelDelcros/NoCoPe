@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse" role="navigation">
+<nav class="navbar navbar-inverse" role="navigation"  ng-controller="userController">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
 			<span class="sr-only">Toggle navigation</span>
@@ -10,7 +10,20 @@
 		<a class="navbar-brand" href="#">NoCope</a>
 	</div>
 
-	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
+	<form id="searchbar">
+		<div class="col-sm-12 col-md-offset-4 col-md-3">
+			<div class="row input-group input-group-lg">
+				<input type="text" class="form-control" id="search_method" placeholder=" {{ placeholder }} " required>
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="submit">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</span>
+			</div>
+		</div>
+	</form>
+
+	<div class="collapse navbar-collapse" id="navbartoggle">
 		<ul class="nav navbar-nav pull-right" id="menu-demo2">
 			<li>
 				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
@@ -106,7 +119,7 @@
 				</div>
 				<div><span ng-show="{{stat}}" class="label label-default">{{back}}</span></div>
 				<div><span ng-show="{{!stat}}" class="label label-info">{{back}}</span></div>
-				<textarea>{{callBack}}</textarea>
+				<!-- <textarea>{{callBack}}</textarea> -->
 			</div>
 		</div>
 	</form>
