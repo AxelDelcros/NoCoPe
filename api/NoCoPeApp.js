@@ -212,7 +212,7 @@ app.get('/init', function(req, res) {
     var default_recipes = require('./default_database').recipes;
     default_recipes.forEach(function(element, index, array) {
 	db.collection('recipes', function(err, collection_recipes) {
-	    element._id = new BSON.ObjectID(element._id);
+	    //element._id = new BSON.ObjectID(element._id);
 	    element.name_url = recipes.nameToUrl(element.name);
 	    collection_recipes.insert(element, function(err, result) {
 	    });
@@ -221,7 +221,7 @@ app.get('/init', function(req, res) {
     var default_ingredients = require('./default_database').ingredients;
     default_ingredients.forEach(function(element, index, array) {
 	db.collection('ingredients', function(err, collection_ingredients) {
-	    element._id = new BSON.ObjectID(element._id);
+	    //element._id = new BSON.ObjectID(element._id);
 	    element.name_url = ingredients.nameToUrl(element.name);
 	    collection_ingredients.insert(element, function(err, result) {
 	    });
@@ -233,6 +233,15 @@ app.get('/init', function(req, res) {
 	    element._id = new BSON.ObjectID(element._id);
 	    element.name_url = tools.nameToUrl(element.name);
 	    collection_tools.insert(element, function(err, result) {
+	    });
+	});
+    });
+    var default_users = require('./default_database').users;
+    default_users.forEach(function(element, index, array) {
+	console.log(element);
+	db.collection('users', function(err, collection_users) {
+	    //element._id = new BSON.ObjectID(element._id);
+	    collection_users.insert(element, function(err, result) {
 	    });
 	});
     });

@@ -123,7 +123,7 @@ exports.login = function(req, res) {
 			var token = MD5(uniqid());
 			//console.log(token);
 
-			collection_users.update({"_id": new BSON.ObjectID(user._id)}, {$set: {"access_token":token}}, {}, function(err, nbrUpdatedFields) {
+			collection_users.update({"_id": user._id}, {$set: {"access_token":token}}, {}, function(err, nbrUpdatedFields) {
 			    if (err) {
 				return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 			    }
@@ -163,7 +163,7 @@ exports.logout = function(req, res) {
 	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
         }
         else {
-	    collection_users.findOne({"_id":new BSON.ObjectID(req.private_var_user._id)}, function(err, user) {
+	    collection_users.findOne({"_id":req.private_var_user._id}, function(err, user) {
 		if (err) {
 		    return (res.status(400).send({"res":false, "error_code":9675, "msg":"Something happened during the database access !"}));
 		}

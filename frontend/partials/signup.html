@@ -1,30 +1,9 @@
-<nav class="navbar navbar-inverse" role="navigation">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
 
-		<a class="navbar-brand" href="#">NoCope</a>
-	</div>
+<ng-include
+   src="'partials/header.html'"
+>
+</ng-include>
 
-	<div class="collapse navbar-collapse" id="navbartoggle" ng-controller="userController">
-		<ul class="nav navbar-nav pull-right">
-			<li>
-				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-			</li>
-			<li>
-				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
-			</li>
-
-			<li>
-				<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" ng-show="{{Logged}}">Logout</a>
-			</li>
-		</ul>
-	</div>
-</nav>
 
 <div class="container">
 	<div id="form_sample"  style="margin-top:15%; margin-left:25%" ng-show="!$window.sessionStorage.token">
