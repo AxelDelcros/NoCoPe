@@ -102,7 +102,7 @@
                 request : function (config) {
                     config.headers = config.headers || {};
                     if ($window.sessionStorage.token) {
-                        config.headers.Authorization = 'NoCoPe' + $window.sessionStorage.token;
+                        config.headers.access_token = $window.sessionStorage.token;
                     }
                     return config;
                 },
