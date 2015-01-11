@@ -21,53 +21,12 @@
 	<div ng-show="loading">Loading ...</div>
 	<div ng-show="!loading">
 		<ul class="col-xs-12" style="list-style-type:none">
-			<li ng-repeat="recipe in recipes">
 
-				<div class="col-xs-2">
-					<img id="recipe_img" src="img/porocaramel.jpg" class="img-circle" width="80%"/>
-				</div>
 
-				<div class="col-xs-10">
-					<div class="col-xs-12">
-						<a href="#/recipes/{{recipe.name_url}}" style="font-size:20pt;color:black;">{{recipe.name}}</a>
-					</div>
+		  <li ng-repeat="e in elements" ng-include="'partials/showSearchList' + e.type + '.html'">
+		  </li>
 
-					<div class="col-xs-3 col-sm-2">
-						<span class="glyphicon glyphicon-time"></span>{{recipe.duration}}</span>
-					</div>
 
-					<div class="col-xs-9 col-sm-10">
-						<ul style="display:inline;padding:0;list-style-type:none;">
-							<li style="display:inline;margin-right:2%" ng-repeat="tag in recipe.tags"><span class="label label-danger">{{recipe.tag}}</span></li>
-						</ul>
-					</div>
-
-					<div class="col-xs-12">
-						<p style="text-align:justify;">
-							{{recipe.description | limitTo:recipes.limit}} ...
-							<a href="#/recipes/{{recipe.name_url}}">See more</a>
-						</p>
-					</div>
-
-					<div class="col-xs-12">
-						<label class="col-xs-3 col-sm-2">Ingredients </label>
-						<div class="col-xs-9 col-sm-10">
-							<ul style="display:inline;padding:0;list-style-type:none;">
-								<li style="display:inline;margin-right:2%;" ng-repeat="ingredient in recipe.ingredients"><a href="#/ingredients/{{ingredient.name_url}}"><span class="label label-info" >{{ingredient.name}}</span></a></li>
-							</ul>
-						</div>
-					</div>
-
-					<div class="col-xs-12">
-						<label class="col-xs-3 col-sm-2">Tools </label>
-						<div class="col-xs-9 col-sm-10">
-							<ul style="display:inline;padding:0;list-style-type:none;">
-								<li style="display:inline;margin-right:2%;" ng-repeat="tool in recipe.tools"><a href="#/tools/{{tool.name_url}}"><span class="label label-default" >{{tool.name}}</span></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</li>
 		</ul>
 	</div>
 

@@ -128,6 +128,7 @@
 			var factory = {
 				recipes : false,
 				ingredient : false,
+				tag : false,
 				getRecipes : function () {
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/recipes')
@@ -140,17 +141,17 @@
 					})
 					return deferred.promise;
 				},
-				getIngredient : function(id){
+			    getIngredient : function(id){
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/ingredients/id/' + id)
 					.success(function (data, status, headers, config) {
-						factory.ingredient = data;
-						deferred.resolve(factory.ingredient);
+					    factory.ingredient = data;
+					    deferred.resolve(factory.ingredient);
 					})
 					.error(function (data, status, headers, config) {
 						deferred.reject("Can't get ingredient data");
 					})
-					return deferred.promise;
+				return deferred.promise;
 				},
 				getTool : function(id){
 					var deferred = $q.defer();
@@ -161,6 +162,18 @@
 					})
 					.error(function (data, status, headers, config) {
 						deferred.reject("Can't get tool data");
+					})
+					return deferred.promise;
+				},
+				getTag : function(id){
+					var deferred = $q.defer();
+					$http.get('http://localhost:5555/tags/id/' + id)
+					.success(function (data, status, headers, config) {
+						factory.tag = data;
+						deferred.resolve(factory.tag);
+					})
+					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tag data");
 					})
 					return deferred.promise;
 				}
@@ -185,7 +198,7 @@
 			$scope.placeholder = 'Type recipe name here...';
 			console.log($window.sessionStorage.token);
 			console.log("in recipeCOntroller " + $window.sessionStorage.token);
-			$scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
+		    $scope.recipes = RecipesFactory.getRecipes().then(function (recipes) {
 				$scope.recipes = recipes;
 				$scope.recipes.limit = 258;
 				angular.forEach($scope.recipes, function (recipe, key1) {
@@ -377,7 +390,8 @@
 	NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route', "$rootScope", "$location",
 		function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
 			console.log(" authentification.islogged " + AuthenticationService.isLogged);
-			$scope.search = function() {
+		        $scope.placeholder = "Write a research here";
+		        $scope.search = function() {
 				$location.path('/search/' + $scope.searchName);
 			}
 			$scope.logout = function () {
@@ -413,9 +427,9 @@
 		}
 	]);
 
-	NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$location", "$http", "$routeParams",
-		function searchController ($scope, $window, $rootScope, $location, $http, $routeParams) {
-			alert($routeParams)
+NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$location", "$http", "$routeParams", "$q", "RecipesFactory",
+		function searchController ($scope, $window, $rootScope, $location, $http, $routeParams, $q, RecipesFactory) {
+			//alert($routeParams)
 			console.log($window.sessionStorage.token);
 			if ($window.sessionStorage.token)
 				$scope.Logged = true;
@@ -425,14 +439,61 @@
 			$scope.loading = true;
 			$http.get('http://localhost:5555/search/recipe?q=' + $routeParams.q)
 			.success(function (data, status, headers, config) {
-				$scope.recipes = data.results;
-				$scope.loading = false;
+			    //console.log(JSON.stringify(data.results));
+			    
+			    $scope.elements = data.results;
+			    angular.forEach($scope.elements, function(value, key) {
+				
+				if (value.type == "recipe") {
+				    // On remplace les ingredients, par leur contenu
+				    angular.forEach(value.element.ingredients, function (ingredient, key2) {
+					RecipesFactory.getIngredient(ingredient).then(function (i) {
+					    $scope.elements[key].element.ingredients[key2] = i;
+					}, function (msg) {
+					    //$scope.elements[key].element.ingredients[key2] = "Server Error";
+					    alert(msg);
+					});
+				    });
+				    // On remplace les tools, par leur contenu
+				    angular.forEach(value.element.tools, function (tool, key2) {
+					RecipesFactory.getTool(tool).then(function (t) {
+					    $scope.elements[key].element.tools[key2] = t;
+					}, function (msg) {
+					    //$scope.elements[key].element.tools[key2] = "Server Error";
+					    alert(msg);
+					});
+				    });
+				    // On remplace les tags, par leur contenu
+				    angular.forEach(value.element.tags, function (tag, key2) {
+					RecipesFactory.getTag(tag).then(function (ta) {
+					    $scope.elements[key].element.tags[key2] = ta;
+					}, function (msg) {
+					    //$scope.elements[key].element.tags[key2] = "Server Error";
+					    alert(msg);
+					});
+				    });
+				}
+			    });
+			    $scope.loading = false;
 			})
 			.error(function (data, status, headers, config) {
 				$scope.callBack = data;
 			})
+		    $scope.calc_time_recipe = function(param) {
+			var result = 0;
+			for (i = 0 ; i < param.steps.length ; i++) {
+			    result += param.steps[i].duration;
+			}
+			return (Math.floor(result/60) + "H" + result%60 + "min");
+		    }
+		    
 		}
-	]);
+        ]);
+
+
+
+
+
 
 	NoCoPe.controller('addRecipeController', ['$scope','$http', '$location', '$window', 'AuthenticationService', "$rootScope",
 		function addRecipeController ($scope , $http ,$location, $window, AuthenticationService, $rootScope) {
