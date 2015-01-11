@@ -17,6 +17,11 @@
 					controller : 'searchController',
 					access : { requiredLogin: false}
 				})
+				.when('/user/:username', {
+					templateUrl : 'partials/profil.html',
+					controller : 'profilController',
+					access : { requiredLogin: true}
+				})
 				// route for the about page
 				.when('/recipes', {
 					templateUrl : 'partials/recipes.html',
@@ -66,9 +71,10 @@
 				.when('/settings', {
 					templateUrl : 'partials/settings.html',
 					controller : 'settingsController',
-					access : { requiredLogin: false}
+					access : { requiredLogin: true}
 				})
 				.otherwise({redirectTo: '/'});
+
 				$httpProvider.interceptors.push('TokenInterceptor');
 			}
 		]);
@@ -340,8 +346,8 @@
 		}
 	]);
 
-	NoCoPe.controller('signupController', ['$scope','$http', '$window',
-		function signupController ($scope , $http, $window) {
+	NoCoPe.controller('signupController', ['$scope','$http', '$window', '$location',
+		function signupController ($scope , $http, $window, $location) {
 			$scope.info = {login: 'Login', firstname : "First name", lastname : "Last name"};
 			$scope.placeholderMail = 'Email';
 			$scope.placeholderPassword = 'Password';
@@ -376,24 +382,31 @@
 
 	NoCoPe.controller('userController', ['$scope', '$window', 'AuthenticationService', '$route', "$rootScope", "$location",
 		function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
-			console.log(" authentification.islogged " + AuthenticationService.isLogged);
-			$scope.search = function() {
-				$location.path('/search/' + $scope.searchName);
+			if ($rootScope.user && $window.sessionStorage.token) {
+				$scope.Logged = true;
+				$scope.username = JSON.parse($rootScope.user).login;
+				console.log("rooteScope in userController " + $rootScope.user)
+				console.log("scope.user.login in userController " + $scope.username)
+				console.log("json.parse in userController " + JSON.parse($rootScope.user).login)
+				$scope.search = function() {
+					$location.path('/search/' + $scope.searchName);
+				}
 			}
 			$scope.logout = function () {
-				delete $window.sessionStorage.token;
-				console.log(" in logout function " + $window.sessionStorage.token);
-				$scope.Logged = false;
-				delete $rootScope.user;
-				$route.reload();
-			}
-			if ($window.sessionStorage.token)
-				$scope.Logged = true;
+					delete $window.sessionStorage.token;
+					console.log(" in logout function " + $window.sessionStorage.token);
+					$scope.Logged = false;
+					if ($rootScope.user)
+						delete $rootScope.user;
+					$route.reload();
+					$location.path('/');
+				}
 		}
 	]);
 
 	NoCoPe.controller('settingsController', ['$scope', '$window', "$rootScope",
 		function settingsController ($scope, $window, $rootScope) {
+			console.log($rootScope.user);
 			console.log($window.sessionStorage.token);
 			if ($window.sessionStorage.token)
 				$scope.Logged = true;
@@ -402,9 +415,43 @@
 		}
 	]);
 
+	NoCoPe.controller('profilController', ['$scope', '$window', "$rootScope", '$routeParams',
+		function profilController ($scope, $window, $rootScope, $routeParams) {
+			console.log($window.sessionStorage.token);
+			console.log($rootScope.user);
+			if ($window.sessionStorage.token)
+				$scope.Logged = true;
+			else
+				$scope.Logged = false;
+			if ($rootScope.user)
+			{
+				$scope.user = {};
+				$scope.user.login = JSON.parse($rootScope.user).login;
+				$scope.user.email = JSON.parse($rootScope.user).email;
+				$scope.user.firstname = JSON.parse($rootScope.user).firsname;
+				$scope.user.lastname = JSON.parse($rootScope.user).lastname;
+				$scope.user.sexe = JSON.parse($rootScope.user).sexe;
+				$scope.user.birth = JSON.parse($rootScope.user).birth;
+				$scope.user.image = JSON.parse($rootScope.user).image;
+				$scope.user.diets = JSON.parse($rootScope.user).diet;
+				$scope.user.followed = JSON.parse($rootScope.user).followed;
+				$scope.user.fridge = JSON.parse($rootScope.user).fridge;
+				$scope.user.tools = JSON.parse($rootScope.user).tools;
+			}
+			else
+			{
+				controller = $('#navbar');
+				angular.element(controller).scope().logout();
+				angular.element(controller).scope().$apply();
+			}
+			console.log($rootScope.user);
+		}
+	]);
+
 	NoCoPe.controller('homeController', ['$scope', '$window', "$rootScope",
 		function homeController ($scope, $window, $rootScope) {
 			console.log($window.sessionStorage.token);
+			console.log($rootScope.user);
 			if ($window.sessionStorage.token)
 				$scope.Logged = true;
 			else
@@ -413,15 +460,15 @@
 		}
 	]);
 
+		
+
 	NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$location", "$http", "$routeParams",
 		function searchController ($scope, $window, $rootScope, $location, $http, $routeParams) {
-			alert($routeParams)
 			console.log($window.sessionStorage.token);
 			if ($window.sessionStorage.token)
 				$scope.Logged = true;
 			else
 				$scope.Logged = false;
-			search = $location.path();
 			$scope.loading = true;
 			$http.get('http://localhost:5555/search/recipe?q=' + $routeParams.q)
 			.success(function (data, status, headers, config) {
