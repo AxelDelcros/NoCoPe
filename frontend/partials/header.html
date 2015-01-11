@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse" role="navigation" ng-controller="userController">
+<nav class="navbar navbar-inverse" id="navbar" role="navigation" ng-controller="userController">
 	<div class="navbar-header">
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
 			<span class="sr-only">Toggle navigation</span>
@@ -40,7 +40,11 @@
 					</li>
 
 					<li>
-						<a href="#settings" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Settings</a>
+						<a href="#user/{{ username }}" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Profil</a>
+					</li>
+
+					<li>
+						<a href="#settings" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicons glyphicons-settings"></span>Settings</a>
 					</li>
 
 					<li>
