@@ -469,6 +469,69 @@ exports.follow = function(req, res) {
 
 
 
+// Get The number of recipes published by the user
+exports.getNbrRecipesPublished = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+    //return (res.status(200).send("42"));
+
+    var id = req.params.id;
+    if (id.length != 24)
+        return (res.status(400).send({"res":false, "error_code":5554, "msg":"Invalid param 'id' !"}));
+    db.collection('recipes', function(err, collection_recipes) {
+        if (err) {
+	    console.log(err);
+            return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+        }
+        else {
+            collection_recipes.count({"uid":id}, function(err, nbr) {
+                if (err) {
+                    console.log(err);
+		    return (res.send({"res":false, "error_code":0007, "msg":"Something happened during the database access !"}));
+                }
+                else {
+                    return (res.status(200).send(JSON.stringify(nbr)));
+                }
+            });
+        }
+    });
+};
+
+
+
+
+
+
+// Get The number of followers
+exports.getNbrFollowers = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+    //return (res.status(200).send("42"));
+
+    var id = req.params.id;
+    if (id.length != 24)
+        return (res.status(400).send({"res":false, "error_code":5554, "msg":"Invalid param 'id' !"}));
+    db.collection('users', function(err, collection_users) {
+        if (err) {
+	    console.log(err);
+            return (res.send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+        }
+        else {
+            collection_users.count({"followed": {$elemMatch: {$in: [id]}}}, function(err, nbr) {
+                if (err) {
+                    console.log(err);
+		    return (res.send({"res":false, "error_code":0007, "msg":"Something happened during the database access !"}));
+                }
+                else {
+                    return (res.status(200).send(JSON.stringify(nbr)));
+                }
+            });
+        }
+    });
+};
+
+
+
 /*
 ** END USER FUNCTIONS
 */

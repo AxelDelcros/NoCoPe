@@ -135,6 +135,8 @@
 				recipes : false,
 				ingredient : false,
 				tag : false,
+				nbrRecipesPublished : false,
+				nbrFollowers : false,
 				getRecipes : function () {
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/recipes')
@@ -177,6 +179,30 @@
 					.success(function (data, status, headers, config) {
 						factory.tag = data;
 						deferred.resolve(factory.tag);
+					})
+					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tag data");
+					})
+					return deferred.promise;
+				},
+				getNbrRecipesPublished : function(id){
+				       var deferred = $q.defer();
+				       $http.get('http://localhost:5555/users/' + id + '/NbrRecipesPublished')
+					.success(function (data, status, headers, config) {
+						factory.nbrRecipesPublished = data;
+					        deferred.resolve(factory.nbrRecipesPublished);
+					})
+					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tag data");
+					})
+					return deferred.promise;
+				},
+				getNbrFollowers : function(id){
+				       var deferred = $q.defer();
+				       $http.get('http://localhost:5555/users/' + id + '/NbrFollowers')
+					.success(function (data, status, headers, config) {
+					        factory.nbrFollowers = data;
+					        deferred.resolve(factory.nbrFollowers);
 					})
 					.error(function (data, status, headers, config) {
 						deferred.reject("Can't get tag data");
@@ -418,7 +444,7 @@
 					$route.reload();
 					$location.path('/');
 				}
-		}
+		}}
 	]);
 
 	NoCoPe.controller('settingsController', ['$scope', '$window', "$rootScope",
@@ -522,12 +548,30 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 					});
 				    });
 				}
+				else if (value.type == "user") {
+				    alert(JSON.stringify(value.element));
+				    // On init le nombre de recettes publiées
+				    RecipesFactory.getNbrRecipesPublished(value.element._id).then(function (nbr) {
+					$scope.elements[key].element.nbrrecipespublished = nbr;
+				    }, function (msg) {
+					//$scope.elements[key].element.tools[key2] = "Server Error";
+					alert(msg);
+				    });
+				    // On init le nombre de followers
+				    RecipesFactory.getNbrFollowers(value.element._id).then(function (nbr) {
+					$scope.elements[key].element.nbrfollowers = nbr;
+				    }, function (msg) {
+					//$scope.elements[key].element.tools[key2] = "Server Error";
+					alert(msg);
+				    });
+				}
 			    });
 			    $scope.loading = false;
 			})
 			.error(function (data, status, headers, config) {
 				$scope.callBack = data;
 			})
+		    
 		    $scope.calc_time_recipe = function(param) {
 			var result = 0;
 			for (i = 0 ; i < param.steps.length ; i++) {

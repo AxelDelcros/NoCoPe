@@ -1424,7 +1424,7 @@ exports.users = [
 	birth: "1993-03-29",
 	image: null,
 	diets: [],
-	followed: ["users3333333333333333333", "users4444444444444444444", "users5555555555555555555"],
+	followed: ["users1111111111111111111", "users3333333333333333333", "users4444444444444444444", "users5555555555555555555"],
 	fridge: [],
 	tools: []
     },
@@ -1440,7 +1440,7 @@ exports.users = [
 	birth: "1993-03-29",
 	image: null,
 	diets: [],
-	followed: ["users4444444444444444444", "users5555555555555555555"],
+	followed: ["users1111111111111111111", "users4444444444444444444", "users5555555555555555555"],
 	fridge: [],
 	tools: []
     },
@@ -1456,7 +1456,7 @@ exports.users = [
 	birth: "1993-03-29",
 	image: null,
 	diets: [],
-	followed: ["users5555555555555555555"],
+	followed: ["users1111111111111111111", "users5555555555555555555"],
 	fridge: [],
 	tools: []
     },
@@ -1472,7 +1472,7 @@ exports.users = [
 	birth: "1993-03-29",
 	image: null,
 	diets: [],
-	followed: [],
+	followed: ["users1111111111111111111"],
 	fridge: [],
 	tools: []
     }

@@ -365,7 +365,11 @@ app.get('/users/id/:id', users.get_user_by_id);
 app.put('/users/id/:id', users.put_user_by_id);
 app.delete('/users/id/:id', users.delete_user_by_id);
 
+app.get('/users/:id/NbrRecipesPublished', users.getNbrRecipesPublished);
+app.get('/users/:id/NbrFollowers', users.getNbrFollowers);
+
 app.post('/users/follow', basic_auth.check_auth, users.follow);
+
 /*
 ** END ROUTES USER
 */
