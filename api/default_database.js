@@ -82,14 +82,16 @@ exports.recipes = [
         "content": "Magna tempor minim duis velit ea nulla quis ullamco ex laboris. Quis enim voluptate officia aliquip aliquip velit dolor excepteur mollit minim sit elit do. Consectetur eiusmod exercitation nostrud laboris ex aliqua irure sint adipisicing. Ipsum ea pariatur culpa reprehenderit officia. Do mollit incididunt exercitation ex ea aliquip ex in consequat nulla mollit est."
       }
     ],
-    "ingredients": [],
-    "tools": [],
+    "ingredients": ["111111111111111111111111", "222222222222222222222222", "444444444444444444444444","555555555555555555555555"],
+    "tools": ["111111111111111111111111", "222222222222222222222222", "333333333333333333333333"],
     "products": [],
     "submit_date": "1973-05-24",
-    "tags": []
+    "tags": ["tags22222222222222222222", "tags44444444444444444444", "tags55555555555555555555"]
   },
+
   {
-    "_id": "recipes11111111111111111",
+
+    "_id": "recipes22222222222222222",
     "uid": "users1111111111111111111",
     "name": "qui excepteur labore et occaecat aliquip consectetur adipisicing",
     "name_url": "",
@@ -177,8 +179,9 @@ exports.recipes = [
     "submit_date": "1989-05-14",
     "tags": []
   },
+
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users1111111111111111111",
     "name": "aliqua irure nisi magna consectetur duis et reprehenderit anim velit",
     "name_url": "",
@@ -267,7 +270,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users1111111111111111111",
     "name": "officia in et",
     "name_url": "",
@@ -356,7 +359,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users1111111111111111111",
     "name": "ullamco velit laboris magna excepteur",
     "name_url": "",
@@ -445,7 +448,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users2222222222222222222",
     "name": "non aute deserunt nostrud sit",
     "name_url": "",
@@ -534,7 +537,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users2222222222222222222",
     "name": "eu cupidatat ut duis qui in quis",
     "name_url": "",
@@ -623,7 +626,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users2222222222222222222",
     "name": "quis elit officia eiusmod aliquip excepteur nisi esse sit",
     "name_url": "",
@@ -712,7 +715,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users2222222222222222222",
     "name": "magna laborum adipisicing ad in tempor qui amet eiusmod ipsum",
     "name_url": "",
@@ -801,7 +804,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users3333333333333333333",
     "name": "culpa sint amet commodo non sint incididunt aliquip",
     "name_url": "",
@@ -890,7 +893,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users3333333333333333333",
     "name": "aute eu aliqua quis nulla anim irure ut",
     "name_url": "",
@@ -979,7 +982,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users3333333333333333333",
     "name": "anim duis cupidatat in sit velit eu ipsum ipsum amet",
     "name_url": "",
@@ -1068,7 +1071,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users4444444444444444444",
     "name": "eiusmod labore esse sunt",
     "name_url": "",
@@ -1157,7 +1160,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users4444444444444444444",
     "name": "adipisicing aute incididunt non consequat dolor labore sunt amet",
     "name_url": "",
@@ -1246,7 +1249,7 @@ exports.recipes = [
     "tags": []
   },
   {
-    "_id": "recipes11111111111111111",
+    "_id": "recipes22222222222222222",
     "uid": "users5555555555555555555",
     "name": "reprehenderit laborum commodo dolor id",
     "name_url": "",
@@ -1354,6 +1357,18 @@ exports.ingredients = [
     {
 	"_id":"333333333333333333333333",
 	"name":"lait",
+	"tags":["11", "22", "33"],
+	"nutrients":["titi", "tata", "toto", "toutou"]
+    },
+    {
+	"_id":"444444444444444444444444",
+	"name":"sel",
+	"tags":["11", "22", "33"],
+	"nutrients":["titi", "tata", "toto", "toutou"]
+    },
+    {
+	"_id":"555555555555555555555555",
+	"name":"poivre",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     }
@@ -1466,3 +1481,35 @@ exports.users = [
 
 
 ];
+
+
+
+
+
+
+
+exports.tags = [
+    {
+	"_id":"tags11111111111111111111",
+	"name":"halal"
+    },
+    {
+	"_id":"tags22222222222222222222",
+	"name":"kasher"
+    },
+    {
+	"_id":"tags33333333333333333333",
+	"name":"vegetarient"
+    },
+    {
+	"_id":"tags44444444444444444444",
+	"name":"vegetalient"
+    },
+    {
+	"_id":"tags55555555555555555555",
+	"name":"con"
+    }
+];
+
+
+

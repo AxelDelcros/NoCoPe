@@ -29,6 +29,34 @@ var promise = require('promise');
 exports.search_recipe = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
+
+
+    db.collection('recipes', function(err, collection_recipes) {
+	//collection_recipes.findOne({"_id": BSON.ObjectID("recipes11111111111111111")}, function(err, elem) {
+	collection_recipes.findOne({"_id": "recipes11111111111111111"}, function(err, elem) {
+	    var default_recipe = elem;
+
+	    var default_user = require('../default_database').users[0];
+	    var default_tool = require('../default_database').tools[0];
+	    var default_ingredient = require('../default_database').ingredients[0];
+	    var obj = [
+		{"type":"recipe", "element": default_recipe},
+		{"type":"user", "element": default_user},
+		{"type":"tool", "element": default_tool},
+		{"type":"ingredient", "element": default_ingredient}];
+	    //console.log(res);
+	    return (res.status(200).send({"res":true, "results": obj}));	    
+	});
+    });
+
+    return ;
+
+
+
+
+
+
+
     
     var q = req.query.q;
     console.log("query : " + q);

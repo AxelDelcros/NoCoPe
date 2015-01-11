@@ -85,6 +85,7 @@ var recipes = require('./crud/recipes');
 var ingredients = require('./crud/ingredients');
 var users = require('./crud/users');
 var tools = require('./crud/tools');
+var tags = require('./crud/tags');
 var moments = require('./crud/moments');
 //var images = require('./crud/images');
 
@@ -221,7 +222,7 @@ app.get('/init', function(req, res) {
     var default_ingredients = require('./default_database').ingredients;
     default_ingredients.forEach(function(element, index, array) {
 	db.collection('ingredients', function(err, collection_ingredients) {
-	    //element._id = new BSON.ObjectID(element._id);
+	    element._id = new BSON.ObjectID(element._id);
 	    element.name_url = ingredients.nameToUrl(element.name);
 	    collection_ingredients.insert(element, function(err, result) {
 	    });
@@ -238,10 +239,19 @@ app.get('/init', function(req, res) {
     });
     var default_users = require('./default_database').users;
     default_users.forEach(function(element, index, array) {
-	console.log(element);
+	//console.log(element);
 	db.collection('users', function(err, collection_users) {
 	    //element._id = new BSON.ObjectID(element._id);
 	    collection_users.insert(element, function(err, result) {
+	    });
+	});
+    });
+    var default_tags = require('./default_database').tags;
+    default_tags.forEach(function(element, index, array) {
+	//console.log(element);
+	db.collection('tags', function(err, collection_tags) {
+	    //element._id = new BSON.ObjectID(element._id);
+	    collection_tags.insert(element, function(err, result) {
 	    });
 	});
     });
@@ -372,6 +382,19 @@ app.put('/tools/id/:id', tools.put_tool_by_id);
 app.delete('/tools/id/:id', tools.delete_tool_by_id);
 /*
 ** END ROUTES TOOL
+*/
+
+
+/*
+** ROUTES TAG
+*/
+//app.post('/tools', tools.post_tool);
+app.get('/tags/id/:id', tags.get_tag_by_id);
+//app.get('/tools/name_url/:name_url', tools.get_tool_by_name_url);
+//app.put('/tools/id/:id', tools.put_tool_by_id);
+//app.delete('/tools/id/:id', tools.delete_tool_by_id);
+/*
+** END ROUTES TAG
 */
 
 
