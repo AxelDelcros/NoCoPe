@@ -138,6 +138,7 @@
 				nbrRecipesPublished : false,
 				nbrFollowers : false,
 				ingredients_names : false,
+				tools_names : false,
 				getRecipes : function () {
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/recipes')
@@ -216,6 +217,18 @@
 					.success(function (data, status, headers, config) {
 					        factory.ingredients_names = data;
 					        deferred.resolve(factory.ingredients_names);
+					})
+					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tag data");
+					})
+					return deferred.promise;
+				},
+				find_tools : function(name){
+				       var deferred = $q.defer();
+				       $http.get('http://localhost:5555/tools/find?q=' + name)
+					.success(function (data, status, headers, config) {
+					        factory.tools_names = data;
+					        deferred.resolve(factory.tools_names);
 					})
 					.error(function (data, status, headers, config) {
 						deferred.reject("Can't get tag data");
@@ -631,7 +644,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			console.log("in the addRecipeController " + $window.sessionStorage.token);
 			picture = [];
  		    $scope.ingredients = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
-		    //{"_id":null, "name":"No result", "choices":[{"_id":"ingredients1111111111111", "name":"eau"}, {"_id":"ingredients2222222222222", "name":"sucre"}, {"_id":"ingredients3333333333333", "name":"lait"}]},
+ 		    $scope.tools = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
 		    $scope.del_ingredient = function(nbr) {
 			$scope.ingredients.splice(nbr,1);
 		    }
@@ -655,10 +668,34 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			i.name = c.name;
 			i._id = c._id;
 		    }
+		    $scope.del_tool = function(nbr) {
+			$scope.tools.splice(nbr,1);
+		    }
+		    $scope.add_tool = function(nbr) {
+			$scope.tools.push({"_id":null, "name":"No result", "choices":[]});
+		    }
+		    $scope.refresh_tools_choices = function(nbr) {
+			//alert("refresh : " + nbr);
+			if ($scope.tools[nbr].query != "") {
+			    RecipesFactory.find_tools($scope.tools[nbr].query).then(function (i) {
+				$scope.tools[nbr].choices = i;
+				//alert(JSON.stringify(i));
+			    }, function (msg) {
+				//$scope.elements[key].element.ingredients[key2] = "Server Error";
+				alert(msg);
+			    });
+			}
+		    }
+		    $scope.select_tool = function(i, c) {
+			//alert("Select : " + JSON.stringify(c));
+			i.name = c.name;
+			i._id = c._id;
+		    }
 
 			var stepArray = [];
 			$scope.submitForm = function () {
 			    var ingredientsArray = [];
+			    var toolsArray = [];
 			    stepArray.push( {'name' : $scope.addrecipe.step.name,
 					'duration' : $scope.addrecipe.step.duration,
 					'content' : $scope.addrecipe.step.content});
@@ -666,14 +703,20 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 				//alert(JSON.stringify($scope.ingredients[i]));
 				ingredientsArray.push($scope.ingredients[i]._id);
 			    }
-			    alert(JSON.stringify(ingredientsArray));
+			    for (i = 0; i < $scope.tools.length; i++) {
+				//alert(JSON.stringify($scope.tools[i]));
+				toolsArray.push($scope.tools[i]._id);
+			    }
+			    //alert(JSON.stringify(ingredientsArray));
+			    //alert(JSON.stringify(toolsArray));
+			    alert($window.sessionStorage.token);
 			    $http.defaults.headers.common.access_token = $window.sessionStorage.token;
 				$http.post('http://localhost:5555/recipes/', {
 					name:$scope.addrecipe.recipename,
 					tags:$scope.addrecipe.tag,
 					description:$scope.addrecipe.description,
 				        ingredients:JSON.stringify(ingredientsArray),
-					tools:$scope.addrecipe.tools,
+					tools:JSON.stringify(toolsArray),
 					products:$scope.addrecipe.product,
 					steps:JSON.stringify(stepArray),
 					pictures:picture,

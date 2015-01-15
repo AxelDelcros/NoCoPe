@@ -30,29 +30,9 @@
 						</div>
 					</div>
 
-					<!--
-					<div class="form-group row">
-                                          <div class="col-xs-6">
-                                            <input type="text" class="form-control" name="ingredientSearch" ng-model="signUp.firstName" placeholder="Search ingredient" autocomplete="off" required>
-                                          </div>
-                                          <div class="col-xs-4 dropdown">
-					    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-					      No results
-					      <span class="caret"></span>
-					    </button>
-					    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					      <li role="presentation">
-						<a role="menuitem" tabindex="0" href="#">Action</a>
-					      </li>
-					    </ul>
-                                          </div>
-					  <div class="btn-group" role="group" aria-label="...">
-					    <button type="button" class="btn btn-default" aria-label="...">-</button>
-					    <button type="button" class="btn btn-default" aria-label="...">+</button>
-					  </div>
-                                        </div>
-					-->
 					
+
+					<!-- INGREDIENTS part -->
 					<div ng-repeat="i in ingredients" class="form-group row">
                                           <div class="col-xs-5">
                                             <input type="text" class="form-control" name="ingredientSearch" ng-model="ingredients[$index].query" placeholder="Search ingredient" autocomplete="off" required>
@@ -79,11 +59,33 @@
 
 
 
-					<div class="form-group row">
-						<div class="col-xs-10 col-sm-12">
-							<input type="text" class="form-control" name="tools" ng-model="addrecipe.tools" placeholder="{{ tools }}" autocomplete="off" required>
-						</div>
-					</div>
+					<!-- TOOLS part -->
+					<div ng-repeat="i in tools" class="form-group row">
+                                          <div class="col-xs-5">
+                                            <input type="text" class="form-control" name="toolSearch" ng-model="tools[$index].query" placeholder="Search tool" autocomplete="off" required>
+                                          </div>
+					  <div class="col-xs-1">
+					    <img src="img/glyphicons/glyphicons-366-restart.png" width="15" height="15" ng-click="refresh_tools_choices($index)"/>
+					  </div>
+                                          <div class="col-xs-4 dropdown">
+					    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+					      {{i.name}}
+					      <span class="caret"></span>
+					    </button>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					      <li role="presentation" ng-repeat="i2 in i.choices">
+						<a role="menuitem" ng-click="select_tool(i, i2)">{{i2.name}}</a>
+					      </li>
+					    </ul>
+                                          </div>
+					  <div class="btn-group" role="group" aria-label="...">
+					    <button ng-show="$index != 0" type="button" class="btn btn-default" aria-label="..." ng-click="del_tool($index)">-</button>
+					    <button ng-show="$last" type="button" class="btn btn-default" aria-label="..." ng-click="add_tool()">+</button>
+					  </div>
+                                        </div>
+
+
+
 
 					<div class="form-group row">
 						<div class="col-xs-10 col-sm-12">

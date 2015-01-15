@@ -387,6 +387,8 @@ app.get('/tools/id/:id', tools.get_tool_by_id);
 app.get('/tools/name_url/:name_url', tools.get_tool_by_name_url);
 app.put('/tools/id/:id', tools.put_tool_by_id);
 app.delete('/tools/id/:id', tools.delete_tool_by_id);
+
+app.get('/tools/find', tools.find_tools);
 /*
 ** END ROUTES TOOL
 */

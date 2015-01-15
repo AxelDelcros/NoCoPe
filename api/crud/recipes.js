@@ -143,8 +143,17 @@ exports.RecipeValidator.tools = function(param)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'tools' !"});
     if (param == "")
         return ({"res":false, "error_code":0007, "msg":"The field 'tools' can't be empty !"});
-    //console.log(param);
-    return (true);
+    try {
+	param = JSON.parse(param);
+    }
+    catch (e) {
+	console.log(e);
+	return ({"res":false, "error_code":0005, "msg":"The 'tools' field is not an array !"});
+    }
+    if (param.isArray) {
+	return (true);
+    }
+    return ({"res":false, "error_code":0005, "msg":"The 'tools' field is not an array !"});
 }
 exports.RecipeValidator.products = function(param)
 {
@@ -196,32 +205,31 @@ exports.post_recipe = function(req, res) {
 	var uid = req.private_var_user._id;
 	var name = fields.name;
 	var description = fields.description;
-	var duration = fields.duration;
 	var steps = fields.steps;
-	//var ingredients = fields.ingredients;
-	var ingredients = JSON.parse(fields.ingredients);
+	var ingredients = fields.ingredients;
 	var tools = fields.tools;
 	var products = fields.products;
 	var tags = fields.tags;
 	
+
 	if ((ret = exports.RecipeValidator["name"](name)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["description"](description)) !== true)
             return (res.status(400).send(ret));
-	//if ((ret = exports.RecipeValidator["duration"](duration)) !== true)
-        //return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["steps"](steps)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["ingredients"](ingredients)) !== true)
             return (res.status(400).send(ret));
+	ingredients = JSON.parse(ingredients);
 	if ((ret = exports.RecipeValidator["tools"](tools)) !== true)
             return (res.status(400).send(ret));
+	tools = JSON.parse(tools);
 	if ((ret = exports.RecipeValidator["products"](products)) !== true)
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["tags"](tags)) !== true)
             return (res.status(400).send(ret));
 
-	console.log(steps);
+	//console.log(steps);
 
 	// We create the new recipe
 	var recipe = {
