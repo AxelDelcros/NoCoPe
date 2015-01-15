@@ -82,8 +82,8 @@ exports.recipes = [
         "content": "Magna tempor minim duis velit ea nulla quis ullamco ex laboris. Quis enim voluptate officia aliquip aliquip velit dolor excepteur mollit minim sit elit do. Consectetur eiusmod exercitation nostrud laboris ex aliqua irure sint adipisicing. Ipsum ea pariatur culpa reprehenderit officia. Do mollit incididunt exercitation ex ea aliquip ex in consequat nulla mollit est."
       }
     ],
-    "ingredients": ["111111111111111111111111", "222222222222222222222222", "444444444444444444444444","555555555555555555555555"],
-    "tools": ["111111111111111111111111", "222222222222222222222222", "333333333333333333333333"],
+    "ingredients": [{"_id": "ingredients1111111111111", "quantity": "3L"}, {"_id": "ingredients2222222222222", "quantity": "500g"}, {"_id": "ingredients4444444444444", "quantity": "3 pincees"},{"_id": "ingredients5555555555555", "quantity": "1 pincee"}],
+    "tools": ["tools1111111111111111111", "tools2222222222222222222", "tools3333333333333333333"],
     "products": [],
     "submit_date": "1973-05-24",
     "tags": ["tags22222222222222222222", "tags44444444444444444444", "tags55555555555555555555"]
@@ -1343,31 +1343,31 @@ exports.recipes = [
 
 exports.ingredients = [
     {
-	"_id":"111111111111111111111111",
+	"_id":"ingredients1111111111111",
 	"name":"eau",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
-	"_id":"222222222222222222222222",
+	"_id":"ingredients2222222222222",
 	"name":"sucre",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
-	"_id":"333333333333333333333333",
+	"_id":"ingredients3333333333333",
 	"name":"lait",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
-	"_id":"444444444444444444444444",
+	"_id":"ingredients4444444444444",
 	"name":"sel",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
-	"_id":"555555555555555555555555",
+	"_id":"ingredients5555555555555",
 	"name":"poivre",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
@@ -1379,15 +1379,15 @@ exports.ingredients = [
 
 exports.tools = [
     {
-	"_id":"111111111111111111111111",
+	"_id":"tools1111111111111111111",
 	"name":"four"
     },
     {
-	"_id":"222222222222222222222222",
+	"_id":"tools2222222222222222222",
 	"name":"micro-onde"
     },
     {
-	"_id":"333333333333333333333333",
+	"_id":"tools3333333333333333333",
 	"name":"batteur a oeufs"
     }
 ];

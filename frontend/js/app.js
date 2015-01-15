@@ -270,10 +270,10 @@
 				$scope.recipes.limit = 258;
 				angular.forEach($scope.recipes, function (recipe, key1) {
 					angular.forEach(recipe.ingredients, function (ingredient, key2) {
-						$scope.recipes[key1].ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
-							$scope.recipes[key1].ingredients[key2] = {
-								name: ingredient.name,
-								name_url: ingredient.name_url
+					    $scope.recipes[key1].ingredients[key2]._id = RecipesFactory.getIngredient(ingredient._id).then(function (ingredient) {
+							$scope.recipes[key1].ingredients[key2]._id = {
+							    name: ingredient.name,
+							    name_url: ingredient.name_url
 							};
 						}, function (msg) {
 							alert(msg);
@@ -643,13 +643,14 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			$scope.stepname = 'Name of the recipe';
 			console.log("in the addRecipeController " + $window.sessionStorage.token);
 			picture = [];
- 		    $scope.ingredients = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
+ 		    $scope.ingredients = [{"query":"", "_id":null, "name":"No result", "choices":[], "quantity": ""}];
  		    $scope.tools = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
+ 		    $scope.steps = [{"name":"", "duration":"", "content":""}];
 		    $scope.del_ingredient = function(nbr) {
 			$scope.ingredients.splice(nbr,1);
 		    }
 		    $scope.add_ingredient = function(nbr) {
-			$scope.ingredients.push({"_id":null, "name":"No result", "choices":[]});
+			$scope.ingredients.push({"_id":null, "name":"No result", "choices":[], "quantity":""});
 		    }
 		    $scope.refresh_ingredients_choices = function(nbr) {
 			//alert("refresh : " + nbr);
@@ -691,25 +692,40 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			i.name = c.name;
 			i._id = c._id;
 		    }
+		    $scope.del_step = function(nbr) {
+			$scope.steps.splice(nbr,1);
+		    }
+		    $scope.add_step = function(nbr) {
+			$scope.steps.push({"name":"", "duration":"", "content":""});
+		    }
 
-			var stepArray = [];
 			$scope.submitForm = function () {
 			    var ingredientsArray = [];
 			    var toolsArray = [];
-			    stepArray.push( {'name' : $scope.addrecipe.step.name,
-					'duration' : $scope.addrecipe.step.duration,
-					'content' : $scope.addrecipe.step.content});
+			    var stepsArray = [];
 			    for (i = 0; i < $scope.ingredients.length; i++) {
 				//alert(JSON.stringify($scope.ingredients[i]));
-				ingredientsArray.push($scope.ingredients[i]._id);
+				ingredientsArray.push({
+				    "_id": $scope.ingredients[i]._id,
+				    "quantity": $scope.ingredients[i].quantity
+				});
 			    }
 			    for (i = 0; i < $scope.tools.length; i++) {
 				//alert(JSON.stringify($scope.tools[i]));
 				toolsArray.push($scope.tools[i]._id);
 			    }
+			    for (i = 0; i < $scope.steps.length; i++) {
+				//alert(JSON.stringify($scope.tools[i]));
+				stepsArray.push({
+				    "name":$scope.steps[i].name,
+				    "duration":$scope.steps[i].duration,
+				    "content":$scope.steps[i].content
+				});
+			    }
 			    //alert(JSON.stringify(ingredientsArray));
 			    //alert(JSON.stringify(toolsArray));
-			    alert($window.sessionStorage.token);
+			    alert(JSON.stringify(stepsArray));
+			    //alert($window.sessionStorage.token);
 			    $http.defaults.headers.common.access_token = $window.sessionStorage.token;
 				$http.post('http://localhost:5555/recipes/', {
 					name:$scope.addrecipe.recipename,
@@ -718,7 +734,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 				        ingredients:JSON.stringify(ingredientsArray),
 					tools:JSON.stringify(toolsArray),
 					products:$scope.addrecipe.product,
-					steps:JSON.stringify(stepArray),
+					steps:JSON.stringify(stepsArray),
 					pictures:picture,
 				})
 				.success(function (data,status,headers,config) {
@@ -730,7 +746,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 					// $scope.back = data.msg;
 					$scope.stat = "false";
 					$scope.callBack = data;
-					$scope.error = stepArray;
+				        //$scope.error = stepArray;
 				});
 			};
 		}

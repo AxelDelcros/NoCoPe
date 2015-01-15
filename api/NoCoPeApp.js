@@ -223,7 +223,7 @@ app.get('/init', function(req, res) {
     var default_ingredients = require('./default_database').ingredients;
     default_ingredients.forEach(function(element, index, array) {
 	db.collection('ingredients', function(err, collection_ingredients) {
-	    element._id = new BSON.ObjectID(element._id);
+	    //element._id = new BSON.ObjectID(element._id);
 	    element.name_url = ingredients.nameToUrl(element.name);
 	    collection_ingredients.insert(element, function(err, result) {
 	    });
@@ -232,7 +232,7 @@ app.get('/init', function(req, res) {
     var default_tools = require('./default_database').tools;
     default_tools.forEach(function(element, index, array) {
 	db.collection('tools', function(err, collection_tools) {
-	    element._id = new BSON.ObjectID(element._id);
+	    //element._id = new BSON.ObjectID(element._id);
 	    element.name_url = tools.nameToUrl(element.name);
 	    collection_tools.insert(element, function(err, result) {
 	    });

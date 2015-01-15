@@ -56,7 +56,7 @@
 		    <label class="col-xs-3 col-sm-2">Ingredients </label>
 		    <div class="col-xs-9 col-sm-10">
 		      <ul style="display:inline;padding:0;list-style-type:none;">
-			<li style="display:inline;margin-right:2%;" ng-repeat="ingredient in recipe.ingredients"><a href="#/ingredients/{{ingredient.name_url}}"><span class="label label-info" >{{ingredient.name}}</span></a></li>
+			<li style="display:inline;margin-right:2%;" ng-repeat="ingredient in recipe.ingredients"><a href="#/ingredients/{{ingredient._id.name_url}}"><span class="label label-info" >{{ingredient._id.name}}</span></a></li>
 		      </ul>
 		    </div>
 		  </div>

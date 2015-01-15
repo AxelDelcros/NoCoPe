@@ -119,6 +119,39 @@ exports.RecipeValidator.steps = function(param)
     }
     return ({"res":false, "error_code":0005, "msg":"The 'steps' field is not an array !"});
 }
+exports.RecipeValidator.quantity = function(param)
+{
+    var good_name = /[^a-zA-Z0-9_ \-\(\)\[\]\"\']/;
+    //console.log(good_name.test(param));
+    if (param === undefined)
+        return ({"res":false, "error_code":0007, "msg":"You have to send the field 'quantity' !"});
+    if (param == "")
+        return ({"res":false, "error_code":0007, "msg":"The field 'quantity' can't be empty !"});
+    if (good_name.test(param))
+	return ({"res":false, "error_code":0007, "msg":"The field 'quantity' is not in the right format ! It can only contain letters, numbers, underscores and spaces !"});
+    return (true);
+}
+exports.RecipeValidator.ingredient = function(param)
+{
+    if (typeof param == "object") {
+
+	var keys = Object.keys(param);
+	//console.log(keys.length);
+	if (keys.length == 2) {
+	    if (keys[0] == "_id" && keys[1] == "quantity") {
+
+		var ret;
+		if (((ret = exports.RecipeValidator["quantity"](param[keys[1]])) !== true)) {
+		    return (ret);
+		}
+		else {
+		    return (true);
+		}
+	    }
+	}
+    }
+    return ({"res":false, "error_code":0005, "msg":"The 'steps' array contains a entry that not respect the 'step' format !"});
+}
 exports.RecipeValidator.ingredients = function(param)
 {
     if (param === undefined)
@@ -133,6 +166,12 @@ exports.RecipeValidator.ingredients = function(param)
 	return ({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not an array !"});
     }
     if (param.isArray) {
+	var ret;
+	for (i = 0 ; i < param.length ; i++) {
+	    if ((ret = exports.RecipeValidator["ingredient"](param[i])) !== true)
+		return (ret);
+	    
+	}
 	return (true);
     }
     return ({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not an array !"});
@@ -210,7 +249,14 @@ exports.post_recipe = function(req, res) {
 	var tools = fields.tools;
 	var products = fields.products;
 	var tags = fields.tags;
-	
+
+	console.log(name);
+	console.log(description);
+	console.log(steps);
+	console.log(ingredients);
+	console.log(tools);
+	console.log(products);
+	console.log(tags);
 
 	if ((ret = exports.RecipeValidator["name"](name)) !== true)
             return (res.status(400).send(ret));

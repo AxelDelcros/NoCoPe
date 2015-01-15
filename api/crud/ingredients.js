@@ -175,7 +175,8 @@ exports.get_ingredient_by_id = function(req, res) {
 	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	}
 	else {
-	    collection_ingredients.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
+	    //collection_ingredients.findOne({"_id" : new BSON.ObjectID(id)}, function(err, ingredient) {
+	    collection_ingredients.findOne({"_id" : id}, function(err, ingredient) {
 		if (err) {
 		    console.log(err);
 		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This ingredient does not exists !"}));

@@ -98,10 +98,12 @@ exports.get_tool_by_id = function(req, res) {
 	return (res.status(400).send({"res":false, "error_code":5553, "msg":"This tool 'id' was not found !"}));
     db.collection('tools', function(err, collection_tools) {
 	if (err) {
+	    console.log(err);
 	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	}
 	else {
-	    collection_tools.findOne({"_id" : new BSON.ObjectID(id)}, function(err, tool) {
+	    //collection_tools.findOne({"_id" : new BSON.ObjectID(id)}, function(err, tool) {
+	    collection_tools.findOne({"_id" : id}, function(err, tool) {
 		if (err) {
 		    console.log(err);
 		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This tool does not exists !"}));

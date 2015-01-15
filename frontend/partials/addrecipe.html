@@ -6,7 +6,7 @@
 <div class="container">
 	<div id="form_sample"  style="margin-top:5%; margin-left:20%">
 		<form  name="signUpForm"  novalidate>
-			<div class="col-sm-8 col-md-offset-3 col-md-6 col-xs-12">
+			<div class="col-sm-15 col-md-offset-3 col-md-6 col-xs-12">
 				<div class="row">
 					<h1>Add a new recipe</h1>
 
@@ -34,13 +34,16 @@
 
 					<!-- INGREDIENTS part -->
 					<div ng-repeat="i in ingredients" class="form-group row">
-                                          <div class="col-xs-5">
+
+                                          <div class="col-xs-4">
                                             <input type="text" class="form-control" name="ingredientSearch" ng-model="ingredients[$index].query" placeholder="Search ingredient" autocomplete="off" required>
                                           </div>
+
 					  <div class="col-xs-1">
 					    <img src="img/glyphicons/glyphicons-366-restart.png" width="15" height="15" ng-click="refresh_ingredients_choices($index)"/>
 					  </div>
-                                          <div class="col-xs-4 dropdown">
+
+                                          <div class="col-xs-2 dropdown">
 					    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 					      {{i.name}}
 					      <span class="caret"></span>
@@ -51,6 +54,11 @@
 					      </li>
 					    </ul>
                                           </div>
+
+                                          <div class="col-xs-3">
+                                            <input type="text" class="form-control" name="Quantity" ng-model="ingredients[$index].quantity" placeholder="Quantity" autocomplete="off" required>
+                                          </div>
+
 					  <div class="btn-group" role="group" aria-label="...">
 					    <button ng-show="$index != 0" type="button" class="btn btn-default" aria-label="..." ng-click="del_ingredient($index)">-</button>
 					    <button ng-show="$last" type="button" class="btn btn-default" aria-label="..." ng-click="add_ingredient()">+</button>
@@ -93,21 +101,41 @@
 						</div>
 					</div>
 
-					<div class="col-xs-10">	
-						<h2>Step</h2>
-						<div class="form-group row">
-							<div class="col-xs-12">
-								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.name" placeholder="{{ stepname }}" autocomplete="off" required>
-							</div>
-							<div class="col-xs-12">
-								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.duration" placeholder="{{ duration }}" autocomplete="off" required>
-							</div>
-							<div class="col-xs-12">
-								<input type="text" class="form-control" name="name" ng-model="addrecipe.step.content" placeholder="{{ steps }}" autocomplete="off" required>
-							</div>
-						</div>
+
+
+
+					<div class="col-xs-15">	
+					  <h2>Steps</h2>
+				
+
+	  
+					  <div class="form-group row" ng-repeat="s in steps">
+					    
+					    <div class="col-xs-9">
+					      <input type="text" class="form-control" name="name" ng-model="steps[$index].name" placeholder="{{ stepname }}" autocomplete="off" required>
+					    </div>
+					    
+					    <div class="col-xs-3">
+					      <input type="text" class="form-control" name="name" ng-model="steps[$index].duration" placeholder="{{ duration }}" autocomplete="off" required>
+					    </div>
+					    
+					    <div class="col-xs-10">
+					      <textarea placeholder="Write the step here" ng-model="steps[$index].content" autocomplete="off" rows="4" cols="45" required></textarea>
+					    </div>
+					    
+					    <div class="btn-group" role="group" aria-label="...">
+					      <button ng-show="$index != 0" type="button" class="btn btn-default" aria-label="..." ng-click="del_step($index)">-</button>
+					      <button ng-show="$last" type="button" class="btn btn-default" aria-label="..." ng-click="add_step()">+</button>
+					    </div>
+					    
+					    
+					  </div>
+					  
+					  
 					</div>
 				</div>
+
+
 
 				<div class="controls">
 					<button id="Submit" name="Submit" ng-click="submitForm(signUp)" class="btn btn-primary" ng-disable="novalidate">Send</button>
