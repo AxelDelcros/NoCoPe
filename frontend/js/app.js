@@ -549,7 +549,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 				    });
 				}
 				else if (value.type == "user") {
-				    alert(JSON.stringify(value.element));
+				    //alert(JSON.stringify(value.element));
 				    // On init le nombre de recettes publiées
 				    RecipesFactory.getNbrRecipesPublished(value.element._id).then(function (nbr) {
 					$scope.elements[key].element.nbrrecipespublished = nbr;
@@ -564,6 +564,12 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 					//$scope.elements[key].element.tools[key2] = "Server Error";
 					alert(msg);
 				    });
+				}
+				else if (value.type == "tool") {
+				    //alert(JSON.stringify(value.element));
+				}
+				else if (value.type == "ingredient") {
+				    //alert(JSON.stringify(value.element));
 				}
 			    });
 			    $scope.loading = false;
