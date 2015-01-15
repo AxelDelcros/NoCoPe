@@ -307,8 +307,8 @@
 			.success(function (data, status, headers, config) {
 				$scope.recipe = data;
 				angular.forEach($scope.recipe.ingredients, function (ingredient, key2) {
-					$scope.recipe.ingredients[key2] = RecipesFactory.getIngredient(ingredient).then(function (ingredient) {
-						$scope.recipe.ingredients[key2] = {
+					$scope.recipe.ingredients[key2]._id = RecipesFactory.getIngredient(ingredient._id).then(function (ingredient) {
+						$scope.recipe.ingredients[key2]._id = {
 							name: ingredient.name,
 							name_url: ingredient.name_url
 						};
