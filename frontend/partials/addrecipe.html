@@ -1,3 +1,8 @@
+<ng-include
+   src="'partials/header.html'"
+   >
+</ng-include>
+
 <div class="container">
 	<div id="form_sample"  style="margin-top:5%; margin-left:20%">
 		<form  name="signUpForm"  novalidate>
@@ -20,18 +25,59 @@
 					<div class="form-group row">
 						<div class="col-xs-6">
 							<div class="controls">                     
-								<textarea rows="4" cols="50" style="text-align:center" maxlength="1500" placeholder="{{ description }}" ng-minLength="1" ng-model="addrecipe.description" autocomplete="off" required></textarea>
+								<textarea rows="4" cols="45" style="text-align:center" maxlength="1500" placeholder="{{ description }}" ng-minLength="1" ng-model="addrecipe.description" autocomplete="off" required></textarea>
 							</div>
 						</div>
 					</div>
 
+					<!--
 					<div class="form-group row">
-						<div class="col-xs-6">
-							<div class="controls">                     
-								<textarea rows="4" cols="50" style="text-align:center" maxlength="1500" placeholder="{{ ingredients }}" ng-minLength="1" ng-model="addrecipe.ingredients" autocomplete="off" required></textarea>
-							</div>
-						</div>
-					</div>
+                                          <div class="col-xs-6">
+                                            <input type="text" class="form-control" name="ingredientSearch" ng-model="signUp.firstName" placeholder="Search ingredient" autocomplete="off" required>
+                                          </div>
+                                          <div class="col-xs-4 dropdown">
+					    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+					      No results
+					      <span class="caret"></span>
+					    </button>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					      <li role="presentation">
+						<a role="menuitem" tabindex="0" href="#">Action</a>
+					      </li>
+					    </ul>
+                                          </div>
+					  <div class="btn-group" role="group" aria-label="...">
+					    <button type="button" class="btn btn-default" aria-label="...">-</button>
+					    <button type="button" class="btn btn-default" aria-label="...">+</button>
+					  </div>
+                                        </div>
+					-->
+					
+					<div ng-repeat="i in ingredients" class="form-group row">
+                                          <div class="col-xs-5">
+                                            <input type="text" class="form-control" name="ingredientSearch" ng-model="ingredients[$index].query" placeholder="Search ingredient" autocomplete="off" required>
+                                          </div>
+					  <div class="col-xs-1">
+					    <img src="img/glyphicons/glyphicons-366-restart.png" width="15" height="15" ng-click="refresh_ingredients_choices($index)"/>
+					  </div>
+                                          <div class="col-xs-4 dropdown">
+					    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+					      {{i.name}}
+					      <span class="caret"></span>
+					    </button>
+					    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					      <li role="presentation" ng-repeat="i2 in i.choices">
+						<a role="menuitem" ng-click="select_ingredient(i, i2)">{{i2.name}}</a>
+					      </li>
+					    </ul>
+                                          </div>
+					  <div class="btn-group" role="group" aria-label="...">
+					    <button ng-show="$index != 0" type="button" class="btn btn-default" aria-label="..." ng-click="del_ingredient($index)">-</button>
+					    <button ng-show="$last" type="button" class="btn btn-default" aria-label="..." ng-click="add_ingredient()">+</button>
+					  </div>
+                                        </div>
+
+
 
 					<div class="form-group row">
 						<div class="col-xs-10 col-sm-12">

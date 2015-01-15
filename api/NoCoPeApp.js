@@ -22,8 +22,8 @@ var ObjectID = mongo.ObjectID;
 
 var MongoDBServer = mongo.Server,
 Db = mongo.Db,
-BSON = mongo.BSONPure,
-GridStore = mongo.GridStore,
+BSON = mongo.BSONPure;
+//GridStore = mongo.GridStore,
 MongoDBServerName = 'localhost';
 MongoDBPort = 27018;
 MongoDBDatabase = 'food_db';
@@ -75,6 +75,7 @@ app.use(function(req,res,next){
     res.header("Access-Control-Allow-Methods", "GET");
     res.header("Access-Control-Request-Methods", "*");
     res.header("Access-Control-Allow-Headers", "access_token, Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    
     next();
 });
 
@@ -352,6 +353,8 @@ app.get('/ingredients/id/:id', ingredients.get_ingredient_by_id);
 app.get('/ingredients/name_url/:name_url', ingredients.get_ingredient_by_name_url);
 app.put('/ingredients/id/:id', ingredients.put_ingredient_by_id);
 app.delete('/ingredients/id/:id', ingredients.delete_ingredient_by_id);
+
+app.get('/ingredients/find', ingredients.find_ingredients);
 /*
 ** END ROUTES INGREDIENT
 */

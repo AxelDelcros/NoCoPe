@@ -137,6 +137,7 @@
 				tag : false,
 				nbrRecipesPublished : false,
 				nbrFollowers : false,
+				ingredients_names : false,
 				getRecipes : function () {
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/recipes')
@@ -208,6 +209,18 @@
 						deferred.reject("Can't get tag data");
 					})
 					return deferred.promise;
+				},
+				find_ingredients : function(name){
+				       var deferred = $q.defer();
+				       $http.get('http://localhost:5555/ingredients/find?q=' + name)
+					.success(function (data, status, headers, config) {
+					        factory.ingredients_names = data;
+					        deferred.resolve(factory.ingredients_names);
+					})
+					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tag data");
+					})
+					return deferred.promise;
 				}
 			}
 			return factory;
@@ -221,6 +234,15 @@
 	// create the controller and inject Angular's $scope
 	NoCoPe.controller('recipeController', ['$scope','$http', 'RecipesFactory', '$window', 'AuthenticationService',
 		function recipeController ($scope, $http, RecipesFactory, $window, AuthenticationService) {
+		    // Fonction de calcul du temps de la recette
+		    $scope.calc_time_recipe = function(param) {
+			var result = 0;
+			for (i = 0 ; i < param.steps.length ; i++) {
+			    result += param.steps[i].duration;
+			}
+			return (Math.floor(result/60) + "H" + result%60 + "min");
+		    }
+		    
 			if ($window.sessionStorage.token)
 				$scope.Logged = true;
 			else
@@ -594,11 +616,11 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 
 
 
-	NoCoPe.controller('addRecipeController', ['$scope','$http', '$location', '$window', 'AuthenticationService', "$rootScope",
-		function addRecipeController ($scope , $http ,$location, $window, AuthenticationService, $rootScope) {
+	NoCoPe.controller('addRecipeController', ['$scope','$http', '$location', '$window', 'AuthenticationService', "$rootScope", "RecipesFactory",
+		function addRecipeController ($scope , $http ,$location, $window, AuthenticationService, $rootScope, RecipesFactory) {
 			$scope.recipename = 'Name of the recipe';
 			$scope.tag = 'Specify any tag, i.e. halal';
-			$scope.description = 'Enter the description for your recipe';
+			$scope.description = 'Enter a little description for your recipe';
 			$scope.duration = 'Time needed to cook (in minutes)';
 			$scope.steps = 'Here explain how you are cooking your recipe';
 			$scope.ingredients = 'Please list here all the ingredients and their quantities';
@@ -608,17 +630,49 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			$scope.stepname = 'Name of the recipe';
 			console.log("in the addRecipeController " + $window.sessionStorage.token);
 			picture = [];
+ 		    $scope.ingredients = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
+		    //{"_id":null, "name":"No result", "choices":[{"_id":"ingredients1111111111111", "name":"eau"}, {"_id":"ingredients2222222222222", "name":"sucre"}, {"_id":"ingredients3333333333333", "name":"lait"}]},
+		    $scope.del_ingredient = function(nbr) {
+			$scope.ingredients.splice(nbr,1);
+		    }
+		    $scope.add_ingredient = function(nbr) {
+			$scope.ingredients.push({"_id":null, "name":"No result", "choices":[]});
+		    }
+		    $scope.refresh_ingredients_choices = function(nbr) {
+			//alert("refresh : " + nbr);
+			if ($scope.ingredients[nbr].query != "") {
+			    RecipesFactory.find_ingredients($scope.ingredients[nbr].query).then(function (i) {
+				$scope.ingredients[nbr].choices = i;
+				//alert(JSON.stringify(i));
+			    }, function (msg) {
+				//$scope.elements[key].element.ingredients[key2] = "Server Error";
+				alert(msg);
+			    });
+			}
+		    }
+		    $scope.select_ingredient = function(i, c) {
+			//alert("Select : " + JSON.stringify(c));
+			i.name = c.name;
+			i._id = c._id;
+		    }
+
 			var stepArray = [];
 			$scope.submitForm = function () {
-				stepArray.push( {'name' : $scope.addrecipe.step.name,
+			    var ingredientsArray = [];
+			    stepArray.push( {'name' : $scope.addrecipe.step.name,
 					'duration' : $scope.addrecipe.step.duration,
 					'content' : $scope.addrecipe.step.content});
-				$http.defaults.headers.common.access_token = $window.sessionStorage.token;
+			    for (i = 0; i < $scope.ingredients.length; i++) {
+				//alert(JSON.stringify($scope.ingredients[i]));
+				ingredientsArray.push($scope.ingredients[i]._id);
+			    }
+			    alert(JSON.stringify(ingredientsArray));
+			    $http.defaults.headers.common.access_token = $window.sessionStorage.token;
 				$http.post('http://localhost:5555/recipes/', {
 					name:$scope.addrecipe.recipename,
 					tags:$scope.addrecipe.tag,
 					description:$scope.addrecipe.description,
-					ingredients:$scope.addrecipe.ingredients,
+				        ingredients:JSON.stringify(ingredientsArray),
 					tools:$scope.addrecipe.tools,
 					products:$scope.addrecipe.product,
 					steps:JSON.stringify(stepArray),

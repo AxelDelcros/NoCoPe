@@ -125,8 +125,17 @@ exports.RecipeValidator.ingredients = function(param)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'ingredients' !"});
     if (param == "")
         return ({"res":false, "error_code":0007, "msg":"The field 'ingredients' can't be empty !"});
-    //console.log(param);
-    return (true);
+    try {
+	param = JSON.parse(param);
+    }
+    catch (e) {
+	console.log(e);
+	return ({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not an array !"});
+    }
+    if (param.isArray) {
+	return (true);
+    }
+    return ({"res":false, "error_code":0005, "msg":"The 'ingredients' field is not an array !"});
 }
 exports.RecipeValidator.tools = function(param)
 {
@@ -189,7 +198,8 @@ exports.post_recipe = function(req, res) {
 	var description = fields.description;
 	var duration = fields.duration;
 	var steps = fields.steps;
-	var ingredients = fields.ingredients;
+	//var ingredients = fields.ingredients;
+	var ingredients = JSON.parse(fields.ingredients);
 	var tools = fields.tools;
 	var products = fields.products;
 	var tags = fields.tags;
@@ -219,7 +229,6 @@ exports.post_recipe = function(req, res) {
 	    "name":name,
 	    "name_url":exports.nameToUrl(name),
 	    "description":description,
-//	    "duration":duration,
 	    "steps":steps,
 	    "ingredients":ingredients,
 	    "tools":tools,
