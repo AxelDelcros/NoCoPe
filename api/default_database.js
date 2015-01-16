@@ -2,105 +2,48 @@ exports.recipes = [
   {
     "_id": "recipes11111111111111111",
     "uid": "users1111111111111111111",
-    "name": "magna magna consequat reprehenderit nulla",
+    "name": "Pancakes",
     "name_url": "",
-    "description": "Amet ut anim id sit. Sint commodo ut laborum do ut anim. Quis exercitation ipsum exercitation consequat ea. Eiusmod non irure Lorem excepteur enim. Mollit excepteur aliqua tempor culpa exercitation laborum. Mollit minim fugiat exercitation Lorem anim nisi exercitation consequat excepteur minim commodo non aliquip. Ad aute amet duis ex dolore pariatur duis ipsum ullamco aute minim reprehenderit exercitation. Proident sit id laboris consequat velit aliqua culpa deserunt. Ut in quis occaecat anim occaecat nulla est sint aliquip eiusmod deserunt ea ad labore. Pariatur adipisicing ex sunt culpa dolore est magna proident veniam eiusmod labore.",
+    "description": "Pacakes are good ! Pancakes are sweet ! Make pancakes !!!",
     "steps": [
       {
-        "name": "consequat duis dolor culpa et",
-        "duration": 50,
-        "content": "Nulla sint excepteur non veniam qui culpa sint sit excepteur occaecat. Minim incididunt sint irure nostrud. Veniam sunt id laborum veniam esse amet sint irure nostrud sit incididunt esse aliquip. Ullamco aliqua dolor ipsum et exercitation qui duis est amet deserunt fugiat anim aliqua. Non minim labore eu enim qui aute cupidatat consequat sit aute non mollit Lorem velit."
+        "name": "Prepare the dough",
+        "duration": 1,
+        "content": "Put the flavour in an container, and add the eggs. Don't begin to mix !"
       },
       {
-        "name": "esse esse cillum et nisi est amet",
-        "duration": 42,
-        "content": "Ut mollit aliqua dolor commodo pariatur eiusmod velit anim ullamco pariatur. Esse dolor consequat commodo cillum dolor. Elit nulla amet reprehenderit culpa tempor est dolor. Cillum aliqua irure qui commodo nisi ex enim."
+        "name": "Mixing",
+        "duration": 5,
+        "content": "Begin to begin in the same time you add the milk. When its an one color mix, add the sugag and mix again."
       },
       {
-        "name": "ex nulla velit quis incididunt ut irure id",
-        "duration": 29,
-        "content": "Adipisicing elit laborum minim ullamco eu nisi et magna enim aute. Nisi velit adipisicing aute id non consectetur. Anim et enim duis excepteur reprehenderit quis enim aliquip sit labore. Mollit consectetur commodo duis tempor in aliquip excepteur velit id amet aute. Id pariatur culpa irure est occaecat in consectetur consequat cillum."
+        "name": "Pause the dough",
+        "duration": 60,
+        "content": "Let the dough in pause in a fridge during at least one hour. The final taste will be a little bit better."
       },
       {
-        "name": "ut commodo anim anim sunt voluptate eu culpa laboris",
-        "duration": 36,
-        "content": "Ea aute mollit minim eu quis elit magna. Exercitation fugiat quis pariatur cupidatat voluptate veniam exercitation cupidatat dolore culpa cupidatat mollit. Pariatur commodo proident elit irure elit minim enim esse id ad ad officia cillum eiusmod. Labore culpa do occaecat ex aute dolor in consequat do ut irure."
-      },
-      {
-        "name": "excepteur adipisicing deserunt",
-        "duration": 24,
-        "content": "Veniam excepteur excepteur excepteur occaecat incididunt enim dolor labore amet consectetur. Deserunt cillum irure reprehenderit fugiat eu ullamco amet adipisicing voluptate consequat dolor sit ipsum. Elit nisi nostrud et irure ad enim. Occaecat sit laborum ipsum Lorem non mollit aliquip. Est anim eiusmod do dolore magna incididunt cillum elit."
-      },
-      {
-        "name": "ea proident proident officia exercitation officia",
-        "duration": 2,
-        "content": "Lorem esse voluptate nostrud enim et Lorem labore eiusmod excepteur. Aliqua exercitation velit pariatur Lorem dolore qui aute laborum. Lorem mollit anim nisi id ullamco velit fugiat est non aliquip quis magna duis mollit."
-      },
-      {
-        "name": "in proident exercitation eiusmod nisi excepteur ullamco",
-        "duration": 55,
-        "content": "Deserunt adipisicing est fugiat dolor Lorem excepteur in tempor minim magna aliqua do deserunt minim. Quis do eu ipsum qui voluptate in est. Eiusmod qui Lorem ad cillum elit magna."
-      },
-      {
-        "name": "commodo qui dolore magna",
-        "duration": 17,
-        "content": "Pariatur qui ea mollit minim cillum. Minim mollit aliquip exercitation Lorem nostrud incididunt excepteur consectetur sint anim ex. In non aliqua do eiusmod nisi irure id nulla dolore aliqua aliquip ea sunt. Aute labore et exercitation do est."
-      },
-      {
-        "name": "exercitation duis est laboris elit pariatur",
-        "duration": 34,
-        "content": "Mollit anim nulla commodo ea pariatur id officia amet reprehenderit consequat elit. Cupidatat excepteur cillum nisi esse Lorem quis in. Fugiat ut qui non et aliquip minim. Veniam nisi adipisicing velit nisi nisi velit."
-      },
-      {
-        "name": "commodo amet exercitation ex reprehenderit non aliqua",
-        "duration": 41,
-        "content": "Consequat nostrud eiusmod occaecat ipsum reprehenderit magna sit dolore. Minim fugiat minim ut duis sunt voluptate voluptate consequat excepteur sint irure anim tempor occaecat. Elit nulla mollit sint ad tempor et ipsum ex consectetur tempor voluptate excepteur consectetur."
-      },
-      {
-        "name": "Lorem anim veniam nulla exercitation laboris voluptate minim",
-        "duration": 45,
-        "content": "Consectetur consequat anim culpa consectetur aliqua culpa ex labore pariatur quis esse Lorem sit. Non adipisicing quis ex aliquip ex ullamco proident enim excepteur. Dolore occaecat voluptate culpa Lorem enim id velit reprehenderit consectetur amet. Officia mollit incididunt minim non sunt velit fugiat. Laborum dolore nulla incididunt et cillum Lorem ipsum."
-      },
-      {
-        "name": "sit sunt enim enim ut irure",
-        "duration": 37,
-        "content": "Sunt irure mollit do officia. Laboris veniam nostrud ad proident. Laborum nostrud tempor culpa ipsum nisi ullamco. Laboris nisi sint nulla culpa id nisi officia. Exercitation elit fugiat magna non anim sit amet ullamco magna eiusmod irure ex labore et."
-      },
-      {
-        "name": "adipisicing excepteur sint nostrud adipisicing magna excepteur deserunt commodo",
-        "duration": 4,
-        "content": "Irure ad sit consequat nostrud do elit veniam pariatur do cupidatat adipisicing laboris cillum incididunt. Et eu commodo id nisi culpa cupidatat velit ex adipisicing officia consequat culpa. Tempor proident enim sunt voluptate cillum consequat sunt fugiat labore dolore occaecat."
-      },
-      {
-        "name": "reprehenderit et magna nostrud ad aute enim laboris",
-        "duration": 59,
-        "content": "In ad commodo veniam sint ex eu pariatur minim. Laboris est sit cillum in. Irure aute voluptate sit commodo eu et anim."
-      },
-      {
-        "name": "magna eu sunt Lorem exercitation reprehenderit officia ullamco consectetur irure",
-        "duration": 2,
-        "content": "Magna tempor minim duis velit ea nulla quis ullamco ex laboris. Quis enim voluptate officia aliquip aliquip velit dolor excepteur mollit minim sit elit do. Consectetur eiusmod exercitation nostrud laboris ex aliqua irure sint adipisicing. Ipsum ea pariatur culpa reprehenderit officia. Do mollit incididunt exercitation ex ea aliquip ex in consequat nulla mollit est."
-      }
-    ],
-    "ingredients": [{"_id": "ingredients1111111111111", "quantity": "3L"}, {"_id": "ingredients2222222222222", "quantity": "500g"}, {"_id": "ingredients4444444444444", "quantity": "3 pincees"},{"_id": "ingredients5555555555555", "quantity": "1 pincee"}],
-    "tools": ["tools1111111111111111111", "tools2222222222222222222", "tools3333333333333333333"],
-    "products": [],
-    "submit_date": "1973-05-24",
-    "tags": ["tags22222222222222222222", "tags44444444444444444444", "tags55555555555555555555"]
+        "name": "Cook the pancakes",
+        "duration": 25,
+        "content": "Put a little bit of oil in the storve, and begin to cook the pancakes."
+      }],
+      "ingredients": [{"_id": "ingredients8888888888888", "quantity": "300g"}, {"_id": "ingredients6666666666666", "quantity": "3"}, {"_id": "ingredients7777777777777", "quantity": "30cl"}, {"_id": "ingredients2222222222222", "quantity": "3 spoons"}, {"_id": "ingredients3333333333333", "quantity": "3 spoons"}],
+      "tools": ["tools1111111111111111111", "tools2222222222222222222", "tools3333333333333333333"],
+      "products": [],
+      "submit_date": "1973-05-24",
+      "tags": ["tags22222222222222222222", "tags44444444444444444444", "tags55555555555555555555"]
   },
-
-  {
-
-    "_id": "recipes22222222222222222",
-    "uid": "users1111111111111111111",
-    "name": "qui excepteur labore et occaecat aliquip consectetur adipisicing",
-    "name_url": "",
-    "description": "Et exercitation adipisicing aliquip duis dolor adipisicing nulla nostrud labore ipsum. Eu tempor nostrud enim minim commodo velit consectetur cillum voluptate qui ipsum amet ullamco fugiat. Do magna sint ea eiusmod exercitation consectetur eiusmod esse sint fugiat pariatur. Nisi magna consequat dolor veniam veniam culpa dolore.",
-    "steps": [
-      {
-        "name": "aliquip voluptate magna qui cupidatat mollit",
-        "duration": 28,
-        "content": "Anim mollit duis do cillum ut mollit magna. Eiusmod sit nulla do irure veniam sunt est eu. Fugiat nulla cupidatat tempor nisi incididunt sunt ipsum voluptate officia mollit. Nisi cillum excepteur ex veniam. Incididunt tempor mollit nostrud amet anim dolore sint reprehenderit consequat Lorem anim voluptate."
+    
+    {
+	"_id": "recipes22222222222222222",
+	"uid": "users1111111111111111111",
+	"name": "qui excepteur labore et occaecat aliquip consectetur adipisicing",
+	"name_url": "",
+	"description": "Et exercitation adipisicing aliquip duis dolor adipisicing nulla nostrud labore ipsum. Eu tempor nostrud enim minim commodo velit consectetur cillum voluptate qui ipsum amet ullamco fugiat. Do magna sint ea eiusmod exercitation consectetur eiusmod esse sint fugiat pariatur. Nisi magna consequat dolor veniam veniam culpa dolore.",
+	"steps": [
+	    {
+		"name": "aliquip voluptate magna qui cupidatat mollit",
+		"duration": 28,
+		"content": "Anim mollit duis do cillum ut mollit magna. Eiusmod sit nulla do irure veniam sunt est eu. Fugiat nulla cupidatat tempor nisi incididunt sunt ipsum voluptate officia mollit. Nisi cillum excepteur ex veniam. Incididunt tempor mollit nostrud amet anim dolore sint reprehenderit consequat Lorem anim voluptate."
       },
       {
         "name": "sunt et est officia commodo duis ut",
@@ -1356,19 +1299,37 @@ exports.ingredients = [
     },
     {
 	"_id":"ingredients3333333333333",
-	"name":"lait",
+	"name":"oil",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
 	"_id":"ingredients4444444444444",
-	"name":"sel",
+	"name":"salt",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     },
     {
 	"_id":"ingredients5555555555555",
-	"name":"poivre",
+	"name":"pepper",
+	"tags":["11", "22", "33"],
+	"nutrients":["titi", "tata", "toto", "toutou"]
+    },
+    {
+	"_id":"ingredients6666666666666",
+	"name":"egg",
+	"tags":["11", "22", "33"],
+	"nutrients":["titi", "tata", "toto", "toutou"]
+    },
+    {
+	"_id":"ingredients7777777777777",
+	"name":"milk",
+	"tags":["11", "22", "33"],
+	"nutrients":["titi", "tata", "toto", "toutou"]
+    },
+    {
+	"_id":"ingredients8888888888888",
+	"name":"flavour",
 	"tags":["11", "22", "33"],
 	"nutrients":["titi", "tata", "toto", "toutou"]
     }
@@ -1380,15 +1341,15 @@ exports.ingredients = [
 exports.tools = [
     {
 	"_id":"tools1111111111111111111",
-	"name":"four"
+	"name":"container"
     },
     {
 	"_id":"tools2222222222222222222",
-	"name":"micro-onde"
+	"name":"whisk"
     },
     {
 	"_id":"tools3333333333333333333",
-	"name":"batteur a oeufs"
+	"name":"stove"
     }
 ];
 
@@ -1495,7 +1456,7 @@ exports.tags = [
     },
     {
 	"_id":"tags22222222222222222222",
-	"name":"kasher"
+	"name":"sugar"
     },
     {
 	"_id":"tags33333333333333333333",

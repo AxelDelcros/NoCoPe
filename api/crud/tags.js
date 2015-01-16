@@ -93,33 +93,28 @@ exports.post_tag = function(req, res) {
 exports.get_tag_by_id = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
-    return (res.send({"_id": "tags11111111111111111111", "name":"kasher"}));
+    //return (res.send({"_id": "tags11111111111111111111", "name":"kasher"}));
 
     var id = req.params.id;
     if (id.length != 24)
 	return (res.status(400).send({"res":false, "error_code":5553, "msg":"This tag 'id' was not found !"}));
-    db.collection('tags', function(err, collection_tags) {
+    db.collection('tags').findOne({"_id" : id}, function(err, tag) {
 	if (err) {
-	    return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+	    console.log(err);
+	    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This tag does not exists !"}));
+	}
+	else if (tag == null) {
+	    return (res.status(400).send({"res":false, "error_code":5555, "msg":"This tag 'id' was not found !"}));
 	}
 	else {
-	    collection_tags.findOne({"_id" : new BSON.ObjectID(id)}, function(err, tag) {
-		if (err) {
-		    console.log(err);
-		    return (res.status(400).send({"res":false, "error_code":5554, "msg":"This tag does not exists !"}));
-		}
-		else if (tag == null) {
-		    return (res.status(400).send({"res":false, "error_code":5555, "msg":"This tag 'id' was not found !"}));
-		}
-		else {
-		    tag.id = tag._id;
-		    delete tag._id;
-		    return (res.status(200).send(tag));
-		}
-	    });
+	    tag.id = tag._id;
+	    delete tag._id;
+	    return (res.status(200).send(tag));
 	}
     });
-};
+}
+
+
 
 
 
