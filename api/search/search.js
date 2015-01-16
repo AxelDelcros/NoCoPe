@@ -124,7 +124,7 @@ exports.search = function(req, res) {
 				    final_results.push(doc);
 				}
 			    }
-			    if (keys.length != 1) {
+			    if (keys.length > 1) {
 				delete good_fields_to_test[keys[0]];
 				return (do_search());
 			    }

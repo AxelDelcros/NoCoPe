@@ -511,7 +511,12 @@
 			    }
 			    //alert(filters_str);
 			    //alert(JSON.stringify($scope.filters.join()));
-			    $location.path('/search/' + $scope.searchName + '?'+"filters="+filters_str);
+			    if (filters_str != "") {
+				$location.path('/search/' + $scope.searchName + '?'+"filters="+filters_str);
+			    }
+			    else {
+				// Aucun filtre n'a ete choisi
+			    }
 			}
 			else {
 			    // La barre de recherche est vide
@@ -612,7 +617,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			    $scope.elements = data;
 			    angular.forEach($scope.elements, function(value, key) {
 				
-				if (value.type == "recipe") {
+				if (value.type == "recipes") {
 				    // On remplace les ingredients, par leur contenu
 				    angular.forEach(value.element.ingredients, function (ingredient, key2) {
 					RecipesFactory.getIngredient(ingredient._id).then(function (i) {
@@ -642,7 +647,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 					});
 				    });
 				}
-				else if (value.type == "user") {
+				else if (value.type == "users") {
 				    //alert(JSON.stringify(value.element));
 				    // On init le nombre de recettes publiées
 				    RecipesFactory.getNbrRecipesPublished(value.element._id).then(function (nbr) {
@@ -659,10 +664,10 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 					alert(msg);
 				    });
 				}
-				else if (value.type == "tool") {
+				else if (value.type == "tools") {
 				    //alert(JSON.stringify(value.element));
 				}
-				else if (value.type == "ingredient") {
+				else if (value.type == "ingredients") {
 				    //alert(JSON.stringify(value.element));
 				}
 			    });
