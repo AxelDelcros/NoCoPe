@@ -322,7 +322,7 @@ app.post('/logout', basic_auth.check_auth, basic_auth.logout);
 /*
 ** ROUTES SEARCH
 */
-app.get('/search/recipe', search.search_recipe);
+app.get('/search/:q', search.search);
 /*
 ** END ROUTES SEARCH
 */

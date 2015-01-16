@@ -26,10 +26,14 @@ String.prototype.isString = true;
 
 var promise = require('promise');
 // [READ] Research in recipes
-exports.search_recipe = function(req, res) {
+exports.search = function(req, res) {
     var db = req.db;
     var BSON = req.BSON;
 
+    var q = req.params.q;
+    var f = req.query.f;
+    console.log("query : " + q);
+    console.log("filters : " + f);
 
     db.collection('recipes', function(err, collection_recipes) {
 	//collection_recipes.findOne({"_id": BSON.ObjectID("recipes11111111111111111")}, function(err, elem) {

@@ -1,57 +1,74 @@
 <nav class="navbar navbar-inverse" id="navbar" role="navigation" ng-controller="userController">
-	<div class="navbar-header">
-		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbartoggle">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    
+    <a class="navbar-brand" href="#">NoCoPe</a>
+  </div>
+  
+  <form id="searchbar">
+    <div class="col-sm-12 col-md-offset-4 col-md-3">
+      <div class="row input-group input-group-lg">
+	<input type="text" class="form-control" id="search_method" placeholder=" {{ placeholder }} " ng-model="searchName" required>
+	<span class="input-group-btn">
+	  <button class="btn btn-default" type="submit" ng-click="search()">
+	    <span class="glyphicon glyphicon-search"></span>
+	  </button>
+	</span>
+      </div>
 
-		<a class="navbar-brand" href="#">NoCoPe</a>
-	</div>
+      <div type="button" class="btn {{filters.users}}" ng-click="change_status_filters('users')">
+	Users
+      </div>
+      <div type="button" class="btn {{filters.recipes}}" ng-click="change_status_filters('recipes')">
+	Recipes
+      </div>
+      <div type="button" class="btn {{filters.ingredients}}" ng-click="change_status_filters('ingredients')">
+	Ingredients
+      </div>
+      <div type="button" class="btn {{filters.tools}}" ng-click="change_status_filters('tools')">
+	Tools
+      </div>
+      <div type="button" class="btn {{filters.all}}" ng-click="change_status_filters('all')">
+	All
+      </div>
 
-	<form id="searchbar">
-		<div class="col-sm-12 col-md-offset-4 col-md-3">
-			<div class="row input-group input-group-lg">
-				<input type="text" class="form-control" id="search_method" placeholder=" {{ placeholder }} " ng-model="searchName" required>
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="submit" ng-click="search()">
-						<span class="glyphicon glyphicon-search"></span>
-					</button>
-				</span>
-			</div>
-		</div>
-	</form>
-
-	<div class="collapse navbar-collapse" id="navbartoggle">
-		<ul class="nav navbar-nav pull-right" id="menu-demo2">
-			<li>
-				<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
-			</li>
-
-			<li>
-				<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
-			</li>
-			
-			<li id="drop down" ng-show="{{Logged}}"><a href="#">User</a>
-				<ul>
-					<li>
-						<a href="#recipes/create" style="color:#FAFAFA;width:100%" class="btn btn-info" >Add recipe</a>
-					</li>
-
-					<li>
-						<a href="#user/{{ username }}" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Profil</a>
-					</li>
-
-					<li>
-						<a href="#settings" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicons glyphicons-settings"></span>Settings</a>
-					</li>
-
-					<li>
-						<a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" >Logout</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</div>
+    </div>
+  </form>
+  
+  <div class="collapse navbar-collapse" id="navbartoggle">
+    <ul class="nav navbar-nav pull-right" id="menu-demo2">
+      <li>
+	<a href="#signup" style="color:#FAFAFA;width:100%" class="btn btn-info" ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Sign up</a>
+      </li>
+      
+      <li>
+	<a href="#login" style="color:#FAFAFA;width:100%" class="btn btn-info"  ng-show="{{!Logged}}"><span class="glyphicon glyphicon-user"></span> Login</a>
+      </li>
+      
+      <li id="drop down" ng-show="{{Logged}}"><a href="#">User</a>
+	<ul>
+	  <li>
+	    <a href="#recipes/create" style="color:#FAFAFA;width:100%" class="btn btn-info" >Add recipe</a>
+	  </li>
+	  
+	  <li>
+	    <a href="#user/{{ username }}" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicon glyphicon-user" ></span>Profil</a>
+	  </li>
+	  
+	  <li>
+	    <a href="#settings" style="color:#FAFAFA;width:100%" class="btn btn-info" ><span class="glyphicons glyphicons-settings"></span>Settings</a>
+	  </li>
+	  
+	  <li>
+	    <a ng-click="logout()" style="color:#FAFAFA;width:100%" class="btn btn-danger" >Logout</a>
+	  </li>
+	</ul>
+      </li>
+    </ul>
+  </div>
 </nav>

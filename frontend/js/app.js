@@ -480,22 +480,35 @@
 		function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
 			console.log(" authentification.islogged " + AuthenticationService.isLogged);
 		        $scope.placeholder = "Write a research here";
-		        $scope.filters = {"users":true, "recipes":true, "ingredients":true, "tools":true, "all":true};
+		        $scope.filters = {users:"btn-success", recipes:"btn-success", ingredients:"btn-success", tools:"btn-success", all:"btn-success"};
 		        $scope.change_status_filters = function(param) {
-			    //alert(param);
 			    if ($scope.filters[param] != undefined) {
-				//alert(param);
-				//alert($scope.filters[param]);
-				if ($scope.filters[param] == false)
-				    $scope.filters[param] = true;
-				else
-				    $scope.filters[param] = false;
-				//alert($scope.filters[param]);
+				if ($scope.filters[param] == "btn-success") {
+				    if (param == "all") {
+					for (i in $scope.filters)
+					    $scope.filters[i] = "btn-danger";
+				    }
+				    else
+					$scope.filters[param] = "btn-danger";
+				}
+				else {
+				    if (param == "all") {
+					for (i in $scope.filters)
+					    $scope.filters[i] = "btn-success";
+				    }
+				    else
+					$scope.filters[param] = "btn-success";
+				}
 			    }
-			    alert($scope.filters);
 			}
 		    $scope.search = function() {
-			$location.path('/search/' + $scope.searchName);
+			var filters_str = "";
+			for (i in $scope.filters)
+			    filters_str += i != "all" ? ((filters_str != "" ? "," : "") + i) : "";
+			//alert(JSON.stringify($scope.filters));
+			//alert(filters_str);
+			//alert(JSON.stringify($scope.filters.join()));
+			$location.path('/search/' + $scope.searchName + '?'+"filters="+filters_str);
 		    }
 		    if ($rootScope.user && $window.sessionStorage.token) {
 			$scope.Logged = true;
@@ -584,7 +597,9 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			else
 				$scope.Logged = false;
 			$scope.loading = true;
-			$http.get('http://localhost:5555/search/recipe?q=' + $routeParams.q)
+		        filters = $routeParams.filters;
+		        //alert(JSON.stringify(filters));
+		        $http.get('http://localhost:5555/search/' + $routeParams.q + (filters!=undefined?"?q="+filters:""))
 			.success(function (data, status, headers, config) {
 			    //console.log(JSON.stringify(data.results));
 			    

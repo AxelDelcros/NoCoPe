@@ -209,8 +209,17 @@ exports.RecipeValidator.tags = function(param)
         return ({"res":false, "error_code":0007, "msg":"You have to send the field 'tags' !"});
     if (param == "")
         return ({"res":false, "error_code":0007, "msg":"The field 'tags' can't be empty !"});
-    //console.log(param);
-    return (true);
+    try {
+        param = JSON.parse(param);
+    }
+    catch (e) {
+        console.log(e);
+	return ({"res":false, "error_code":0005, "msg":"The 'tags' field is not an array !"});
+    }
+    if (param.isArray) {
+        return (true);
+    }
+    return ({"res":false, "error_code":0005, "msg":"The 'tags' field is not an array !"});
 }
 exports.nameToUrl = function(param) {
     var to_replace = ["_", " ", "(", ")", "[", "]", "\"", "'"];
@@ -264,6 +273,7 @@ exports.post_recipe = function(req, res) {
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["steps"](steps)) !== true)
             return (res.status(400).send(ret));
+	steps = JSON.parse(steps);
 	if ((ret = exports.RecipeValidator["ingredients"](ingredients)) !== true)
             return (res.status(400).send(ret));
 	ingredients = JSON.parse(ingredients);
@@ -274,6 +284,8 @@ exports.post_recipe = function(req, res) {
             return (res.status(400).send(ret));
 	if ((ret = exports.RecipeValidator["tags"](tags)) !== true)
             return (res.status(400).send(ret));
+	tags = JSON.parse(tags);
+
 
 	//console.log(steps);
 

@@ -17,14 +17,14 @@
 				<div class="col-xs-12">
 					<div style="font-size:20pt;color:black;">{{recipe.name}}</div>
 				</div>
-
+				
 				<div class="col-xs-3 col-sm-2">
-					<span class="glyphicon glyphicon-time"></span>{{recipe.duration}}</span>
+				  <span class="glyphicon glyphicon-time"></span>{{calc_time_recipe(recipe)}}</span>
 				</div>
 
 				<div class="col-xs-9 col-sm-10">
 					<ul style="display:inline;padding:0;list-style-type:none;">
-						<li style="display:inline;"><span class="label label-danger" ng-repeat="tag in recipe.tags">{{tag}}</span></li>
+						<li style="display:inline;"><span class="label label-danger" ng-repeat="tag in recipe.tags">{{tag.name}}</span></li>
 					</ul>
 				</div>
 
