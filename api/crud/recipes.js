@@ -259,13 +259,14 @@ exports.post_recipe = function(req, res) {
 	var products = fields.products;
 	var tags = fields.tags;
 
-	console.log(name);
-	console.log(description);
-	console.log(steps);
-	console.log(ingredients);
-	console.log(tools);
-	console.log(products);
-	console.log(tags);
+	//console.log(name);
+	//console.log(description);
+	//console.log(steps);
+	//console.log(ingredients);
+	//console.log(tools);
+	//console.log(products);
+	//console.log(tags);
+
 
 	if ((ret = exports.RecipeValidator["name"](name)) !== true)
             return (res.status(400).send(ret));
@@ -306,21 +307,34 @@ exports.post_recipe = function(req, res) {
 	
 	db.collection('recipes', function(err, collection_recipes) {
 	    if (err) {
+			console.log(err);
 		return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
 	    }
 	    else {
-		collection_recipes.insert(recipe, function(err, result) {
+		collection_recipes.findOne({"name":name}, function(err, recipe) {
 		    if (err) {
-			return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+			console.log(err);
+			return (res.status(400).send({"res":false, "error_code":6475, "msg":"Something happened during the database access !"}));
+		    }
+		    else if (recipe != null) {
+			return (res.status(400).send({"res":false, "error_code":6475, "msg":"This recipe 'name' already exists !"}));
 		    }
 		    else {
-			return (res.status(200).send({"res":true, "id":result[0]._id}));
+			collection_recipes.insert(recipe, function(err, result) {
+			    if (err) {
+				console.log(err);
+				return (res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"}));
+			    }
+			    else {
+				return (res.status(200).send({"res":true, "id":result[0]._id}));
+			    }
+			});
 		    }
 		});
 	    }
 	});
     });
-};
+}
 
 
 
