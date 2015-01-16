@@ -299,6 +299,18 @@
 
 	NoCoPe.controller('showRecipeController', ['$scope', '$http', '$window', '$location', 'RecipesFactory',
 		function showRecipeController ($scope, $http, $window, $location, RecipesFactory) {
+		    // Fonction de calcul du temps de la recette
+		    $scope.calc_time_recipe = function(param) {
+			//alert("param : " + JSON.stringify(param));
+			var result = 0;
+			if (param != undefined && param.steps != undefined) {
+			    for (i = 0 ; i < param.steps.length ; i++) {
+				result += param.steps[i].duration;
+			    }
+			}
+			return (Math.floor(result/60) + "H" + result%60 + "min");
+		    }
+
 			$scope.loading = true;
 			recipeid = $location.path();
 			console.log($window.sessionStorage.token);
@@ -321,6 +333,16 @@
 						$scope.recipe.tools[key2] = {
 							name: tool.name,
 							name_url: tool.name_url
+						};
+					}, function (msg) {
+						alert(msg);
+					})
+				});
+				angular.forEach($scope.recipe.tags, function (tag, key2) {
+					$scope.recipe.tags[key2] = RecipesFactory.getTag(tag).then(function (tag) {
+						$scope.recipe.tags[key2] = {
+						    _id: tag._id,
+						    name: tag.name
 						};
 					}, function (msg) {
 						alert(msg);
@@ -458,28 +480,43 @@
 		function userController ($scope, $window, AuthenticationService, $route, $rootScope, $location) {
 			console.log(" authentification.islogged " + AuthenticationService.isLogged);
 		        $scope.placeholder = "Write a research here";
-		        $scope.search = function() {
-				$location.path('/search/' + $scope.searchName);
-			if ($rootScope.user && $window.sessionStorage.token) {
-				$scope.Logged = true;
-				$scope.username = JSON.parse($rootScope.user).login;
-				console.log("rooteScope in userController " + $rootScope.user)
-				console.log("scope.user.login in userController " + $scope.username)
-				console.log("json.parse in userController " + JSON.parse($rootScope.user).login)
-				$scope.search = function() {
-					$location.path('/search/' + $scope.searchName);
-				}
+		        $scope.filters = {"users":true, "recipes":true, "ingredients":true, "tools":true, "all":true};
+		        $scope.change_status_filters = function(param) {
+			    //alert(param);
+			    if ($scope.filters[param] != undefined) {
+				//alert(param);
+				//alert($scope.filters[param]);
+				if ($scope.filters[param] == false)
+				    $scope.filters[param] = true;
+				else
+				    $scope.filters[param] = false;
+				//alert($scope.filters[param]);
+			    }
+			    alert($scope.filters);
 			}
-			$scope.logout = function () {
-					delete $window.sessionStorage.token;
-					console.log(" in logout function " + $window.sessionStorage.token);
-					$scope.Logged = false;
-					if ($rootScope.user)
-						delete $rootScope.user;
-					$route.reload();
-					$location.path('/');
-				}
-		}}
+		    $scope.search = function() {
+			$location.path('/search/' + $scope.searchName);
+		    }
+		    if ($rootScope.user && $window.sessionStorage.token) {
+			$scope.Logged = true;
+			$scope.username = JSON.parse($rootScope.user).login;
+			console.log("rooteScope in userController " + $rootScope.user)
+			console.log("scope.user.login in userController " + $scope.username)
+			console.log("json.parse in userController " + JSON.parse($rootScope.user).login)
+			$scope.search = function() {
+			    $location.path('/search/' + $scope.searchName);
+			}
+		    }
+		    $scope.logout = function () {
+			delete $window.sessionStorage.token;
+			console.log(" in logout function " + $window.sessionStorage.token);
+			$scope.Logged = false;
+			if ($rootScope.user)
+			    delete $rootScope.user;
+			$route.reload();
+			$location.path('/');
+		    }
+		}
 	]);
 
 	NoCoPe.controller('settingsController', ['$scope', '$window', "$rootScope",
