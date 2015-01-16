@@ -18,8 +18,6 @@ var GridStore = mongo.GridStore;
 var ObjectID = mongo.ObjectID;
 
 
-
-
 var MongoDBServer = mongo.Server,
 Db = mongo.Db,
 BSON = mongo.BSONPure;

@@ -502,13 +502,21 @@
 			    }
 			}
 		    $scope.search = function() {
-			var filters_str = "";
-			for (i in $scope.filters)
-			    filters_str += i != "all" ? ((filters_str != "" ? "," : "") + i) : "";
-			//alert(JSON.stringify($scope.filters));
-			//alert(filters_str);
-			//alert(JSON.stringify($scope.filters.join()));
-			$location.path('/search/' + $scope.searchName + '?'+"filters="+filters_str);
+			if ($scope.searchName !== undefined && $scope.searchName !== "")
+			{
+			    var filters_str = "";
+			    //alert(JSON.stringify($scope.filters));
+			    for (i in $scope.filters) {
+				filters_str += (i != "all" && $scope.filters[i] == "btn-success" ? ((filters_str != "" ? "," : "") + i) : "");
+			    }
+			    //alert(filters_str);
+			    //alert(JSON.stringify($scope.filters.join()));
+			    $location.path('/search/' + $scope.searchName + '?'+"filters="+filters_str);
+			}
+			else {
+			    // La barre de recherche est vide
+			    
+			}
 		    }
 		    if ($rootScope.user && $window.sessionStorage.token) {
 			$scope.Logged = true;
@@ -601,16 +609,15 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 		        //alert(JSON.stringify(filters));
 		        $http.get('http://localhost:5555/search/' + $routeParams.q + (filters!=undefined?"?q="+filters:""))
 			.success(function (data, status, headers, config) {
-			    //console.log(JSON.stringify(data.results));
-			    
-			    $scope.elements = data.results;
+			    $scope.elements = data;
 			    angular.forEach($scope.elements, function(value, key) {
 				
 				if (value.type == "recipe") {
 				    // On remplace les ingredients, par leur contenu
 				    angular.forEach(value.element.ingredients, function (ingredient, key2) {
-					RecipesFactory.getIngredient(ingredient).then(function (i) {
+					RecipesFactory.getIngredient(ingredient._id).then(function (i) {
 					    $scope.elements[key].element.ingredients[key2] = i;
+					    //alert(JSON.stringify($scope.elements[key].element.ingredients[key2]));
 					}, function (msg) {
 					    //$scope.elements[key].element.ingredients[key2] = "Server Error";
 					    alert(msg);

@@ -1,0 +1,34 @@
+
+
+<div class="col-xs-2">
+  <a href="#/users/{{e.element.login}}">
+    <img id="user_img" src="img/porocaramel.jpg" class="img-circle" width="80%"/>
+  </a>
+</div>
+
+
+
+
+
+<div class="col-xs-10">
+
+  <div class="form-group row">
+    <div class="col-xs-1">
+      <img id="sexe_img" ng-show="e.element.sexe == 'male'" src="img/glyphicons/glyphicons-35-old-man.png"/>
+      <img id="sexe_img" ng-show="e.element.sexe == 'female'" src="img/glyphicons/glyphicons-36-woman.png"/>
+    </div>
+    <div class="col-xs-9">
+      <a href="#/users/{{e.element.login}}" style="font-size:20pt;color:black;">{{e.element.firstname}} {{e.element.lastname}} ({{e.element.login}})</a>
+    </div>
+  </div>
+  
+  <div class="col-xs-12">
+    <label class="col-xs-3 col-sm-12">Recipes published : {{e.element.nbrrecipespublished}}</label>
+  </div>
+  <div class="col-xs-12">
+    <label class="col-xs-3 col-sm-12">Followers : {{e.element.nbrfollowers}}</label>
+  </div>
+  
+  
+</div>
+

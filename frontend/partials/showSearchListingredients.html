@@ -1,0 +1,42 @@
+
+
+<div class="col-xs-2">
+  <a href="#/ingredients/{{e.element.name_url}}">
+    <img id="ingredient_img" src="img/porocaramel.jpg" class="img-circle" width="80%"/>
+  </a>
+</div>
+
+
+
+
+<div class="col-xs-10">
+
+  <div class="form-group row">
+    <div class="col-xs-1">
+      <img id="sexe_img" src="img/glyphicons/glyphicons-535-lab-alt.png"/>
+    </div>
+    <div class="col-xs-9">
+      <a href="#/ingredients/{{e.element.name_url}}" style="font-size:20pt;color:black;">{{e.element.name}}</a>
+    </div>
+  </div>
+  
+
+
+  <div class="col-xs-12">
+    <label class="col-xs-3 col-sm-2">Nutrients </label>
+    <div class="col-xs-9 col-sm-10">
+      <ul style="display:inline;padding:0;list-style-type:none;">
+
+        <li style="display:inline;margin-right:2%;" ng-repeat="n in e.element.nutrients" >
+          <!--<a href="#/ingredients/{{n.name_url}}">-->
+          <span class="label label-info" >{{n}}</span>
+	  <!--</a>-->
+        </li>
+
+      </ul>
+    </div>
+  </div>
+
+  
+</div>
+

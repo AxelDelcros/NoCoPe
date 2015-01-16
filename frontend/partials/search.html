@@ -4,20 +4,16 @@
 	</ng-include>
 
 	<div class="container">
-	<div class="col-sm-12 col-md-offset-3 col-md-6">
-
-		<div class="row">
-			<div id="select_method" class="btn-group">
-				<a href="#recipes" class="btn btn-primary" id="recipe_name">Recipes</a>
-				<a href="#ingredients" class="btn btn-primary" id="ingredient"> Ingredients</a>
-				<a href="#products" class="btn btn-primary" id="product"> Products</a>
-			</div>
-		</div>
-	</div>
 
 	<div ng-show="loading">Loading ...</div>
 	<div ng-show="!loading">
 		<ul class="col-xs-12" style="list-style-type:none">
+		  
+		  <strong>
+		    <h3>
+		      {{elements.length}} Results founds<span ng-show="elements.length > 0"> :</span>
+		    </h3>
+		  </strong>
 
 		  <li ng-repeat="e in elements" ng-include="'partials/showSearchList' + e.type + '.html'">
 		  </li>
