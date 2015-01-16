@@ -251,6 +251,37 @@ exports.delete_tag_by_id = function(req, res) {
 
 
 
+
+
+
+// [READ] Find Tag
+exports.find_tags = function(req, res) {
+    var db = req.db;
+    var BSON = req.BSON;
+
+    var q = req.query.q;
+    if (q != undefined && q != null && q != "") {
+
+        var c = db.collection('tags');
+        c.find({"name": {$regex: q}}).toArray(function(err, docs) {
+            if (err) {
+                console.log(err);
+                res.status(400).send({"res":false, "error_code":0004, "msg":"Something happened during the database access !"});
+            }
+            else {
+                //console.log(docs);
+                res.status(200).send(docs);
+            }
+        });
+    }
+    else {
+        return (res.status(200).send([]));
+    }
+};
+
+
+
+
 /*
 ** END TAG FUNCTIONS
 */

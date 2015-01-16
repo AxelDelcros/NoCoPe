@@ -139,6 +139,7 @@
 				nbrFollowers : false,
 				ingredients_names : false,
 				tools_names : false,
+				tags_names : false,
 				getRecipes : function () {
 					var deferred = $q.defer();
 					$http.get('http://localhost:5555/recipes')
@@ -231,10 +232,23 @@
 					        deferred.resolve(factory.tools_names);
 					})
 					.error(function (data, status, headers, config) {
+						deferred.reject("Can't get tool data");
+					})
+					return deferred.promise;
+				},
+				find_tags : function(name){
+				       var deferred = $q.defer();
+				       $http.get('http://localhost:5555/tags/find?q=' + name)
+					.success(function (data, status, headers, config) {
+					        factory.tags_names = data;
+					        deferred.resolve(factory.tags_names);
+					})
+					.error(function (data, status, headers, config) {
 						deferred.reject("Can't get tag data");
 					})
 					return deferred.promise;
 				}
+
 			}
 			return factory;
 		}
@@ -709,6 +723,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			picture = [];
  		    $scope.ingredients = [{"query":"", "_id":null, "name":"No result", "choices":[], "quantity": ""}];
  		    $scope.tools = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
+ 		    $scope.tags = [{"query":"", "_id":null, "name":"No result", "choices":[]}];
  		    $scope.steps = [{"name":"", "duration":"", "content":""}];
 		    $scope.del_ingredient = function(nbr) {
 			$scope.ingredients.splice(nbr,1);
@@ -756,6 +771,29 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			i.name = c.name;
 			i._id = c._id;
 		    }
+		    $scope.del_tag = function(nbr) {
+			$scope.tags.splice(nbr,1);
+		    }
+		    $scope.add_tag = function(nbr) {
+			$scope.tags.push({"_id":null, "name":"No result", "choices":[]});
+		    }
+		    $scope.refresh_tags_choices = function(nbr) {
+			//alert("refresh : " + nbr);
+			if ($scope.tags[nbr].query != "") {
+			    RecipesFactory.find_tags($scope.tags[nbr].query).then(function (i) {
+				$scope.tags[nbr].choices = i;
+				//alert(JSON.stringify(i));
+			    }, function (msg) {
+				//$scope.elements[key].element.ingredients[key2] = "Server Error";
+				alert(msg);
+			    });
+			}
+		    }
+		    $scope.select_tag = function(i, c) {
+			//alert("Select : " + JSON.stringify(c));
+			i.name = c.name;
+			i._id = c._id;
+		    }
 		    $scope.del_step = function(nbr) {
 			$scope.steps.splice(nbr,1);
 		    }
@@ -766,6 +804,7 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			$scope.submitForm = function () {
 			    var ingredientsArray = [];
 			    var toolsArray = [];
+			    var tagsArray = [];
 			    var stepsArray = [];
 			    for (i = 0; i < $scope.ingredients.length; i++) {
 				//alert(JSON.stringify($scope.ingredients[i]));
@@ -778,6 +817,10 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 				//alert(JSON.stringify($scope.tools[i]));
 				toolsArray.push($scope.tools[i]._id);
 			    }
+			    for (i = 0; i < $scope.tags.length; i++) {
+				//alert(JSON.stringify($scope.tools[i]));
+				tagsArray.push($scope.tags[i]._id);
+			    }
 			    for (i = 0; i < $scope.steps.length; i++) {
 				//alert(JSON.stringify($scope.tools[i]));
 				stepsArray.push({
@@ -788,12 +831,12 @@ NoCoPe.controller('searchController', ['$scope', '$window', "$rootScope", "$loca
 			    }
 			    //alert(JSON.stringify(ingredientsArray));
 			    //alert(JSON.stringify(toolsArray));
-			    alert(JSON.stringify(stepsArray));
+			    //alert(JSON.stringify(stepsArray));
 			    //alert($window.sessionStorage.token);
 			    $http.defaults.headers.common.access_token = $window.sessionStorage.token;
 				$http.post('http://localhost:5555/recipes/', {
 					name:$scope.addrecipe.recipename,
-					tags:$scope.addrecipe.tag,
+					tags:JSON.stringify(tagsArray),
 					description:$scope.addrecipe.description,
 				        ingredients:JSON.stringify(ingredientsArray),
 					tools:JSON.stringify(toolsArray),
